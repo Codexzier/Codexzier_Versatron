@@ -7,6 +7,7 @@
 #include <stdint.h>
 #include "GC9A01_LTSM.hpp"
 
+
 #ifndef CODEXZIER_VERSATRON_CODEXZIER_VERSATRON_H
 #define CODEXZIER_VERSATRON_CODEXZIER_VERSATRON_H
 
@@ -25,6 +26,15 @@ class Codexzier_Versatron {
     int _radiusOuter3 = 96;
     int _radiusInner3 = 88;
 
+    int _segmentIndexReset = 0;
+    bool _segmentIndexResetFlag = false;
+    int _segmentIndex = 0;
+    int _segmentIndexMax = 60;
+
+    int _segmentValue1 = 0;
+    int _segmentValue2 = 0;
+    int _segmentValue3 = 0;
+
     void drawGaugeSegmentsByParameter(
         GC9A01_LTSM &tft,
         int8_t ring,
@@ -36,6 +46,9 @@ class Codexzier_Versatron {
 
 public:
     Codexzier_Versatron();
+
+    void updateSegmentIndex(GC9A01_LTSM &tft);
+
     void drawInitGaugeSegments(
         GC9A01_LTSM &tft,
         uint16_t gaugeColor,
@@ -48,6 +61,9 @@ public:
         int16_t value,
         float startAngle,
         int8_t ring);
+    void drawSetValueForGaugeSegments(
+        int16_t value,
+        int8_t ring);
 
     static void drawGaugeSegment(
         GC9A01_LTSM &tft,
@@ -55,6 +71,7 @@ public:
         uint16_t color,
         int radiusOuter,
         int radiusInner);
+
 };
 
 #endif //CODEXZIER_VERSATRON_CODEXZIER_VERSATRON_H

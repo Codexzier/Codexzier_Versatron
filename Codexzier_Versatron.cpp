@@ -4,25 +4,50 @@
 
 #include "Codexzier_Versatron.h"
 #include <math.h>
-
+#include "fonts_LTSM/FontArialBold_LTSM.hpp"    // 16x16 pixels
+#include "fonts_LTSM/FontPico_LTSM.hpp"         // 8x12 pixels
+#include "fonts_LTSM/FontSinclairS_LTSM.hpp"    // 8x8 pixels
 
 Codexzier_Versatron::Codexzier_Versatron() {
+}
+
+void Codexzier_Versatron::updateSegmentIndex(GC9A01_LTSM &tft) {
+    if (_segmentIndex >= _segmentIndexMax) {
+        _segmentIndex = 0;
+    } else {
+        _segmentIndex++;
+    }
+
+    if (_segmentIndexResetFlag) {
+
+        if (_segmentIndexReset >= _segmentIndexMax) {
+            _segmentIndexReset = 0;
+            _segmentIndexResetFlag = false;
+        } else {
+            _segmentIndexReset++;
+        }
+    }
+
+    drawGaugeSegments(tft, _segmentValue1, 0, 0);
+    drawGaugeSegments(tft, _segmentValue2, 0, 1);
+    drawGaugeSegments(tft, _segmentValue3, 0, 2);
 }
 
 void Codexzier_Versatron::drawInitGaugeSegments(
     GC9A01_LTSM &tft,
     uint16_t colorOn,
-    uint16_t colorOff) {
+    const uint16_t colorOff) {
 
     _colorOn = colorOn;
     _colorOff = colorOff;
 
+    float angle = 0;
     for (int index = 0; index < 60; index++) {
         _segmentsOnRing1[index] = false;
         _segmentsOnRing2[index] = false;
         _segmentsOnRing3[index] = false;
 
-        float angle = 45 + ((7 - index) * 6);
+        angle = 45 + ((7 - index) * 6);
         drawGaugeSegment(tft, angle, _colorOff, _radiusOuter1, _radiusInner1);
         drawGaugeSegment(tft, angle, _colorOff, _radiusOuter2, _radiusInner2);
         drawGaugeSegment(tft, angle, _colorOff, _radiusOuter3, _radiusInner3);
@@ -31,16 +56,18 @@ void Codexzier_Versatron::drawInitGaugeSegments(
 
 void Codexzier_Versatron::drawGaugeSegmentReset(
     GC9A01_LTSM &tft,
-    int8_t ring) {
+    const int8_t ring) {
 
-    uint16_t color1 = _colorOff;
+    _segmentIndexResetFlag = true;
 
-    for (int index = 0; index < 60; index++) {
+    const uint16_t color1 = _colorOff;
+    float angle = 0;
+    //for (int index = 0; index < 60; index++) {
 
-        float angle = 45 + ((7 - index) * 6);
-
-        drawGaugeSegmentsByParameter(tft, ring, false, false, index, angle, color1);
-    }
+    int index = _segmentIndexReset;
+    angle = 45 + ((7 - index) * 6);
+    drawGaugeSegmentsByParameter(tft, ring, false, false, index, angle, color1);
+    //}
 }
 
 void Codexzier_Versatron::drawGaugeSegments(
@@ -49,21 +76,38 @@ void Codexzier_Versatron::drawGaugeSegments(
     const float startAngle,
     const int8_t ring) {
 
+    if (_segmentIndexResetFlag) return;
+
     constexpr float step = 1.0;
     const float segmentValueOn = value / step;
 
     float angle = 0;
-    for(int index = 0; index < 60; index++) {
-        angle = 45 + startAngle + ((7 - index) * 6);
 
-        uint16_t color1 = _colorOn;
-        bool segmentOn = true;
-        if(segmentValueOn <= index) {
-            color1 = _colorOff;
-            segmentOn = false;
-        }
+    //for(int index = 0; index < 60; index++) {
+    const int index = _segmentIndex;
 
-        drawGaugeSegmentsByParameter(tft, ring, segmentOn, true, index, angle, color1);
+    angle = 45 + startAngle + ((7 - index) * 6);
+
+    uint16_t color1 = _colorOn;
+    bool segmentOn = true;
+    if(segmentValueOn <= index) {
+        color1 = _colorOff;
+        segmentOn = false;
+    }
+
+    drawGaugeSegmentsByParameter(tft, ring, segmentOn, true, index, angle, color1);
+    //}
+}
+
+void Codexzier_Versatron::drawSetValueForGaugeSegments(
+    int16_t value,
+    int8_t ring) {
+
+    switch (ring) {
+        case 0: _segmentValue1 = value; break;
+        case 1: _segmentValue2 = value; break;
+        case 2: _segmentValue3 = value; break;
+        default: break;
     }
 }
 
@@ -142,4 +186,3 @@ void Codexzier_Versatron::drawGaugeSegment(
     tft.fillTriangle(xA, yA, xB, yB, xC, yC, color);
     tft.fillTriangle(xB, yB, xC, yC, xD, yD, color);
 }
-
