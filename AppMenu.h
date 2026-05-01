@@ -19,12 +19,13 @@ class AppMenu {
     uint16_t _colorOff;
 
     int _menuIndex = 0;
-    int _menuX = 40;
-    int _menuY1 = 60;
-    int _menuY2 = 95;
-    int _menuY3 = 130;
+    int _menuX = 30;
+    int _menuY1 = 50;
+    int _menuY2 = 85;
+    int _menuY3 = 120;
+    int _menuY4 = 155;
 
-    int _width = 160;
+    int _width = 180;
     int _height = 30;
     int _cornerRadius = 4;
 
