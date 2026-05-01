@@ -6,72 +6,50 @@
 #include <Arduino.h>
 #include <stdint.h>
 #include "GC9A01_LTSM.hpp"
-
+#include "RingSegmentDisplay.h"
 
 #ifndef CODEXZIER_VERSATRON_CODEXZIER_VERSATRON_H
 #define CODEXZIER_VERSATRON_CODEXZIER_VERSATRON_H
 
 class Codexzier_Versatron {
 
-    bool _segmentsOnRing1[60];
-    bool _segmentsOnRing2[60];
-    bool _segmentsOnRing3[60];
+    GC9A01_LTSM *_tft;
     uint16_t _colorOn;
     uint16_t _colorOff;
 
+    // ========================================================================================
+    // Workout Helper
     int _radiusOuter1 = 118;
     int _radiusInner1 = 112;
     int _radiusOuter2 = 108;
     int _radiusInner2 = 100;
-    int _radiusOuter3 = 96;
-    int _radiusInner3 = 88;
 
-    int _segmentIndexReset = 0;
-    bool _segmentIndexResetFlag = false;
-    int _segmentIndex = 0;
-    int _segmentIndexMax = 60;
+    RingSegmentDisplay mRing1;
+    RingSegmentDisplay mRing2;
 
-    int _segmentValue1 = 0;
-    int _segmentValue2 = 0;
-    int _segmentValue3 = 0;
-
-    void drawGaugeSegmentsByParameter(
-        GC9A01_LTSM &tft,
-        int8_t ring,
-        bool segmentOn,
-        bool bySegmentOn,
-        int index,
-        float angle,
-        uint16_t color);
 
 public:
-    Codexzier_Versatron();
+    Codexzier_Versatron()
+        : _tft(nullptr), _colorOn(0), _colorOff(0),
+            mRing1(_radiusOuter1, _radiusInner1),
+            mRing2(_radiusOuter2, _radiusInner2) {
+    }
 
-    void updateSegmentIndex(GC9A01_LTSM &tft);
+    void init(GC9A01_LTSM &tft,
+        const uint16_t colorOn,
+        const uint16_t colorOff)
+    {
+        _tft = &tft;
+        _colorOn = colorOn;
+        _colorOff = colorOff;
 
-    void drawInitGaugeSegments(
-        GC9A01_LTSM &tft,
-        uint16_t gaugeColor,
-        uint16_t colorOff);
-    void drawGaugeSegmentReset(
-        GC9A01_LTSM &tft,
-        int8_t ring);
-    void drawGaugeSegments(
-        GC9A01_LTSM &tft,
-        int16_t value,
-        float startAngle,
-        int8_t ring);
-    void drawSetValueForGaugeSegments(
-        int16_t value,
-        int8_t ring);
+        mRing1.init(tft, _colorOn, _colorOff);
+        mRing2.init(tft, _colorOn, _colorOff);
+    }
 
-    static void drawGaugeSegment(
-        GC9A01_LTSM &tft,
-        float angleDeg,
-        uint16_t color,
-        int radiusOuter,
-        int radiusInner);
+    void drawMenuAppUi();
 
+    void drawWorkoutAppUi();
 };
 
 #endif //CODEXZIER_VERSATRON_CODEXZIER_VERSATRON_H
