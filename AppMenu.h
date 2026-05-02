@@ -6,11 +6,23 @@
 
 #include <Arduino.h>
 #include <stdint.h>
+#include <vector>
+#include <string>
+#include <memory>
+
 #include "GC9A01_LTSM.hpp"
 
 #ifndef CODEXZIER_VERSATRON_APPMENU_H
 #define CODEXZIER_VERSATRON_APPMENU_H
 
+class MenuItem {
+
+public:
+    std::string MenuName;
+    std::string MenuDescription;
+
+    bool isSelected = false;
+};
 
 class AppMenu {
 
@@ -29,6 +41,9 @@ class AppMenu {
     int _height = 30;
     int _cornerRadius = 4;
 
+    std::unique_ptr<std::vector<MenuItem*>> _menuItems;
+    bool _isInitializedDrawMenu = false;
+
 public:
     AppMenu()
     : _tft(nullptr), _colorOn(0), _colorOff(0){}
@@ -41,10 +56,19 @@ public:
         _colorOn = colorOn;
         _colorOff = colorOff;
     }
+
+    void ResetInitializedDrawMenu() {
+        _isInitializedDrawMenu = false;
+        _menuIndex = 0;
+    }
+
+    void addItem(const MenuItem& item);
     void drawMenu();
 
     void setMenuIndex(int index);
     int getMenuIndex();
+
+
 
     ~AppMenu();
 };

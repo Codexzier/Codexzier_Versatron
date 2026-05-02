@@ -6,47 +6,58 @@
 #include "GC9A01_LTSM.hpp"
 #include "fonts_LTSM/FontArialBold_LTSM.hpp"    // 16x16 pixels
 
+
+void AppMenu::addItem(const MenuItem& item) {
+
+    if (!_menuItems) {
+        _menuItems = std::make_unique<std::vector<MenuItem*>>();
+    }
+
+    // Erstelle eine Kopie des MenuItem-Objekts auf dem Heap
+    MenuItem* newItem = new MenuItem;
+    newItem->MenuName = item.MenuName;          // std::string kopiert automatisch
+    newItem->MenuDescription = item.MenuDescription;
+
+    // Füge den Zeiger zum Vector hinzu
+    _menuItems->push_back(newItem);
+}
+
 void AppMenu::drawMenu() {
-    _tft->drawRoundRect(_menuX, _menuY1, _width, _height, _cornerRadius, _colorOn);
-    _tft->drawRoundRect(_menuX, _menuY2, _width, _height, _cornerRadius, _colorOff);
-    _tft->drawRoundRect(_menuX, _menuY3, _width, _height, _cornerRadius, _colorOff);
-    _tft->drawRoundRect(_menuX, _menuY4, _width, _height, _cornerRadius, _colorOff);
 
-    _tft->setTextColor(_colorOn, _tft->C_BLACK);
+    if (!_menuItems) {
+        return;
+    }
+
+    const int maxEntries = 4;
+    const int yPositions[] = {_menuY1, _menuY2, _menuY3, _menuY4};
+
     _tft->setFont(FontArialBold);
+    for (int i = 0; i < maxEntries && i < static_cast<int>(_menuItems->size()); ++i) {
 
-    _tft->setCursor(_menuX + 10, _menuY1 + 6);
-    _tft->print("Workout");
-    _tft->setCursor(_menuX + 10, _menuY2 + 6);
-    _tft->print("Servo Test");
-    _tft->setCursor(_menuX + 10, _menuY3 + 6);
-    _tft->print("Camera");
-    _tft->setCursor(_menuX + 10, _menuY4 + 6);
-    _tft->print("WiFi Scan");
+        MenuItem* item = (*_menuItems)[i];
+        if (_isInitializedDrawMenu && item->isSelected == (i == _menuIndex)) {
+            continue;
+        }
+
+        item->isSelected = (i == _menuIndex);
+
+        uint16_t color = (i == _menuIndex) ? _colorOn : _colorOff;
+        _tft->drawRoundRect(_menuX, yPositions[i], _width, _height, _cornerRadius, color);
+        _tft->setTextColor(color, _tft->C_BLACK);
+        _tft->setCursor(_menuX + 10, yPositions[i] + 6);
+        _tft->print(item->MenuName.c_str());
+    }
+
+    _isInitializedDrawMenu = true;
 }
 
 void AppMenu::setMenuIndex(int index) {
-    _tft->drawRoundRect(_menuX, _menuY1, _width, _height, _cornerRadius, _colorOff);
-    _tft->drawRoundRect(_menuX, _menuY2, _width, _height, _cornerRadius, _colorOff);
-    _tft->drawRoundRect(_menuX, _menuY3, _width, _height, _cornerRadius, _colorOff);
-    _tft->drawRoundRect(_menuX, _menuY4, _width, _height, _cornerRadius, _colorOff);
 
-    switch (index) {
-        case 0:
-            _tft->drawRoundRect(_menuX, _menuY1, _width, _height, _cornerRadius, _colorOn);
-            break;
-        case 1:
-            _tft->drawRoundRect(_menuX, _menuY2, _width, _height, _cornerRadius, _colorOn);
-            break;
-        case 2:
-            _tft->drawRoundRect(_menuX, _menuY3, _width, _height, _cornerRadius, _colorOn);
-            break;
-        case 3:
-            _tft->drawRoundRect(_menuX, _menuY4, _width, _height, _cornerRadius, _colorOn);
-            break;
-        default:
-            break;
-    }
+    if (index < 0 || index >= static_cast<int>(_menuItems->size()))
+        return;
+
+    _menuIndex = index;
+    drawMenu();
 }
 
 int AppMenu::getMenuIndex() {
@@ -54,5 +65,9 @@ int AppMenu::getMenuIndex() {
 }
 
 AppMenu::~AppMenu() {
-
+    if (_menuItems) {
+        for (MenuItem* item : *_menuItems) {
+            delete item;
+        }
+    }
 }
