@@ -48,6 +48,17 @@ void AppMenu::drawMenu() {
         _tft->print(item->MenuName.c_str());
     }
 
+    if (!_isInitializedDrawMenu) {
+        _tft->drawRoundRect(100, 196, 34, 24, _cornerRadius, _tft->C_BEIGE);
+    }
+
+    _tft->setTextColor(_colorOff, _tft->C_BLACK);
+    _tft->setCursor(110, 200);
+
+    char buffer[12];
+    sprintf(buffer, "%d", _menuIndex + 1);
+    _tft->print(buffer);
+
     _isInitializedDrawMenu = true;
 }
 
