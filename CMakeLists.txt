@@ -15,4 +15,6 @@ add_executable(Codexzier_Versatron
         RingSegmentDisplay.cpp
         RingSegmentDisplay.h
         AppMenu.cpp
-        AppMenu.h)
+        AppMenu.h
+        MenuPaging.cpp
+        MenuPaging.h)

@@ -20,6 +20,17 @@ void AppMenu::addItem(const MenuItem& item) {
 
     // Füge den Zeiger zum Vector hinzu
     _menuItems->push_back(newItem);
+
+    _menuPaging.drawFrameAndPage(_menuIndexPage, _menuIndexPageSelected);
+
+    float maxIndexPage1 = static_cast<int>(_menuItems->size()) / 4.0f;
+    int maxIndexPage2 = static_cast<int>(_menuItems->size()) / 4;
+
+    if (maxIndexPage1 > (float)maxIndexPage2) {
+        maxIndexPage2++;
+    }
+
+    _menuIndexPageMax = maxIndexPage2;
 }
 
 void AppMenu::drawMenu() {
@@ -28,36 +39,50 @@ void AppMenu::drawMenu() {
         return;
     }
 
+    if (_menuIndexPage != _menuIndexPageSelected) {
+        _isInitializedDrawMenu = false;
+        _tft->fillScreen(_tft->C_BLACK);
+    }
+    _menuIndexPageSelected = _menuIndexPage;
+
     const int maxEntries = 4;
     const int yPositions[] = {_menuY1, _menuY2, _menuY3, _menuY4};
+    bool nothing = false;
 
-    _tft->setFont(FontArialBold);
-    for (int i = 0; i < maxEntries && i < static_cast<int>(_menuItems->size()); ++i) {
+    for (int i = 0; i < maxEntries; ++i) {
 
-        MenuItem* item = (*_menuItems)[i];
-        if (_isInitializedDrawMenu && item->isSelected == (i == _menuIndex)) {
+        int indexItem = i + ((_menuIndexPage - 1) * 4);
+        if (indexItem < 0 || indexItem >= static_cast<int>(_menuItems->size())) {
+            nothing = true;
+        }
+
+        if (nothing) {
             continue;
         }
 
-        item->isSelected = (i == _menuIndex);
-
-        uint16_t color = (i == _menuIndex) ? _colorOn : _colorOff;
+        bool isSelected = (indexItem == _menuIndex);
+        uint16_t color = isSelected ? _colorOn : _colorOff;
         _tft->drawRoundRect(_menuX, yPositions[i], _width, _height, _cornerRadius, color);
+
+        MenuItem* item = (*_menuItems)[indexItem];
+        if (_isInitializedDrawMenu && item->isSelected == isSelected) {
+            continue;
+        }
+
+        item->isSelected = isSelected;
+
+        _tft->setFont(FontArialBold);
         _tft->setTextColor(color, _tft->C_BLACK);
         _tft->setCursor(_menuX + 10, yPositions[i] + 6);
         _tft->print(item->MenuName.c_str());
     }
 
-    if (!_isInitializedDrawMenu) {
-        _tft->drawRoundRect(100, 196, 34, 24, _cornerRadius, _tft->C_BEIGE);
+    if (_isInitializedDrawMenu) {
+        _menuPaging.setPage(_menuIndexPage);
     }
-
-    _tft->setTextColor(_colorOff, _tft->C_BLACK);
-    _tft->setCursor(110, 200);
-
-    char buffer[12];
-    sprintf(buffer, "%d", _menuIndex + 1);
-    _tft->print(buffer);
+    else {
+        _menuPaging.drawFrameAndPage(_menuIndexPage, static_cast<int>(_menuItems->size()));
+    }
 
     _isInitializedDrawMenu = true;
 }
@@ -68,11 +93,23 @@ void AppMenu::setMenuIndex(int index) {
         return;
 
     _menuIndex = index;
+    _menuIndexPage = index > 3 ? 2 : 1;
     drawMenu();
 }
 
 int AppMenu::getMenuIndex() {
     return _menuIndex;
+}
+
+void AppMenu::drawDebugValue(int value) {
+
+    _tft->setFont(FontDefault);
+    _tft->setTextColor(_tft->C_GREEN, _tft->C_BLACK);
+    _tft->setCursor(180, 120);
+
+    char buffer[12];
+    sprintf(buffer, "%d", value);
+    _tft->print(buffer);
 }
 
 AppMenu::~AppMenu() {
