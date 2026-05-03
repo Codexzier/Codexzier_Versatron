@@ -6,6 +6,30 @@
 #include "GC9A01_LTSM.hpp"
 #include "fonts_LTSM/FontArialBold_LTSM.hpp"    // 16x16 pixels
 
+// not sure if this is the best approach
+void AppMenu::setMaxIndexPage() {
+    float maxIndexPage1 = static_cast<int>(_menuItems->size()) / 4.0f;
+    int maxIndexPage2 = static_cast<int>(_menuItems->size()) / 4;
+
+    if (maxIndexPage1 > (float)maxIndexPage2) {
+        maxIndexPage2++;
+    }
+
+    _menuIndexPageMax = maxIndexPage2;
+}
+
+void AppMenu::setIndexPage() {
+    // get the current index page based on the menu index
+    // example: is index 1, it is page 1 and it is index 4, it is page 2.
+    float current = (_menuIndex + 1) / 4.0f;
+    int currentInt = (_menuIndex + 1) / 4;
+
+    if (current > (float)currentInt) {
+        currentInt++;
+    }
+
+    _menuIndexPage = currentInt;
+}
 
 void AppMenu::addItem(const MenuItem& item) {
 
@@ -21,16 +45,9 @@ void AppMenu::addItem(const MenuItem& item) {
     // Füge den Zeiger zum Vector hinzu
     _menuItems->push_back(newItem);
 
-    _menuPaging.drawFrameAndPage(_menuIndexPage, _menuIndexPageSelected);
+    _menuPaging.drawFrameAndPage(_menuIndexPage, _menuIndexPageMax);
 
-    float maxIndexPage1 = static_cast<int>(_menuItems->size()) / 4.0f;
-    int maxIndexPage2 = static_cast<int>(_menuItems->size()) / 4;
-
-    if (maxIndexPage1 > (float)maxIndexPage2) {
-        maxIndexPage2++;
-    }
-
-    _menuIndexPageMax = maxIndexPage2;
+    setMaxIndexPage();
 }
 
 void AppMenu::drawMenu() {
@@ -61,14 +78,14 @@ void AppMenu::drawMenu() {
         }
 
         bool isSelected = (indexItem == _menuIndex);
-        uint16_t color = isSelected ? _colorOn : _colorOff;
-        _tft->drawRoundRect(_menuX, yPositions[i], _width, _height, _cornerRadius, color);
 
         MenuItem* item = (*_menuItems)[indexItem];
         if (_isInitializedDrawMenu && item->isSelected == isSelected) {
             continue;
         }
 
+        uint16_t color = isSelected ? _colorOn : _colorOff;
+        _tft->drawRoundRect(_menuX, yPositions[i], _width, _height, _cornerRadius, color);
         item->isSelected = isSelected;
 
         _tft->setFont(FontArialBold);
@@ -81,23 +98,24 @@ void AppMenu::drawMenu() {
         _menuPaging.setPage(_menuIndexPage);
     }
     else {
-        _menuPaging.drawFrameAndPage(_menuIndexPage, static_cast<int>(_menuItems->size()));
+        _menuPaging.drawFrameAndPage(_menuIndexPage, _menuIndexPageMax);
     }
 
     _isInitializedDrawMenu = true;
 }
 
-void AppMenu::setMenuIndex(int index) {
+void AppMenu::setMenuSelect(int index) {
 
     if (index < 0 || index >= static_cast<int>(_menuItems->size()))
         return;
 
     _menuIndex = index;
-    _menuIndexPage = index > 3 ? 2 : 1;
+
+    setIndexPage();
     drawMenu();
 }
 
-int AppMenu::getMenuIndex() {
+int AppMenu::getMenuSelectIndex() {
     return _menuIndex;
 }
 

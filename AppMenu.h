@@ -52,6 +52,9 @@ class AppMenu {
 
     MenuPaging _menuPaging;
 
+    void setMaxIndexPage();
+    void setIndexPage();
+
 public:
     AppMenu()
     : _tft(nullptr), _colorOn(0), _colorOff(0){}
@@ -67,20 +70,18 @@ public:
         _menuPaging.init(tft, _colorOn, _colorOff, tft.C_BEIGE, 85, 194);
     }
 
-    void ResetInitializedDrawMenu() {
+    void resetInitializedDrawMenu() {
         _isInitializedDrawMenu = false;
         _menuIndex = 0;
-
         _menuIndexPage = 1;
-
         _menuPaging.drawFrameAndPage(_menuIndexPage, _menuIndexPageMax);
     }
 
     void addItem(const MenuItem& item);
     void drawMenu();
 
-    void setMenuIndex(int index);
-    int getMenuIndex();
+    void setMenuSelect(int index);
+    int getMenuSelectIndex();
 
 
     void drawDebugValue(int value);

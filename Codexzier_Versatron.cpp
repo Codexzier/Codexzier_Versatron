@@ -3,6 +3,7 @@
 //
 
 #include "Codexzier_Versatron.h"
+#include "AppMenu.h"
 #include "RingSegmentDisplay.h"
 
 #include <math.h>
@@ -14,11 +15,18 @@
 void Codexzier_Versatron::drawMenuAppUi()
 {
     _tft->fillScreen(_tft->C_BLACK);
+    _appMenu.resetInitializedDrawMenu();
+    _appMenu.drawMenu();
+}
+void Codexzier_Versatron::addMenuItem(const MenuItem& item)
+{
+    _appMenu.addItem(item);
 }
 
 void Codexzier_Versatron::drawWorkoutAppUi()
 {
     _tft->fillScreen(_tft->C_BLACK);
+    
     mRing1.drawInitGauge();
     mRing2.drawInitGauge();
 }

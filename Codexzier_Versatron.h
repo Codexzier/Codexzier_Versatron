@@ -6,6 +6,7 @@
 #include <Arduino.h>
 #include <stdint.h>
 #include "GC9A01_LTSM.hpp"
+#include "AppMenu.h"
 #include "RingSegmentDisplay.h"
 
 #ifndef CODEXZIER_VERSATRON_CODEXZIER_VERSATRON_H
@@ -16,6 +17,10 @@ class Codexzier_Versatron {
     GC9A01_LTSM *_tft;
     uint16_t _colorOn;
     uint16_t _colorOff;
+
+    // ========================================================================================
+    // app menu
+    AppMenu _appMenu;
 
     // ========================================================================================
     // Workout Helper
@@ -43,11 +48,19 @@ public:
         _colorOn = colorOn;
         _colorOff = colorOff;
 
+        _appMenu.init(tft, _colorOn, _colorOff);
+
+
         mRing1.init(tft, _colorOn, _colorOff);
         mRing2.init(tft, _colorOn, _colorOff);
     }
 
     void drawMenuAppUi();
+    void addMenuItem(const MenuItem& item);
+    void setMenuSelect(int index)
+    {
+        _appMenu.setMenuSelect(index);
+    }
 
     void drawWorkoutAppUi();
 };
