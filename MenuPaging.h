@@ -7,7 +7,6 @@
 
 #include <Arduino.h>
 #include <stdint.h>
-
 #include "GC9A01_LTSM.hpp"
 
 class MenuPaging {

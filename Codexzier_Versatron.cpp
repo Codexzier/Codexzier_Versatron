@@ -4,6 +4,7 @@
 
 #include "Codexzier_Versatron.h"
 #include "AppMenu.h"
+#include "AppWorkout.h"
 #include "RingSegmentDisplay.h"
 
 #include <math.h>
@@ -27,6 +28,10 @@ void Codexzier_Versatron::drawWorkoutAppUi()
 {
     _tft->fillScreen(_tft->C_BLACK);
     
-    mRing1.drawInitGauge();
-    mRing2.drawInitGauge();
+    _appWorkout.drawOption1();
+}
+
+void Codexzier_Versatron::drawUpdate()
+{
+    _appWorkout.drawUpdate();
 }

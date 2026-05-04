@@ -17,4 +17,6 @@ add_executable(Codexzier_Versatron
         AppMenu.cpp
         AppMenu.h
         MenuPaging.cpp
-        MenuPaging.h)
+        MenuPaging.h
+        AppWorkout.cpp
+        AppWorkout.h)
