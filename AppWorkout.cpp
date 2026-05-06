@@ -61,6 +61,15 @@ void AppWorkout::trainingUpdate() {
 
 void AppWorkout::drawUpdate() {
 
+    switch (_optionSetup){
+        case 1: {
+            drawOption1Setup();
+            return;
+        }
+    }
+
+    if (_option > 0) return;
+
     _ring1.drawGaugeUpdate();
     _ring2.drawGaugeUpdate();
 
@@ -118,15 +127,65 @@ void AppWorkout::drawTimeValues(int x, int y, int value1, int value2) {
 }
 
 void AppWorkout::drawWorkoutOptions() {
-
+    // TODO: Auswahlfenster für die verschiedenen Workouts
+    // TODO: Auswahl Option 1
+    // TODO: Auswahl Option 2
 }
 
 void AppWorkout::setOption(int option) {
 
+    _option = option;
+    _option1SetupHasDraw = false;
+
 }
 
+// option 1 Setup
+void AppWorkout::drawOption1Setup() {
+    // TODO: Folgende Einstellgungen vornehmen
 
-// options
+    if (!_option1SetupHasDraw) {
+        _tft->drawCircle(120, 120, 99, _colorOn);
+
+        _tft->setCursor(_startX, _startY);
+        _tft->setFont(FontArialBold);
+        _tft->setTextColor(_colorText, _tft->C_BLACK);
+        _tft->print("Workout Setup 1");
+
+        _tft->drawFastHLine(_startX, _startY + 20, 140, _colorText);
+
+        _tft->drawFastHLine(_startX, _startY + 80, 140, _colorText);
+    }
+
+    // TODO: Wie lange die Ausführung dauert soll
+    // TODO: Der Wert in _secondsExecutionMax muss über den Poti gesetzt werden
+    drawOption1SetupTextAndTime(_startX, _startY + 30, "Execution", _secondsExecutionMax);
+
+    // TODO: Wie lange die Pause dauert soll
+    drawOption1SetupTextAndTime(_startX, _startY + 45, "Break", _secondsBreakMax);
+
+    // TODO: Anzahl der Runden
+    drawOption1SetupTextAndTime(_startX, _startY + 60, "Rounds", _roundMax);
+
+    _option1SetupHasDraw = true;
+}
+
+void AppWorkout::drawOption1SetupTextAndTime(int x, int y, const char *text, int value) {
+
+    _tft->setFont(FontArialBold);
+    _tft->setTextColor(_colorText, _tft->C_BLACK);
+
+    if (!_option1SetupHasDraw) {
+        _tft->setCursor(x, y);
+        _tft->print(text);
+    }
+
+    _tft->setCursor(x + 100, y);
+    char buffer[10];
+    sprintf(buffer, "%02d", value);
+    _tft->print(buffer);
+}
+
+// option 1
 void AppWorkout::drawOption1() {
     _ring1.drawInitGauge();
     _ring2.drawInitGauge();

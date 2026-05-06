@@ -26,6 +26,7 @@ class AppWorkout {
     RingSegmentDisplay _ring1;
     RingSegmentDisplay _ring2;
 
+    int _optionSetup = 1;
     int _option = 1;
 
 
@@ -49,6 +50,11 @@ class AppWorkout {
 
     void drawRound();
     int _round = 1;
+    int _roundMax = 5;
+
+    // option 1 setup
+    void drawOption1SetupTextAndTime(int x, int y, const char* text, int value);
+    bool _option1SetupHasDraw = false;
 
 public:
     AppWorkout()
@@ -76,6 +82,7 @@ public:
     void drawWorkoutOptions();
     void setOption(int option);
 
+    void drawOption1Setup();
     void drawOption1() ;
 };
 
