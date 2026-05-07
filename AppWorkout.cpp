@@ -78,14 +78,31 @@ void AppWorkout::drawTimeValues(int x, int y, int value1, int value2) {
 
 void AppWorkout::drawUpdate() {
 
-    switch (_optionSetup){
-        case 1: {
-            drawOption1Setup();
-            return;
+    if (!_optionRun) {
+        switch (_option){
+            case 0: {
+                drawOption1Setup();
+                return;
+            }
+            case 1: {
+                drawOption2Setup();
+                return;
+            }
         }
+        return;
     }
 
-    if (_option > 0) return;
+    // if (!_drawRoundHasDraw) {
+    //     switch (_option){
+    //         case 0: {
+    //             drawOption1Run();
+    //             return;
+    //         }
+    //         case 1: {
+    //             return;
+    //         }
+    //     }
+    // }
 
     _ring1.drawGaugeUpdate();
     _ring2.drawGaugeUpdate();
@@ -134,17 +151,35 @@ void AppWorkout::drawTimeUp(int x, int y, int value, const char* text) {
     }
 }
 
-void AppWorkout::drawWorkoutOptions() {
-    // TODO: Auswahlfenster für die verschiedenen Workouts
-    // TODO: Auswahl Option 1
-    // TODO: Auswahl Option 2
+void AppWorkout::setNextOption() {
+
+    if (_option > 0) {
+        _option = 0;
+    }
+    else {
+        _option++;
+    }
+
+    Serial.print("Option: ");
+    Serial.println(_option, DEC);
+
+    _option1SetupHasDraw = false;
+    _drawRoundHasDraw = false;
+
+    _optionRun = false;
 }
 
-void AppWorkout::setOption(int option) {
+void AppWorkout::setOptionRun() {
+    _drawRoundHasDraw = false;
+    _optionRun = true;
 
-    _option = option;
-    _option1SetupHasDraw = false;
+    _secondsExecution = 0;
+    _secondsBreak = 0;
+    _round = 1;
+    _seconds = 0;
+    _minutes = 0;
 
+    drawOption1Run();
 }
 
 // option 1 Setup
@@ -196,7 +231,7 @@ void AppWorkout::drawOption1SetupTextAndTime(int x, int y, const char *text, int
 }
 
 // option 1
-void AppWorkout::drawOption1() {
+void AppWorkout::drawOption1Run() {
     _ring1.drawInitGauge();
     _ring2.drawInitGauge();
 
@@ -215,4 +250,35 @@ void AppWorkout::drawOption1() {
     _tft->drawCircle(120, 120, 99, _colorOn);
     _tft->drawCircle(120, 120, 98, _colorOn);
     _tft->drawCircle(120, 120, 97, _colorOff);
+}
+
+// option 2 setup
+void AppWorkout::drawOption2Setup() {
+    // TODO: Folgende Einstellgungen vornehmen
+
+    if (!_option1SetupHasDraw) {
+        _tft->drawCircle(120, 120, 99, _colorOn);
+
+        _tft->setCursor(_startX, _startY);
+        _tft->setFont(FontArialBold);
+        _tft->setTextColor(_colorText, _tft->C_BLACK);
+        _tft->print("Workout");
+        _tft->setCursor(_startX, _startY + 20);
+        _tft->print("Setup 2");
+
+        _tft->drawFastHLine(_startX, _startY + 45, 140, _colorText);
+
+        _tft->drawFastHLine(_startX, _startY + 100, 140, _colorText);
+    }
+
+    // TODO: Auswahl des Workouts set
+    drawOption1SetupTextAndTime(_startX, _startY + 50, "Workout", _secondsExecutionMax);
+
+    // TODO: Anzahl Sätze
+    drawOption1SetupTextAndTime(_startX, _startY + 65, "Sets", _secondsBreakMax);
+
+    // TODO: Anzahl der Runden
+    drawOption1SetupTextAndTime(_startX, _startY + 80, "Rounds", _roundMax);
+
+    _option1SetupHasDraw = true;
 }

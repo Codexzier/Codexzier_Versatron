@@ -55,6 +55,8 @@ public:
     }
 
     void drawWorkoutAppUi();
+    void drawWorkoutAppNextOption();
+    void setWorkoutAppRun();
 
     void drawUpdate();
 };

@@ -26,9 +26,8 @@ class AppWorkout {
     RingSegmentDisplay _ring1;
     RingSegmentDisplay _ring2;
 
-    int _optionSetup = 1;
     int _option = 1;
-
+    bool _optionRun;
 
 
     // timer variables
@@ -80,11 +79,13 @@ public:
     void drawUpdate();
 
     // individual functions
-    void drawWorkoutOptions();
-    void setOption(int option);
+    void setNextOption();
+    void setOptionRun();
 
     void drawOption1Setup();
-    void drawOption1() ;
+    void drawOption1Run() ;
+
+    void drawOption2Setup();
 };
 
 

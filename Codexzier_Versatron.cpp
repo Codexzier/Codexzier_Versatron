@@ -6,7 +6,6 @@
 #include "AppMenu.h"
 #include "AppWorkout.h"
 #include "RingSegmentDisplay.h"
-
 #include <math.h>
 #include "fonts_LTSM/FontArialBold_LTSM.hpp"    // 16x16 pixels
 #include "fonts_LTSM/FontPico_LTSM.hpp"         // 8x12 pixels
@@ -27,9 +26,16 @@ void Codexzier_Versatron::addMenuItem(const MenuItem& item)
 void Codexzier_Versatron::drawWorkoutAppUi()
 {
     _tft->fillScreen(_tft->C_BLACK);
+}
 
-    //_appWorkout.drawUpdate();
-    //_appWorkout.drawOption1();
+void Codexzier_Versatron::drawWorkoutAppNextOption() {
+    _tft->fillScreen(_tft->C_BLACK);
+    _appWorkout.setNextOption();
+}
+
+void Codexzier_Versatron::setWorkoutAppRun() {
+    _tft->fillScreen(_tft->C_BLACK);
+    _appWorkout.setOptionRun();
 }
 
 void Codexzier_Versatron::drawUpdate()
