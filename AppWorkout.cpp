@@ -59,6 +59,23 @@ void AppWorkout::trainingUpdate() {
     drawRound();
 }
 
+void AppWorkout::drawTimeValues(int x, int y, int value1, int value2) {
+
+    _tft->setFont(FontArialBold);
+    _tft->setTextColor(_colorText, _tft->C_BLACK);
+
+    char buffer[3];
+    sprintf(buffer, "%02d", value1);
+    _tft->setCursor(x, y);
+    _tft->print(buffer);
+
+    _tft->setCursor(x + 30, y);
+    _tft->print(":");
+    sprintf(buffer, "%02d", value2);
+    _tft->setCursor(x + 45, y);
+    _tft->print(buffer);
+}
+
 void AppWorkout::drawUpdate() {
 
     switch (_optionSetup){
@@ -77,21 +94,27 @@ void AppWorkout::drawUpdate() {
         return;
     }
 
-    trainingUpdate();
-
     _ring1.setValue(_seconds);
     _ring2.setValue(_minutes);
 
-    drawTimeValues(_startX + 30, 40, _minutes, _seconds);
+    drawTimeValues(_startX + 32, 40, _minutes, _seconds);
+    trainingUpdate();
+
+    _drawRoundHasDraw = true;
 }
 
 void AppWorkout::drawRound() {
     _tft->setFont(FontArialBold);
     _tft->setTextColor(_colorText, _tft->C_BLACK);
 
-    _tft->setCursor(_startX, _startY + 50);
+    if (!_drawRoundHasDraw) {
+        _tft->setCursor(_startX, _startY + 50);
+        _tft->print("Round");
+    }
+
+    _tft->setCursor(_startX + 100, _startY + 50);
     char buffer[10];
-    sprintf(buffer, "Round %d", _round);
+    sprintf(buffer, "%d", _round);
     _tft->print(buffer);
 }
 
@@ -105,25 +128,10 @@ void AppWorkout::drawTimeUp(int x, int y, int value, const char* text) {
     sprintf(buffer, "%02d", value);
     _tft->print(buffer);
 
-    _tft->setCursor(x + 20, y);
-    _tft->print(text);
-}
-
-void AppWorkout::drawTimeValues(int x, int y, int value1, int value2) {
-
-    _tft->setFont(FontArialBold);
-    _tft->setTextColor(_colorText, _tft->C_BLACK);
-
-    char buffer[3];
-    sprintf(buffer, "%02d", value1);
-    _tft->setCursor(x, y);
-    _tft->print(buffer);
-
-    _tft->setCursor(x + 30, y);
-    _tft->print(":");
-    sprintf(buffer, "%02d", value2);
-    _tft->setCursor(x + 45, y);
-    _tft->print(buffer);
+    if (!_drawRoundHasDraw) {
+        _tft->setCursor(x + 20, y);
+        _tft->print(text);
+    }
 }
 
 void AppWorkout::drawWorkoutOptions() {
@@ -149,22 +157,24 @@ void AppWorkout::drawOption1Setup() {
         _tft->setCursor(_startX, _startY);
         _tft->setFont(FontArialBold);
         _tft->setTextColor(_colorText, _tft->C_BLACK);
-        _tft->print("Workout Setup 1");
+        _tft->print("Workout");
+        _tft->setCursor(_startX, _startY + 20);
+        _tft->print("Setup 1");
 
-        _tft->drawFastHLine(_startX, _startY + 20, 140, _colorText);
+        _tft->drawFastHLine(_startX, _startY + 45, 140, _colorText);
 
-        _tft->drawFastHLine(_startX, _startY + 80, 140, _colorText);
+        _tft->drawFastHLine(_startX, _startY + 100, 140, _colorText);
     }
 
     // TODO: Wie lange die Ausführung dauert soll
     // TODO: Der Wert in _secondsExecutionMax muss über den Poti gesetzt werden
-    drawOption1SetupTextAndTime(_startX, _startY + 30, "Execution", _secondsExecutionMax);
+    drawOption1SetupTextAndTime(_startX, _startY + 50, "Execut", _secondsExecutionMax);
 
     // TODO: Wie lange die Pause dauert soll
-    drawOption1SetupTextAndTime(_startX, _startY + 45, "Break", _secondsBreakMax);
+    drawOption1SetupTextAndTime(_startX, _startY + 65, "Break", _secondsBreakMax);
 
     // TODO: Anzahl der Runden
-    drawOption1SetupTextAndTime(_startX, _startY + 60, "Rounds", _roundMax);
+    drawOption1SetupTextAndTime(_startX, _startY + 80, "Rounds", _roundMax);
 
     _option1SetupHasDraw = true;
 }

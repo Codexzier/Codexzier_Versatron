@@ -27,8 +27,9 @@ void Codexzier_Versatron::addMenuItem(const MenuItem& item)
 void Codexzier_Versatron::drawWorkoutAppUi()
 {
     _tft->fillScreen(_tft->C_BLACK);
-    
-    _appWorkout.drawOption1();
+
+    //_appWorkout.drawUpdate();
+    //_appWorkout.drawOption1();
 }
 
 void Codexzier_Versatron::drawUpdate()

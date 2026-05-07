@@ -49,6 +49,7 @@ class AppWorkout {
     int _secondsBreakMax = 30;
 
     void drawRound();
+    bool _drawRoundHasDraw = false;
     int _round = 1;
     int _roundMax = 5;
 
