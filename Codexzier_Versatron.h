@@ -7,11 +7,16 @@
 #include <stdint.h>
 #include "GC9A01_LTSM.hpp"
 
-#include "AppMenu.h"
+#include "MenuArea.h"
 #include "AppWorkout.h"
 
 #ifndef CODEXZIER_VERSATRON_CODEXZIER_VERSATRON_H
 #define CODEXZIER_VERSATRON_CODEXZIER_VERSATRON_H
+
+enum DrawContent {
+    Menu,
+    Workout
+};
 
 class Codexzier_Versatron {
 
@@ -20,9 +25,11 @@ class Codexzier_Versatron {
     uint16_t _colorOff;
     uint16_t _colorText;
 
+    DrawContent _drawContent;
+
     // ========================================================================================
     // app menu
-    AppMenu _appMenu;
+    MenuArea _menu;
 
     // ========================================================================================
     // Workout Helper
@@ -43,16 +50,18 @@ public:
         _colorOff = colorOff;
         _colorText = colorText;
 
-        _appMenu.init(tft, _colorOn, _colorOff);
+        _menu.init(tft, _colorOn, _colorOff);
         _appWorkout.init(tft, _colorOn, _colorOff, colorText);
     }
 
-    void drawMenuAppUi();
+    void showMenuAppUi();
     void addMenuItem(const MenuItem& item);
-    void setMenuSelect(int index)
-    {
-        _appMenu.setMenuSelect(index);
-    }
+    void nextMenuSelect();
+
+    // void setMenuSelect(int index)
+    // {
+    //     _menu.setMenuSelect(index);
+    // }
 
     void drawWorkoutAppUi();
     void drawWorkoutAppNextOption();

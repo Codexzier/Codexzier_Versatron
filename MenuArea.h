@@ -25,7 +25,7 @@ public:
     bool isSelected = false;
 };
 
-class AppMenu {
+class MenuArea {
 
     GC9A01_LTSM *_tft;
     uint16_t _colorOn;
@@ -55,8 +55,12 @@ class AppMenu {
     void setMaxIndexPage();
     void setIndexPage();
 
+    void drawMenu();
+    void drawClearByChangedPage();
+    void drawMenuPaging();
+
 public:
-    AppMenu()
+    MenuArea()
     : _tft(nullptr), _colorOn(0), _colorOff(0){}
 
     void init(
@@ -77,16 +81,18 @@ public:
         _menuPaging.drawFrameAndPage(_menuIndexPage, _menuIndexPageMax);
     }
 
-    void addItem(const MenuItem& item);
-    void drawMenu();
+    void drawUpdate();
 
-    void setMenuSelect(int index);
+    void addItem(const MenuItem& item);
+    void nextMenuSelect();
+    //void setMenuSelect(int index);
+
     int getMenuSelectIndex();
 
 
     void drawDebugValue(int value);
 
-    ~AppMenu();
+    ~MenuArea();
 };
 
 #endif //CODEXZIER_VERSATRON_APPMENU_H

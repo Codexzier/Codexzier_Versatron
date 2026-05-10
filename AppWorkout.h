@@ -8,7 +8,8 @@
 #include <Arduino.h>
 #include <stdint.h>
 #include "GC9A01_LTSM.hpp"
-#include "RingSegmentDisplay.h"
+#include "ControlRingSegmentDisplay.h"
+#include "AppWorkoutSetup.h"
 
 
 class AppWorkout {
@@ -23,12 +24,14 @@ class AppWorkout {
     int _radiusOuter2 = 108;
     int _radiusInner2 = 100;
 
-    RingSegmentDisplay _ring1;
-    RingSegmentDisplay _ring2;
+    ControlRingSegmentDisplay _ring1;
+    ControlRingSegmentDisplay _ring2;
 
     int _option = 1;
     bool _optionRun;
 
+    // Setup
+    AppWorkoutSetup _setup;
 
     // timer variables
     int _startX = 50;
@@ -52,9 +55,6 @@ class AppWorkout {
     int _round = 1;
     int _roundMax = 5;
 
-    // option 1 setup
-    void drawOption1SetupTextAndTime(int x, int y, const char* text, int value);
-    bool _option1SetupHasDraw = false;
 
 public:
     AppWorkout()
@@ -82,7 +82,7 @@ public:
     void setNextOption();
     void setOptionRun();
 
-    void drawOption1Setup();
+    //void drawOption1Setup();
     void drawOption1Run() ;
 
     void drawOption2Setup();

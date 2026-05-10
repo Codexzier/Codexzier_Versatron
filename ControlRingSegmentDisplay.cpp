@@ -2,11 +2,11 @@
 // Created by codexzier on 29.04.26.
 //
 
-#include "RingSegmentDisplay.h"
+#include "ControlRingSegmentDisplay.h"
 #include <math.h>
 #include "fonts_LTSM/FontArialBold_LTSM.hpp"    // 16x16 pixels
 
-void RingSegmentDisplay::drawInitGauge()
+void ControlRingSegmentDisplay::drawInitGauge()
 {
     float angle = 0;
     for (int index = 0; index < _segmentsCount; index++) {
@@ -17,7 +17,7 @@ void RingSegmentDisplay::drawInitGauge()
     }
 }
 
-void RingSegmentDisplay::setValue(int value)
+void ControlRingSegmentDisplay::setValue(int value)
 {
     if (value < 0 || value > _segmentsCount) {
         return;
@@ -25,11 +25,11 @@ void RingSegmentDisplay::setValue(int value)
     _segmentValueOn = value / _angleStep;
 }
 
-int RingSegmentDisplay::GetValue() {
+int ControlRingSegmentDisplay::GetValue() {
     return static_cast<int>(_segmentValueOn * _angleStep);
 }
 
-void RingSegmentDisplay::drawGaugeUpdate() {
+void ControlRingSegmentDisplay::drawGaugeUpdate() {
 
     if (_segmentIndex >= _segmentsCount) {
         _segmentIndex = 0;
@@ -61,7 +61,7 @@ void RingSegmentDisplay::drawGaugeUpdate() {
 // @param color Die Farbe des Segments (RGB565)
 // @param Äußerer Rand des Balkens (fast am Glas)
 // @param Innerer Rand (Dicke des Balkens = 15px)
-void RingSegmentDisplay::drawGaugeSegment(
+void ControlRingSegmentDisplay::drawGaugeSegment(
         const float angleDeg,
         const uint16_t color) {
 

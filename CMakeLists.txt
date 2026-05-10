@@ -12,11 +12,13 @@ include_directories(.
 add_executable(Codexzier_Versatron
         Codexzier_Versatron.cpp
         Codexzier_Versatron.h
-        RingSegmentDisplay.cpp
-        RingSegmentDisplay.h
-        AppMenu.cpp
-        AppMenu.h
+        ControlRingSegmentDisplay.cpp
+        ControlRingSegmentDisplay.h
+        MenuArea.cpp
+        MenuArea.h
         MenuPaging.cpp
         MenuPaging.h
         AppWorkout.cpp
-        AppWorkout.h)
+        AppWorkout.h
+        AppWorkoutSetup.cpp
+        AppWorkoutSetup.h)

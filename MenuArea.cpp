@@ -2,12 +2,24 @@
 // Created by codexzier on 01.05.26.
 //
 
-#include "AppMenu.h"
+#include "MenuArea.h"
 #include "GC9A01_LTSM.hpp"
 #include "fonts_LTSM/FontArialBold_LTSM.hpp"    // 16x16 pixels
 
+
+void MenuArea::drawUpdate() {
+
+    // Nur das Menü zeichnen, wenn Items vorhanden sind.
+    if (!_menuItems) {
+        return;
+    }
+
+    drawMenu();
+}
+
+
 // not sure if this is the best approach
-void AppMenu::setMaxIndexPage() {
+void MenuArea::setMaxIndexPage() {
     float maxIndexPage1 = static_cast<int>(_menuItems->size()) / 4.0f;
     int maxIndexPage2 = static_cast<int>(_menuItems->size()) / 4;
 
@@ -18,7 +30,7 @@ void AppMenu::setMaxIndexPage() {
     _menuIndexPageMax = maxIndexPage2;
 }
 
-void AppMenu::setIndexPage() {
+void MenuArea::setIndexPage() {
     // get the current index page based on the menu index
     // example: is index 1, it is page 1 and it is index 4, it is page 2.
     float current = (_menuIndex + 1) / 4.0f;
@@ -31,7 +43,7 @@ void AppMenu::setIndexPage() {
     _menuIndexPage = currentInt;
 }
 
-void AppMenu::addItem(const MenuItem& item) {
+void MenuArea::addItem(const MenuItem& item) {
 
     if (!_menuItems) {
         _menuItems = std::make_unique<std::vector<MenuItem*>>();
@@ -50,17 +62,9 @@ void AppMenu::addItem(const MenuItem& item) {
     setMaxIndexPage();
 }
 
-void AppMenu::drawMenu() {
+void MenuArea::drawMenu() {
 
-    if (!_menuItems) {
-        return;
-    }
-
-    if (_menuIndexPage != _menuIndexPageSelected) {
-        _isInitializedDrawMenu = false;
-        _tft->fillScreen(_tft->C_BLACK);
-    }
-    _menuIndexPageSelected = _menuIndexPage;
+    drawClearByChangedPage();
 
     const int maxEntries = 4;
     const int yPositions[] = {_menuY1, _menuY2, _menuY3, _menuY4};
@@ -94,32 +98,51 @@ void AppMenu::drawMenu() {
         _tft->print(item->MenuName.c_str());
     }
 
+    drawMenuPaging();
+
+    _isInitializedDrawMenu = true;
+}
+
+// Wenn sich die Index Page sich geändert hat.
+void MenuArea::drawClearByChangedPage() {
+
+    if (_menuIndexPage != _menuIndexPageSelected) {
+        _isInitializedDrawMenu = false;
+        _tft->fillScreen(_tft->C_BLACK);
+    }
+    _menuIndexPageSelected = _menuIndexPage;
+}
+
+void MenuArea::drawMenuPaging() {
     if (_isInitializedDrawMenu) {
         _menuPaging.setPage(_menuIndexPage);
     }
     else {
         _menuPaging.drawFrameAndPage(_menuIndexPage, _menuIndexPageMax);
     }
-
-    _isInitializedDrawMenu = true;
 }
 
-void AppMenu::setMenuSelect(int index) {
+void MenuArea::nextMenuSelect() {
 
-    if (index < 0 || index >= static_cast<int>(_menuItems->size()))
-        return;
-
-    _menuIndex = index;
+    if (_menuIndex < 0 || _menuIndex >= static_cast<int>(_menuItems->size()))
+    {
+        _menuIndex = 0;
+    }
+    else {
+        _menuIndex++;
+    }
 
     setIndexPage();
-    drawMenu();
+
+    _isInitializedDrawMenu = false;
+    //drawMenu();
 }
 
-int AppMenu::getMenuSelectIndex() {
+int MenuArea::getMenuSelectIndex() {
     return _menuIndex;
 }
 
-void AppMenu::drawDebugValue(int value) {
+void MenuArea::drawDebugValue(int value) {
 
     _tft->setFont(FontDefault);
     _tft->setTextColor(_tft->C_GREEN, _tft->C_BLACK);
@@ -130,7 +153,7 @@ void AppMenu::drawDebugValue(int value) {
     _tft->print(buffer);
 }
 
-AppMenu::~AppMenu() {
+MenuArea::~MenuArea() {
     if (_menuItems) {
         for (MenuItem* item : *_menuItems) {
             delete item;

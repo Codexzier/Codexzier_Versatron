@@ -12,7 +12,7 @@
 #define CODEXZIER_VERSATRON_RINGSEGMENTDISPLAY_H
 
 
-class RingSegmentDisplay {
+class ControlRingSegmentDisplay {
 
 private:
     GC9A01_LTSM *_tft;
@@ -34,7 +34,7 @@ private:
         uint16_t color);
 
 public:
-    explicit RingSegmentDisplay(int radiusOuter, int radiusInner)
+    explicit ControlRingSegmentDisplay(int radiusOuter, int radiusInner)
         : _tft(nullptr), _colorOn(0), _colorOff(0),
             _radiusOuter(radiusOuter), _radiusInner(radiusInner) { }
 

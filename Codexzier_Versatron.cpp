@@ -3,25 +3,40 @@
 //
 
 #include "Codexzier_Versatron.h"
-#include "AppMenu.h"
-#include "AppWorkout.h"
-#include "RingSegmentDisplay.h"
-#include <math.h>
-#include "fonts_LTSM/FontArialBold_LTSM.hpp"    // 16x16 pixels
-#include "fonts_LTSM/FontPico_LTSM.hpp"         // 8x12 pixels
-#include "fonts_LTSM/FontSinclairS_LTSM.hpp"    // 8x8 pixels
+#include "MenuArea.h"
 
 
-void Codexzier_Versatron::drawMenuAppUi()
+// ################################################################
+// Public
+// ================================================================
+// render update content
+void Codexzier_Versatron::drawUpdate()
 {
+    switch (_drawContent) {
+        case Menu: {
+            _menu.drawUpdate();
+            break;
+        }
+        case Workout: {
+            break;
+        }
+    }
+}
+
+// ================================================================
+// menu
+void Codexzier_Versatron::showMenuAppUi(){
     _tft->fillScreen(_tft->C_BLACK);
-    _appMenu.resetInitializedDrawMenu();
-    _appMenu.drawMenu();
+    _menu.resetInitializedDrawMenu();
 }
-void Codexzier_Versatron::addMenuItem(const MenuItem& item)
-{
-    _appMenu.addItem(item);
+void Codexzier_Versatron::addMenuItem(const MenuItem& item){
+    _menu.addItem(item);
 }
+
+void Codexzier_Versatron::nextMenuSelect() {
+    _menu.nextMenuSelect();
+}
+
 
 void Codexzier_Versatron::drawWorkoutAppUi()
 {
@@ -38,7 +53,7 @@ void Codexzier_Versatron::setWorkoutAppRun() {
     _appWorkout.setOptionRun();
 }
 
-void Codexzier_Versatron::drawUpdate()
-{
-    _appWorkout.drawUpdate();
-}
+
+
+// ================================================================
+// private
