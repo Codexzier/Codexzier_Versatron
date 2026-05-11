@@ -9,6 +9,11 @@
 #include <stdint.h>
 #include "GC9A01_LTSM.hpp"
 
+enum SelectSetup {
+    TimeExecution,
+    TimeBreak,
+    CountRound
+};
 
 class AppWorkoutSetup {
 
@@ -18,18 +23,21 @@ class AppWorkoutSetup {
     uint16_t _colorText;
 
 
-    int _startX = 50;
-    int _startY = 70;
+    int16_t _startX = 50;
+    int16_t _startY = 70;
 
-    void drawOption1SetupTextAndTime(int x, int y, const char* text, int value);
+    void drawTextAndTime(int x, int y, const char* text, int value);
     bool _option1SetupHasDraw = false;
 
-    int _secondsExecutionMax = 30;
-    int _secondsBreakMax = 30;
-    int _roundMax = 5;
+    SelectSetup _selectSetup = TimeExecution;
+    int16_t _lastSelectSetupPointerPositionY = 0;
+    int16_t _secondsExecutionMax = 30;
+    int16_t _secondsBreakMax = 30;
+    int16_t _roundMax = 5;
 
 
-    void drawOptionSetup();
+    void drawSetupValues();
+    void drawSelectPointer();
 
 public:
     AppWorkoutSetup()
@@ -47,6 +55,9 @@ public:
 
     // base functions
     void drawUpdate();
+
+    void setValue1(int16_t value);
+    void setButton1();
 };
 
 

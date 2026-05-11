@@ -25,7 +25,7 @@ class Codexzier_Versatron {
     uint16_t _colorOff;
     uint16_t _colorText;
 
-    DrawContent _drawContent;
+    DrawContent _drawContent = Menu;
 
     // ========================================================================================
     // app menu
@@ -58,12 +58,13 @@ public:
     void addMenuItem(const MenuItem& item);
     void nextMenuSelect();
 
-    // void setMenuSelect(int index)
-    // {
-    //     _menu.setMenuSelect(index);
-    // }
+    void showApp(DrawContent content);
+    void setValue1(int16_t value);
+    void setButton1();
 
-    void drawWorkoutAppUi();
+
+    // obsolete
+    // app draw and setup
     void drawWorkoutAppNextOption();
     void setWorkoutAppRun();
 

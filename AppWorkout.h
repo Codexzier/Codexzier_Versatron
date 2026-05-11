@@ -7,6 +7,8 @@
 
 #include <Arduino.h>
 #include <stdint.h>
+
+#include "AppWorkoutRun.h"
 #include "GC9A01_LTSM.hpp"
 #include "ControlRingSegmentDisplay.h"
 #include "AppWorkoutSetup.h"
@@ -19,48 +21,17 @@ class AppWorkout {
     uint16_t _colorOff;
     uint16_t _colorText;
 
-    int _radiusOuter1 = 118;
-    int _radiusInner1 = 112;
-    int _radiusOuter2 = 108;
-    int _radiusInner2 = 100;
-
-    ControlRingSegmentDisplay _ring1;
-    ControlRingSegmentDisplay _ring2;
-
     int _option = 1;
-    bool _optionRun;
+    bool _optionRun = false;
 
-    // Setup
+    // Setup and run
     AppWorkoutSetup _setup;
-
-    // timer variables
-    int _startX = 50;
-    int _startY = 70;
-    void drawTimeValues(int x, int y, int value1, int value2);
-    bool timerUpdate();
-    long _lastTime = 0;
-    int _seconds = 0;
-    int _minutes = 0;
-
-    void trainingUpdate();
-    void drawTimeUp(int x, int y, int value, const char* text);
-    int _secondsExecution = 0;
-    int _secondsExecutionMax = 30;
-
-    int _secondsBreak = 0;
-    int _secondsBreakMax = 30;
-
-    void drawRound();
-    bool _drawRoundHasDraw = false;
-    int _round = 1;
-    int _roundMax = 5;
+    AppWorkoutRun _run;
 
 
 public:
     AppWorkout()
-        : _tft(nullptr), _colorOn(0), _colorOff(0), _colorText(0),
-            _ring1(_radiusOuter1, _radiusInner1),
-            _ring2(_radiusOuter2, _radiusInner2){ }
+        : _tft(nullptr), _colorOn(0), _colorOff(0), _colorText(0){ }
 
     void init(GC9A01_LTSM &tft,
             const uint16_t colorOn,
@@ -71,21 +42,17 @@ public:
         _colorOff = colorOff;
         _colorText = colorText;
 
-        _ring1.init(tft, _colorOn, _colorOff);
-        _ring2.init(tft, _colorOn, _colorOff);
+        _setup.init(tft, colorOn, colorOff, colorText);
+        _run.init(tft, colorOn, colorOff, colorText);
     }
 
     // base functions
     void drawUpdate();
 
-    // individual functions
-    void setNextOption();
-    void setOptionRun();
+    void setValue1(int16_t value);
+    void setButton1();
 
-    //void drawOption1Setup();
-    void drawOption1Run() ;
 
-    void drawOption2Setup();
 };
 
 

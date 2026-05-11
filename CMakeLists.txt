@@ -21,4 +21,6 @@ add_executable(Codexzier_Versatron
         AppWorkout.cpp
         AppWorkout.h
         AppWorkoutSetup.cpp
-        AppWorkoutSetup.h)
+        AppWorkoutSetup.h
+        AppWorkoutRun.cpp
+        AppWorkoutRun.h)

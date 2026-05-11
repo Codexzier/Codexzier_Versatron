@@ -18,6 +18,7 @@ void Codexzier_Versatron::drawUpdate()
             break;
         }
         case Workout: {
+            _appWorkout.drawUpdate();
             break;
         }
     }
@@ -37,11 +38,41 @@ void Codexzier_Versatron::nextMenuSelect() {
     _menu.nextMenuSelect();
 }
 
+// ================================================================
+// app start
+void Codexzier_Versatron::showApp(DrawContent content) {
 
-void Codexzier_Versatron::drawWorkoutAppUi()
-{
     _tft->fillScreen(_tft->C_BLACK);
+    _drawContent = content;
 }
+
+void Codexzier_Versatron::setValue1(int16_t value) {
+    switch (_drawContent) {
+        case Menu: {
+            break;
+        }
+        case Workout: {
+            _appWorkout.setValue1(value);
+            break;
+        }
+    }
+}
+
+void Codexzier_Versatron::setButton1() {
+    switch (_drawContent) {
+        case Menu: {
+            break;
+        }
+        case Workout: {
+            _appWorkout.setButton1();
+            break;
+        }
+    }
+}
+
+// ================================================================
+// app workout
+
 
 void Codexzier_Versatron::drawWorkoutAppNextOption() {
     _tft->fillScreen(_tft->C_BLACK);
