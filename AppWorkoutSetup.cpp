@@ -118,3 +118,16 @@ void AppWorkoutSetup::drawSelectPointer() {
 
     _tft->drawTriangle(x, y, x - 5, y + 3, x, y + 6, _colorOn);
 }
+
+// ==============================
+// properties
+int16_t AppWorkoutSetup::getExecutionMax() const {
+    return _secondsExecutionMax;
+}
+
+int16_t AppWorkoutSetup::getBreakMax() const {
+    return _secondsBreakMax;
+}
+int16_t AppWorkoutSetup::getRoundMx() const {
+    return _roundMax;
+}

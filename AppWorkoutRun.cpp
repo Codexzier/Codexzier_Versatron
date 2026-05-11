@@ -17,6 +17,14 @@ void AppWorkoutRun::drawUpdate() {
         return;
     }
 
+    // TODO: dwitch between break and execution
+    if (_secondsBreak != _secondsBreakMax) {
+        _ring1.setColor(_tft->C_GREEN);
+    }
+    else if (_secondsExecution != _secondsExecutionMax) {
+        _ring1.setColor(_colorOn);
+    }
+
     _ring1.setValue(_seconds);
     _ring2.setValue(_minutes);
 
@@ -124,7 +132,12 @@ void AppWorkoutRun::drawTimeUp(int x, int y, int value, const char *text) {
 }
 
 
-void AppWorkoutRun::setOptionRun() {
+void AppWorkoutRun::setOptionRun(int16_t executionMax, int16_t breakMax, int16_t roundMax) {
+
+    _secondsExecutionMax = executionMax;
+    _secondsBreakMax = breakMax;
+    _roundMax = roundMax;
+
     _drawRoundHasDraw = false;
 
     _secondsExecution = 0;
@@ -133,10 +146,11 @@ void AppWorkoutRun::setOptionRun() {
     _seconds = 0;
     _minutes = 0;
 
-    drawOption1Run();
+    drawOptionRun();
 }
 
-void AppWorkoutRun::drawOption1Run() {
+void AppWorkoutRun::drawOptionRun() {
+
     _ring1.drawInitGauge();
     _ring2.drawInitGauge();
 

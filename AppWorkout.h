@@ -50,9 +50,11 @@ public:
     void drawUpdate();
 
     void setValue1(int16_t value);
+
+    // Selection option
     void setButton1();
-
-
+    // accept setup
+    void setButton2();
 };
 
 

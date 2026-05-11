@@ -59,6 +59,8 @@ public:
      */
     void setValue(int value);
 
+    void setColor(uint16_t color);
+
     /**
      * Get the current value of the ring segment display.
      * @return The current value, between 0 and 100.

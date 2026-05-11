@@ -20,17 +20,32 @@ void AppWorkout::drawUpdate() {
 }
 
 void AppWorkout::setValue1(int16_t value) {
+
     if (!_optionRun) {
-        // TODO: Set Option Setup
         _setup.setValue1(value);
         return;
     }
 }
 
 void AppWorkout::setButton1() {
+
     if (!_optionRun) {
-        // TODO: Set Option Setup
+
         _setup.setButton1();
+        return;
+    }
+}
+
+void AppWorkout::setButton2() {
+
+    if (!_optionRun) {
+        _tft->fillScreen(_tft->C_BLACK);
+
+        _run.setOptionRun(
+            _setup.getExecutionMax(),
+            _setup.getBreakMax(),
+            _setup.getRoundMx());
+        _optionRun = true;
         return;
     }
 }

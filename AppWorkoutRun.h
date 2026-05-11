@@ -50,6 +50,8 @@ class AppWorkoutRun {
     int _round = 1;
     int _roundMax = 5;
 
+    void drawOptionRun();
+
 public:
     AppWorkoutRun()
         : _tft(nullptr), _colorOn(0), _colorOff(0), _colorText(0),
@@ -73,8 +75,7 @@ public:
     void drawUpdate();
 
     // individual functions
-    void setOptionRun();
-    void drawOption1Run() ;
+    void setOptionRun(int16_t executionMax, int16_t breakMax, int16_t roundMax);
 };
 
 

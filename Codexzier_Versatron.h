@@ -54,21 +54,17 @@ public:
         _appWorkout.init(tft, _colorOn, _colorOff, colorText);
     }
 
+    void drawUpdate();
+
     void showMenuAppUi();
     void addMenuItem(const MenuItem& item);
-    void nextMenuSelect();
 
     void showApp(DrawContent content);
     void setValue1(int16_t value);
     void setButton1();
+    void setButton2();
 
 
-    // obsolete
-    // app draw and setup
-    void drawWorkoutAppNextOption();
-    void setWorkoutAppRun();
-
-    void drawUpdate();
 };
 
 #endif //CODEXZIER_VERSATRON_CODEXZIER_VERSATRON_H

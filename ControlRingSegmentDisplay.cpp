@@ -25,6 +25,10 @@ void ControlRingSegmentDisplay::setValue(int value)
     _segmentValueOn = value / _angleStep;
 }
 
+void ControlRingSegmentDisplay::setColor(uint16_t color) {
+    _colorOn = color;
+}
+
 int ControlRingSegmentDisplay::GetValue() {
     return static_cast<int>(_segmentValueOn * _angleStep);
 }

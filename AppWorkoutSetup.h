@@ -58,6 +58,10 @@ public:
 
     void setValue1(int16_t value);
     void setButton1();
+
+    int16_t getExecutionMax() const;
+    int16_t getBreakMax() const;
+    int16_t getRoundMx() const;
 };
 
 
