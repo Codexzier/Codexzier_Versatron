@@ -55,6 +55,7 @@ public:
 
     // base functions
     void drawUpdate();
+    void reset();
 
     void setValue1(int16_t value);
     void setButton1();

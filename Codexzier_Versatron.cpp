@@ -42,6 +42,7 @@ void Codexzier_Versatron::showApp(DrawContent content) {
 
     _tft->fillScreen(_tft->C_BLACK);
     _drawContent = content;
+    _appWorkout.reset();
 }
 
 void Codexzier_Versatron::setValue1(int16_t value) {

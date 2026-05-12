@@ -73,6 +73,7 @@ public:
 
     // base functions
     void drawUpdate();
+    void reset();
 
     // individual functions
     void setOptionRun(int16_t executionMax, int16_t breakMax, int16_t roundMax);

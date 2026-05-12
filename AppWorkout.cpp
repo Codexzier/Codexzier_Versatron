@@ -19,6 +19,13 @@ void AppWorkout::drawUpdate() {
     _run.drawUpdate();
 }
 
+void AppWorkout::reset() {
+ _option = 1;
+    _optionRun = false;
+    _setup.reset();
+    _run.reset();
+}
+
 void AppWorkout::setValue1(int16_t value) {
 
     if (!_optionRun) {

@@ -34,6 +34,10 @@ void AppWorkoutRun::drawUpdate() {
     _drawRoundHasDraw = true;
 }
 
+void AppWorkoutRun::reset() {
+    _drawRoundHasDraw = false;
+}
+
 bool AppWorkoutRun::timerUpdate() {
     long actualTime = millis();
     if(actualTime <= _lastTime + 1000){

@@ -29,6 +29,11 @@ void AppWorkoutSetup::drawUpdate() {
     _option1SetupHasDraw = true;
 }
 
+void AppWorkoutSetup::reset() {
+    _option1SetupHasDraw = false;
+    _lastSelectSetupPointerPositionY = 0;
+}
+
 void AppWorkoutSetup::setValue1(int16_t value) {
 
     switch (_selectSetup) {

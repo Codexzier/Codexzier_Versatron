@@ -10,7 +10,6 @@
 
 #include "AppWorkoutRun.h"
 #include "GC9A01_LTSM.hpp"
-#include "ControlRingSegmentDisplay.h"
 #include "AppWorkoutSetup.h"
 
 
@@ -48,6 +47,7 @@ public:
 
     // base functions
     void drawUpdate();
+    void reset();
 
     void setValue1(int16_t value);
 
