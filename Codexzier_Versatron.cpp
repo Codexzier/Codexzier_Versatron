@@ -19,6 +19,10 @@ void Codexzier_Versatron::drawUpdate()
         }
         case Workout: {
             _appWorkout.drawUpdate();
+            
+            if (_appWorkout.CanBeClosed()) {
+                showMenuAppUi();
+            }
             break;
         }
     }
@@ -73,10 +77,24 @@ void Codexzier_Versatron::setButton1() {
 void Codexzier_Versatron::setButton2() {
     switch (_drawContent) {
         case Menu: {
+            showApp(Workout);
             break;
         }
         case Workout: {
             _appWorkout.setButton2();
+            break;
+        }
+    }
+}
+
+void Codexzier_Versatron::setButton3() {
+    switch (_drawContent) {
+        case Menu: {
+            showApp(Workout);
+            break;
+        }
+        case Workout: {
+            _appWorkout.setButton3();
             break;
         }
     }

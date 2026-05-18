@@ -22,6 +22,7 @@ class AppWorkout {
 
     int _option = 1;
     bool _optionRun = false;
+    bool _canBeClosed = false;
 
     // Setup and run
     AppWorkoutSetup _setup;
@@ -48,6 +49,7 @@ public:
     // base functions
     void drawUpdate();
     void reset();
+    bool CanBeClosed();
 
     void setValue1(int16_t value);
 
@@ -55,6 +57,8 @@ public:
     void setButton1();
     // accept setup
     void setButton2();
+    // Return
+    void setButton3();
 };
 
 

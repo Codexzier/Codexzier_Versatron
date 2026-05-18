@@ -20,10 +20,15 @@ void AppWorkout::drawUpdate() {
 }
 
 void AppWorkout::reset() {
- _option = 1;
+    _option = 1;
     _optionRun = false;
+    _canBeClosed = false;
     _setup.reset();
     _run.reset();
+}
+
+bool AppWorkout::CanBeClosed() {
+    return _canBeClosed;
 }
 
 void AppWorkout::setValue1(int16_t value) {
@@ -46,6 +51,9 @@ void AppWorkout::setButton1() {
 void AppWorkout::setButton2() {
 
     if (!_optionRun) {
+
+        // TODO: Fragen ob wirklich gestartet werden soll.
+
         _tft->fillScreen(_tft->C_BLACK);
 
         _run.setOptionRun(
@@ -55,4 +63,17 @@ void AppWorkout::setButton2() {
         _optionRun = true;
         return;
     }
+}
+
+void AppWorkout::setButton3() {
+    if (_option) {
+
+        _tft->fillScreen(_tft->C_BLACK);
+        reset();
+
+        return;
+    }
+
+    // TODO: Zurück zum Hauptmenü bzw. App verlassen
+    _canBeClosed = true;
 }

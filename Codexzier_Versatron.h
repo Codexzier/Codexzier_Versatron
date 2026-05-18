@@ -63,6 +63,7 @@ public:
     void setValue1(int16_t value);
     void setButton1();
     void setButton2();
+    void setButton3();
 
 
 };
