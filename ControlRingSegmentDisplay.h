@@ -19,7 +19,7 @@ private:
     uint16_t _colorOn;
     uint16_t _colorOff;
 
-    const int _segmentsCount = 60;
+    int _segmentsCount = 60;
     const float _startAngle = 0.0f;
     const float _angleStep = 1.0f;
     int _segmentIndex = 0;
@@ -28,6 +28,7 @@ private:
     bool _segmentsOnRing[60];
     int _radiusOuter = 118;
     int _radiusInner = 112;
+    float _segmentMultiplicator = 6.0;
 
     void drawGaugeSegment(
         float angleDeg,
@@ -52,7 +53,7 @@ public:
         _colorOn = colorOn;
         _colorOff = colorOff;
     }
-    void drawInitGauge();
+
     void drawInitGaugeSetup(int countSegments);
 
     /**

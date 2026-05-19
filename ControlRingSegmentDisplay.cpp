@@ -8,20 +8,17 @@
 #include <math.h>
 #include "fonts_LTSM/FontArialBold_LTSM.hpp"    // 16x16 pixels
 
-void ControlRingSegmentDisplay::drawInitGauge()
-{
-    drawInitGaugeSetup(60);
-}
 
 void ControlRingSegmentDisplay::drawInitGaugeSetup(int countSegments) {
+    _segmentsCount = countSegments;
     float segmentWidth = 3.0; // Breite des Segments in Grad für die Optik
     float angle = 0;
-    float multiplicator = 360.0 / countSegments;
-    segmentWidth = multiplicator / 2.0;
+    _segmentMultiplicator = 360.0 / _segmentsCount;
+    segmentWidth = _segmentMultiplicator / 2.0;
     for (int index = 0; index < _segmentsCount; index++) {
         _segmentsOnRing[index] = false;
 
-        angle = _startAngle + (index * multiplicator);
+        angle = _startAngle + (index * _segmentMultiplicator);
         drawGaugeSegment(angle, _colorOff, segmentWidth);
     }
 }
@@ -48,7 +45,7 @@ void ControlRingSegmentDisplay::drawGaugeUpdate() {
         _segmentIndex = 0;
     }
 
-    float angle = _startAngle + (_segmentIndex * 6);
+    float angle = _startAngle + (_segmentIndex * _segmentMultiplicator);
 
     uint16_t color1 = _colorOn;
     bool segmentOn = true;
@@ -63,7 +60,7 @@ void ControlRingSegmentDisplay::drawGaugeUpdate() {
     }
     _segmentsOnRing[_segmentIndex] = segmentOn;
 
-    drawGaugeSegment(angle, color1, 3);
+    drawGaugeSegment(angle, color1, _segmentMultiplicator / 2.0);
 
     _segmentIndex++;
 }

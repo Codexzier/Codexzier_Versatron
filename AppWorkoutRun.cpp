@@ -18,10 +18,10 @@ void AppWorkoutRun::drawUpdate() {
     }
 
     // TODO: dwitch between break and execution
-    if (_secondsBreak != _secondsBreakMax) {
+    if (_secondsExecution < _secondsExecutionMax) {
         _ring1.setColor(_tft->C_GREEN);
     }
-    else if (_secondsExecution != _secondsExecutionMax) {
+    else if (_secondsBreak < _secondsBreakMax) {
         _ring1.setColor(_colorOn);
     }
 
@@ -67,12 +67,14 @@ void AppWorkoutRun::trainingUpdate() {
     _tft->setFont(FontDefault);
     int timeUpExecution = _secondsExecutionMax;
     int timeUpBreak = _secondsBreakMax;
-    if (_secondsExecution <= _secondsExecutionMax) {
+
+    if (_secondsExecution < _secondsExecutionMax) {
         timeUpExecution = _secondsExecutionMax - _secondsExecution;
         _secondsExecution++;
     }
     else {
-        if (_secondsBreak <= _secondsBreakMax ) {
+
+        if (_secondsBreak < _secondsBreakMax ) {
             timeUpBreak = _secondsBreakMax - _secondsBreak;
             _secondsBreak++;
         }
@@ -155,8 +157,8 @@ void AppWorkoutRun::setOptionRun(int16_t executionMax, int16_t breakMax, int16_t
 
 void AppWorkoutRun::drawOptionRun() {
 
-    _ring1.drawInitGauge();
-    _ring2.drawInitGauge();
+    _ring1.drawInitGaugeSetup(_secondsExecutionMax + _secondsBreakMax);
+    _ring2.drawInitGaugeSetup(_roundMax);
 
     _ring1.setValue(0);
     _ring2.setValue(0);
