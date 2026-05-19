@@ -3,17 +3,26 @@
 //
 
 #include "ControlRingSegmentDisplay.h"
+
+#include <algorithm>
 #include <math.h>
 #include "fonts_LTSM/FontArialBold_LTSM.hpp"    // 16x16 pixels
 
 void ControlRingSegmentDisplay::drawInitGauge()
 {
+    drawInitGaugeSetup(60);
+}
+
+void ControlRingSegmentDisplay::drawInitGaugeSetup(int countSegments) {
+    float segmentWidth = 3.0; // Breite des Segments in Grad für die Optik
     float angle = 0;
+    float multiplicator = 360.0 / countSegments;
+    segmentWidth = multiplicator / 2.0;
     for (int index = 0; index < _segmentsCount; index++) {
         _segmentsOnRing[index] = false;
 
-        angle = _startAngle + (index * 6);
-        drawGaugeSegment(angle, _colorOff);
+        angle = _startAngle + (index * multiplicator);
+        drawGaugeSegment(angle, _colorOff, segmentWidth);
     }
 }
 
@@ -54,7 +63,7 @@ void ControlRingSegmentDisplay::drawGaugeUpdate() {
     }
     _segmentsOnRing[_segmentIndex] = segmentOn;
 
-    drawGaugeSegment(angle, color1);
+    drawGaugeSegment(angle, color1, 3);
 
     _segmentIndex++;
 }
@@ -67,17 +76,17 @@ void ControlRingSegmentDisplay::drawGaugeUpdate() {
 // @param Innerer Rand (Dicke des Balkens = 15px)
 void ControlRingSegmentDisplay::drawGaugeSegment(
         const float angleDeg,
-        const uint16_t color) {
+        const uint16_t color,
+        const float segmentWidth) {
 
     // Feste Werte für das Design der Camping-Lampe
     constexpr int centerX = 120;    // Mitte des 240x240 Displays
     constexpr int centerY = 120;
-    constexpr float segmentWidth = 3.0; // Breite des Segments in Grad für die Optik
 
     // Umrechnung von Winkeln zwischen Grad und Radiant.
     float shiftAngle = angleDeg - 90.0;
     const float rad = M_PI * shiftAngle / 180.0;
-    constexpr float radOffset = (segmentWidth / 2.0) * M_PI / 180.0;
+    const float radOffset = (segmentWidth / 2.0) * M_PI / 180.0;
 
     // Berechnung der 4 Eckpunkte des Segments für ein sauberes Rechteck
     // Punkt A & B (Innen), Punkt C & D (Außen)

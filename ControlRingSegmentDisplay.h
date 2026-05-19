@@ -31,7 +31,8 @@ private:
 
     void drawGaugeSegment(
         float angleDeg,
-        uint16_t color);
+        uint16_t color,
+        float segmentWidth);
 
 public:
     explicit ControlRingSegmentDisplay(int radiusOuter, int radiusInner)
@@ -52,6 +53,7 @@ public:
         _colorOff = colorOff;
     }
     void drawInitGauge();
+    void drawInitGaugeSetup(int countSegments);
 
     /**
      * Set the value of the ring segment display.
