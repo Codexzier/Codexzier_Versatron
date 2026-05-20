@@ -22,11 +22,11 @@ void AppWorkoutRun::drawUpdate() {
         _ring1.setColor(_tft->C_GREEN);
     }
     else if (_secondsBreak < _secondsBreakMax) {
-        _ring1.setColor(_colorOn);
+        _ring1.setColor(_tft->C_ORANGE);
     }
 
-    _ring1.setValue(_seconds);
-    _ring2.setValue(_minutes);
+    _ring1.setValue(_secondsExecution + _secondsBreak + 1);
+    _ring2.setValue(_round - 1);
 
     drawTimeValues(_startX + 32, 40, _minutes, _seconds);
     trainingUpdate();
@@ -68,17 +68,19 @@ void AppWorkoutRun::trainingUpdate() {
     int timeUpExecution = _secondsExecutionMax;
     int timeUpBreak = _secondsBreakMax;
 
+    // TODO: in eigene Function verschieben
     if (_secondsExecution < _secondsExecutionMax) {
         timeUpExecution = _secondsExecutionMax - _secondsExecution;
         _secondsExecution++;
     }
     else {
 
-        if (_secondsBreak < _secondsBreakMax ) {
+        if (_secondsBreak < _secondsBreakMax - 1) {
             timeUpBreak = _secondsBreakMax - _secondsBreak;
             _secondsBreak++;
         }
-        else {
+
+        if (_secondsBreak >= _secondsBreakMax) {
             _secondsExecution = 0;
             _secondsBreak = 0;
             _round++;
