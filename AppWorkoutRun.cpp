@@ -26,7 +26,7 @@ void AppWorkoutRun::drawUpdate() {
     }
 
     _ring1.setValue(_secondsExecution + _secondsBreak + 1);
-    _ring2.setValue(_round - 1);
+    _ring2.setValue(_round);
 
     drawTimeValues(_startX + 32, 40, _minutes, _seconds);
     trainingUpdate();
@@ -75,16 +75,19 @@ void AppWorkoutRun::trainingUpdate() {
     }
     else {
 
-        if (_secondsBreak < _secondsBreakMax - 1) {
+        if (_secondsBreak < _secondsBreakMax) {
             timeUpBreak = _secondsBreakMax - _secondsBreak;
             _secondsBreak++;
         }
-
-        if (_secondsBreak >= _secondsBreakMax) {
+        else  {
             _secondsExecution = 0;
             _secondsBreak = 0;
+            _ring1.setValue(0);
             _round++;
         }
+
+        Serial.print("Break");
+        Serial.println(_secondsBreak, DEC);
     }
 
     drawTimeUp(_startX, _startY + 10, timeUpExecution, "Execution");
