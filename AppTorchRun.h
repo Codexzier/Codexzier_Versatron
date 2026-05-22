@@ -25,8 +25,9 @@ class AppTorchRun {
     int16_t _brightness = 0;
 
     void setBackground();
-    uint16_t _colorBackground;
+    uint16_t _colorBackground = 1;
     void setMode();
+    int _modeAnimation1 = 0;
 
 public:
     AppTorchRun()
@@ -40,6 +41,9 @@ public:
         _colorOn = colorOn;
         _colorOff = colorOff;
         _colorText = colorText;
+
+        _color = tft.C_WHITE;
+        _colorBackground = tft.C_RED;
     }
 
     // base functions

@@ -93,7 +93,7 @@ void Codexzier_Versatron::setButton1() {
 void Codexzier_Versatron::setButton2() {
     switch (_drawContent) {
         case Menu: {
-            showApp(Workout);
+            showApp((DrawContent)(_menu.getMenuSelectIndex() + 1));
             break;
         }
         case Workout: {
@@ -108,6 +108,10 @@ void Codexzier_Versatron::setButton2() {
 }
 
 void Codexzier_Versatron::setButton3() {
+
+    showMenuAppUi();
+    return;
+
     switch (_drawContent) {
         case Menu: {
             showApp(Workout);

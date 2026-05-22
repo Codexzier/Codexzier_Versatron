@@ -23,6 +23,14 @@ void AppTorchRun::drawUpdate() {
         }
         case 2: {
 
+            _tft->drawCircle(120, 120, _mode, _color);
+
+            if (_modeAnimation1 >= 100) {
+                _modeAnimation1 = 0;
+            }
+            else {
+                _modeAnimation1++;
+            }
             break;
         }
         case 3: {
@@ -39,7 +47,7 @@ void AppTorchRun::reset() {
 }
 
 bool AppTorchRun::CanBeClosed() {
-    _canBeClosed = true;
+    return _canBeClosed;
 }
 
 void AppTorchRun::setValue1(int16_t value) {
@@ -55,13 +63,12 @@ void AppTorchRun::setButton1() {
             break;
         }
         case 2: {
-            _tft->fillScreen(_tft->C_RED);
-            _color = _tft->C_WHITE;
+            _color = _tft->C_RED;
             _option++;
             break;
         }
         case 3: {
-            _tft->fillScreen(_tft->C_BLUE);
+            _color = _tft->C_BLUE;
             _option = 1;
             break;
         }

@@ -15,9 +15,9 @@
 #define CODEXZIER_VERSATRON_CODEXZIER_VERSATRON_H
 
 enum DrawContent {
-    Menu,
-    Workout,
-    Torch
+    Menu = 0,
+    Workout = 1,
+    Torch = 2
 };
 
 class Codexzier_Versatron {
