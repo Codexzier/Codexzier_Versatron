@@ -10,6 +10,26 @@
 
 void AppWorkoutRun::drawUpdate() {
 
+    if (_workoutFinish) {
+
+        if (_renderWorkoutFinish) {
+            return;
+        }
+
+        _tft->fillRect(50, 80, 140, 80, _tft->C_BLACK);
+        _tft->drawRoundRect(50, 80, 140, 80, 4, _colorOn);
+
+        _tft->setFont(FontArialBold);
+        _tft->setTextColor(_colorText, _tft->C_BLACK);
+        _tft->setCursor(64, 100);
+        _tft->print("Workout");
+        _tft->setCursor(64, 120);
+        _tft->print("Finish");
+
+        _renderWorkoutFinish = true;
+        return;
+    }
+
     _ring1.drawGaugeUpdate();
     _ring2.drawGaugeUpdate();
 
@@ -17,7 +37,6 @@ void AppWorkoutRun::drawUpdate() {
         return;
     }
 
-    // TODO: dwitch between break and execution
     if (_secondsExecution < _secondsExecutionMax) {
         _ring1.setColor(_tft->C_GREEN);
     }
@@ -36,6 +55,8 @@ void AppWorkoutRun::drawUpdate() {
 
 void AppWorkoutRun::reset() {
     _drawRoundHasDraw = false;
+    _workoutFinish = false;
+    _renderWorkoutFinish = false;
 }
 
 bool AppWorkoutRun::timerUpdate() {
@@ -65,18 +86,26 @@ bool AppWorkoutRun::timerUpdate() {
 
 void AppWorkoutRun::trainingUpdate() {
     _tft->setFont(FontDefault);
-    int timeUpExecution = _secondsExecutionMax;
-    int timeUpBreak = _secondsBreakMax;
+    _timeUpExecution = _secondsExecutionMax;
+    _timeUpBreak = _secondsBreakMax;
 
-    // TODO: in eigene Function verschieben
+    updateExecutionAndBreak();
+
+    drawTimeUp(_startX, _startY + 10, _timeUpExecution, "Execution");
+    drawTimeUp(_startX, _startY + 25, _timeUpBreak, "Break");
+    drawRound();
+}
+
+void AppWorkoutRun::updateExecutionAndBreak() {
+
     if (_secondsExecution < _secondsExecutionMax) {
-        timeUpExecution = _secondsExecutionMax - _secondsExecution;
+        _timeUpExecution = _secondsExecutionMax - _secondsExecution;
         _secondsExecution++;
     }
     else {
 
         if (_secondsBreak < _secondsBreakMax) {
-            timeUpBreak = _secondsBreakMax - _secondsBreak;
+            _timeUpBreak = _secondsBreakMax - _secondsBreak;
             _secondsBreak++;
         }
         else  {
@@ -84,15 +113,12 @@ void AppWorkoutRun::trainingUpdate() {
             _secondsBreak = 0;
             _ring1.setValue(0);
             _round++;
+
+            if (_round > _roundMax) {
+                _workoutFinish = true;
+            }
         }
-
-        Serial.print("Break");
-        Serial.println(_secondsBreak, DEC);
     }
-
-    drawTimeUp(_startX, _startY + 10, timeUpExecution, "Execution");
-    drawTimeUp(_startX, _startY + 25, timeUpBreak, "Break");
-    drawRound();
 }
 
 void AppWorkoutRun::drawTimeValues(int x, int y, int value1, int value2) {
@@ -150,6 +176,8 @@ void AppWorkoutRun::setOptionRun(int16_t executionMax, int16_t breakMax, int16_t
     _roundMax = roundMax;
 
     _drawRoundHasDraw = false;
+    _workoutFinish = false;
+    _renderWorkoutFinish = false;
 
     _secondsExecution = 0;
     _secondsBreak = 0;

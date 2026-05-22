@@ -38,6 +38,11 @@ class AppWorkoutRun {
     int _minutes = 0;
 
     void trainingUpdate();
+    void updateExecutionAndBreak();
+    int _timeUpExecution = 0;
+    int _timeUpBreak = 0;
+    bool _workoutFinish = false;
+    bool _renderWorkoutFinish = false;
     void drawTimeUp(int x, int y, int value, const char* text);
     int _secondsExecution = 0;
     int _secondsExecutionMax = 30;

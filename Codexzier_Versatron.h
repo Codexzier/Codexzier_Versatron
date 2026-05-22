@@ -9,13 +9,15 @@
 
 #include "MenuArea.h"
 #include "AppWorkout.h"
+#include "AppTorchRun.h"
 
 #ifndef CODEXZIER_VERSATRON_CODEXZIER_VERSATRON_H
 #define CODEXZIER_VERSATRON_CODEXZIER_VERSATRON_H
 
 enum DrawContent {
     Menu,
-    Workout
+    Workout,
+    Torch
 };
 
 class Codexzier_Versatron {
@@ -34,6 +36,10 @@ class Codexzier_Versatron {
     // ========================================================================================
     // Workout Helper
     AppWorkout _appWorkout;
+
+    // ========================================================================================
+    // Torch
+    AppTorchRun _appTorch;
 
 
 public:

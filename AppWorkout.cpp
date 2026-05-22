@@ -33,6 +33,13 @@ bool AppWorkout::CanBeClosed() {
 
 void AppWorkout::setValue1(int16_t value) {
 
+    // TODO: noch in eigene Function verschieben.
+    value = value / 60;
+    if(value > 60) {
+        value = 60;
+    }
+    value = 60 - value;
+
     if (!_optionRun) {
         _setup.setValue1(value);
         return;
@@ -66,6 +73,7 @@ void AppWorkout::setButton2() {
 }
 
 void AppWorkout::setButton3() {
+
     if (_option) {
 
         _tft->fillScreen(_tft->C_BLACK);

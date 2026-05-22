@@ -25,6 +25,14 @@ void Codexzier_Versatron::drawUpdate()
             }
             break;
         }
+        case Torch: {
+            _appTorch.drawUpdate();
+
+            if (_appTorch.CanBeClosed()) {
+                showMenuAppUi();
+            }
+            break;
+        }
     }
 }
 
@@ -58,6 +66,10 @@ void Codexzier_Versatron::setValue1(int16_t value) {
             _appWorkout.setValue1(value);
             break;
         }
+        case Torch: {
+            _appTorch.setValue1(value);
+            break;
+        }
     }
 }
 
@@ -69,6 +81,10 @@ void Codexzier_Versatron::setButton1() {
         }
         case Workout: {
             _appWorkout.setButton1();
+            break;
+        }
+        case Torch: {
+            _appTorch.setButton1();
             break;
         }
     }
@@ -84,6 +100,10 @@ void Codexzier_Versatron::setButton2() {
             _appWorkout.setButton2();
             break;
         }
+        case Torch: {
+            _appTorch.setButton2();
+            break;
+        }
     }
 }
 
@@ -95,6 +115,10 @@ void Codexzier_Versatron::setButton3() {
         }
         case Workout: {
             _appWorkout.setButton3();
+            break;
+        }
+        case Torch: {
+            _appTorch.setButton3();
             break;
         }
     }
