@@ -58,6 +58,7 @@ public:
 
         _menu.init(tft, _colorOn, _colorOff);
         _appWorkout.init(tft, _colorOn, _colorOff, colorText);
+        _appTorch.init(tft, _colorOn, _colorOff, colorText);
     }
 
     void drawUpdate();

@@ -20,7 +20,7 @@ class AppTorchRun {
     int _option = 1;
     bool _canBeClosed = false;
 
-    uint16_t _color;
+    uint16_t _color = 1;
     int _mode = 1;
     int16_t _brightness = 0;
 
@@ -28,6 +28,7 @@ class AppTorchRun {
     uint16_t _colorBackground = 1;
     void setMode();
     int _modeAnimation1 = 0;
+    uint16_t _colorChanged = 0;
 
 public:
     AppTorchRun()

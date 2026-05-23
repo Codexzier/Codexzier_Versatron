@@ -23,10 +23,17 @@ void AppTorchRun::drawUpdate() {
         }
         case 2: {
 
-            _tft->drawCircle(120, 120, _mode, _color);
+            _tft->drawCircle(120, 120, _modeAnimation1, _colorChanged);
 
-            if (_modeAnimation1 >= 100) {
+            if (_modeAnimation1 >= 120) {
                 _modeAnimation1 = 0;
+
+                if (_colorChanged == _color) {
+                    _colorChanged = _tft->C_BLACK;
+                }
+                else {
+                    _colorChanged = _color;
+                }
             }
             else {
                 _modeAnimation1++;
@@ -35,6 +42,19 @@ void AppTorchRun::drawUpdate() {
         }
         case 3: {
 
+            if (_modeAnimation1 >= 120) {
+                _modeAnimation1 = 0;
+
+                if (_colorChanged == _color) {
+                    _color = _tft->C_BLACK;
+                }
+                else {
+                    _color = _color;
+                }
+            }
+            else {
+                _modeAnimation1++;
+            }
             break;
         }
     }
@@ -59,16 +79,19 @@ void AppTorchRun::setButton1() {
     switch (_option) {
         case 1: {
             _color = _tft->C_WHITE;
+            _colorChanged = _tft->C_WHITE;
             _option++;
             break;
         }
         case 2: {
             _color = _tft->C_RED;
+            _colorChanged = _tft->C_RED;
             _option++;
             break;
         }
         case 3: {
             _color = _tft->C_BLUE;
+            _colorChanged = _tft->C_BLUE;
             _option = 1;
             break;
         }
@@ -84,6 +107,8 @@ void AppTorchRun::setButton2() {
         _mode++;
     }
 
+    //_color = _tft->C_BLACK;
+    _tft->fillScreen(_tft->C_BLACK);
 }
 
 void AppTorchRun::setButton3() {

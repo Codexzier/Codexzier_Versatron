@@ -55,6 +55,7 @@ void Codexzier_Versatron::showApp(DrawContent content) {
     _tft->fillScreen(_tft->C_BLACK);
     _drawContent = content;
     _appWorkout.reset();
+    _appTorch.reset();
 }
 
 void Codexzier_Versatron::setValue1(int16_t value) {
@@ -110,20 +111,4 @@ void Codexzier_Versatron::setButton2() {
 void Codexzier_Versatron::setButton3() {
 
     showMenuAppUi();
-    return;
-
-    switch (_drawContent) {
-        case Menu: {
-            showApp(Workout);
-            break;
-        }
-        case Workout: {
-            _appWorkout.setButton3();
-            break;
-        }
-        case Torch: {
-            _appTorch.setButton3();
-            break;
-        }
-    }
 }
