@@ -45,11 +45,11 @@ void AppTorchRun::drawUpdate() {
             if (_modeAnimation1 >= 120) {
                 _modeAnimation1 = 0;
 
-                if (_colorChanged == _color) {
-                    _color = _tft->C_BLACK;
+                if (_colorBackground == _color) {
+                    _color = _tft->C_WHITE;
                 }
                 else {
-                    _color = _color;
+                    _color = _colorChanged;
                 }
             }
             else {
