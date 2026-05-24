@@ -3,15 +3,44 @@
 //
 
 #include "AppTorchRun.h"
+#include <string>
+#include "GC9A01_LTSM.hpp"
+#include "fonts_LTSM/FontArialBold_LTSM.hpp"
+#include "fonts_LTSM/FontPico_LTSM.hpp" // 8x12 pixels
+#include "fonts_LTSM/FontSinclairS_LTSM.hpp" // 8x8 pixels
 
 void AppTorchRun::setBackground() {
 
-    if (_color == _colorBackground) {
+    if (_colorTarget == _colorBackground) {
         return;
     }
 
-    _colorBackground = _color;
+    _colorBackground = _colorTarget;
     _tft->fillScreen(_colorBackground);
+}
+
+bool AppTorchRun::animationRun(int animationEndCount) {
+    if (_modeAnimation1 < animationEndCount) {
+        _modeAnimation1++;
+
+        return false;
+    }
+
+    _modeAnimation1 = 0;
+    return true;
+}
+
+void AppTorchRun::setCircleAnimation() {
+    _tft->drawCircle(120, 120, _modeAnimation1, _colorCircle);
+
+    if (animationRun(120)) {
+        if (_colorCircle == _colorTarget) {
+            _colorCircle = _tft->C_BLACK;
+        }
+        else {
+            _colorCircle = _colorTarget;
+        }
+    }
 }
 
 void AppTorchRun::drawUpdate() {
@@ -22,48 +51,32 @@ void AppTorchRun::drawUpdate() {
             break;
         }
         case 2: {
-
-            _tft->drawCircle(120, 120, _modeAnimation1, _colorChanged);
-
-            if (_modeAnimation1 >= 120) {
-                _modeAnimation1 = 0;
-
-                if (_colorChanged == _color) {
-                    _colorChanged = _tft->C_BLACK;
-                }
-                else {
-                    _colorChanged = _color;
-                }
-            }
-            else {
-                _modeAnimation1++;
-            }
+            setCircleAnimation();
             break;
         }
         case 3: {
 
-            if (_modeAnimation1 >= 120) {
-                _modeAnimation1 = 0;
+            if (animationRun(120)) {
 
-                if (_colorBackground == _color) {
-                    _color = _tft->C_WHITE;
+                if (_colorBackground == _colorTarget) {
+                    _colorTarget = _tft->C_BLUE;
                 }
                 else {
-                    _color = _colorChanged;
+                    _colorTarget = _tft->C_RED;
                 }
-            }
-            else {
-                _modeAnimation1++;
+
+                //setBackground();
             }
             break;
         }
     }
-
 }
 
 void AppTorchRun::reset() {
     _option = 1;
     _canBeClosed = false;
+    _colorTarget = _tft->C_WHITE;
+    _colorBackground = _tft->C_RED;
 }
 
 bool AppTorchRun::CanBeClosed() {
@@ -78,20 +91,17 @@ void AppTorchRun::setButton1() {
 
     switch (_option) {
         case 1: {
-            _color = _tft->C_WHITE;
-            _colorChanged = _tft->C_WHITE;
+            _colorTarget = _tft->C_WHITE;
             _option++;
             break;
         }
         case 2: {
-            _color = _tft->C_RED;
-            _colorChanged = _tft->C_RED;
+            _colorTarget = _tft->C_RED;
             _option++;
             break;
         }
         case 3: {
-            _color = _tft->C_BLUE;
-            _colorChanged = _tft->C_BLUE;
+            _colorTarget = _tft->C_BLUE;
             _option = 1;
             break;
         }
@@ -100,15 +110,30 @@ void AppTorchRun::setButton1() {
 
 void AppTorchRun::setButton2() {
 
-    if (_mode >= 3) {
-        _mode = 0;
-    }
-    else {
+    if (_mode < 2) {
         _mode++;
     }
+    else {
+        _mode = 1;
+    }
 
-    //_color = _tft->C_BLACK;
+    _modeAnimation1 = 0;
     _tft->fillScreen(_tft->C_BLACK);
+
+
+    int positionX = 50;
+    int positionY = 100;
+
+    _tft->setFont(FontDefault);
+    _tft->setCursor(positionX, positionY);
+    _tft->setTextColor(_tft->C_GREEN);
+
+    _tft->print("Mode");
+
+    char buffer[10];
+    sprintf(buffer, "%d", _mode);
+    _tft->setCursor(positionX, positionY + 20);
+    _tft->print(buffer);
 }
 
 void AppTorchRun::setButton3() {

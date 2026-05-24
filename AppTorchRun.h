@@ -8,6 +8,9 @@
 #include <Arduino.h>
 #include <stdint.h>
 #include "GC9A01_LTSM.hpp"
+#include "fonts_LTSM/FontArialBold_LTSM.hpp"
+#include "fonts_LTSM/FontPico_LTSM.hpp" // 8x12 pixels
+#include "fonts_LTSM/FontSinclairS_LTSM.hpp" // 8x8 pixels
 
 
 class AppTorchRun {
@@ -20,15 +23,16 @@ class AppTorchRun {
     int _option = 1;
     bool _canBeClosed = false;
 
-    uint16_t _color = 1;
+    uint16_t _colorTarget = 1;
     int _mode = 1;
     int16_t _brightness = 0;
 
     void setBackground();
     uint16_t _colorBackground = 1;
-    void setMode();
+    void setCircleAnimation();
+    bool animationRun(int animationEndCount);
     int _modeAnimation1 = 0;
-    uint16_t _colorChanged = 0;
+    uint16_t _colorCircle = 0;
 
 public:
     AppTorchRun()
@@ -43,7 +47,7 @@ public:
         _colorOff = colorOff;
         _colorText = colorText;
 
-        _color = tft.C_WHITE;
+        _colorTarget = tft.C_WHITE;
         _colorBackground = tft.C_RED;
     }
 

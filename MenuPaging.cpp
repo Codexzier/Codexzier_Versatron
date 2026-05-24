@@ -31,7 +31,7 @@ void MenuPaging::drawFrameAndPage(int pageNumber, int pageMax) {
 
     _tft->setFont(FontArialBold);
 
-    const int width = 70; //34;
+    const int width = 70;
     _tft->drawRoundRect(_positionX, _positionY, width, 24, _cornerRadius, _colorOff);
     _tft->drawLine(_positionX + 34, _positionY, _positionX + 34, _positionY + 22, _colorOff);
 
