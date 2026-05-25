@@ -24,6 +24,15 @@ public:
     MenuPaging()
     : _tft(nullptr), _colorOn(0), _colorOff(0), _colorText(0){}
 
+    /**
+     * Initialize the ring segment display with the given TFT display and colors.
+     * @param tft The GC9A01_LTSM TFT display object.
+     * @param colorOn The color to use for segments that are on.
+     * @param colorOff The color to use for segments that are off.
+     * @param colorText The color to use for text.
+     * @param positionX The position x to draw menu paging.
+     * @param positionY The position y to draw menu paging.
+     */
     void init(
             GC9A01_LTSM &tft,
             const uint16_t colorOn,
@@ -39,9 +48,24 @@ public:
         _positionY = positionY;
     }
 
+    /**
+     * Draw content.
+     * @param pageNumber draw actual page and maximum pages.
+     * @param pageMax
+     */
     void drawFrameAndPage(int pageNumber, int pageMax);
 
+    /**
+     * set up actual page and max page
+     * @param pageNumber
+     * @param pageMax
+     */
     void setPageAndPageMax(int pageNumber, int pageMax);
+
+    /**
+     * Set the actual page.
+     * @param pageNumber set actual page.
+     */
     void setPage(int pageNumber);
 };
 

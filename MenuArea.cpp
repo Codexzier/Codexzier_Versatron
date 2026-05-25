@@ -9,14 +9,13 @@
 
 void MenuArea::drawUpdate() {
 
-    // Nur das Menü zeichnen, wenn Items vorhanden sind.
+    // draw only if menu items exists
     if (!_menuItems) {
         return;
     }
 
     drawMenu();
 }
-
 
 // not sure if this is the best approach
 void MenuArea::setMaxIndexPage() {
@@ -103,7 +102,6 @@ void MenuArea::drawMenu() {
     _isInitializedDrawMenu = true;
 }
 
-// Wenn sich die Index Page sich geändert hat.
 void MenuArea::drawClearByChangedPage() {
 
     if (_menuIndexPage != _menuIndexPageSelected) {

@@ -5,9 +5,6 @@
 #include "AppTorchRun.h"
 #include <string>
 #include "GC9A01_LTSM.hpp"
-#include "fonts_LTSM/FontArialBold_LTSM.hpp"
-#include "fonts_LTSM/FontPico_LTSM.hpp" // 8x12 pixels
-#include "fonts_LTSM/FontSinclairS_LTSM.hpp" // 8x8 pixels
 
 void AppTorchRun::setBackground() {
 
@@ -120,7 +117,6 @@ void AppTorchRun::setButton2() {
     _modeAnimation1 = 0;
     _tft->fillScreen(_tft->C_BLACK);
 
-
     int positionX = 50;
     int positionY = 100;
 
@@ -130,7 +126,7 @@ void AppTorchRun::setButton2() {
 
     _tft->print("Mode");
 
-    char buffer[10];
+    char buffer[12];
     sprintf(buffer, "%d", _mode);
     _tft->setCursor(positionX, positionY + 20);
     _tft->print(buffer);

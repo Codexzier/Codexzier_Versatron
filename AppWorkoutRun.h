@@ -63,10 +63,17 @@ public:
             _ring1(_radiusOuter1, _radiusInner1),
             _ring2(_radiusOuter2, _radiusInner2){}
 
+    /**
+     * Initialize the ring segment display with the given TFT display and colors.
+     * @param tft The GC9A01_LTSM TFT display object.
+     * @param colorOn The color to use for segments that are on.
+     * @param colorOff The color to use for segments that are off.
+     * @param colorText The color to use for text.
+     */
     void init(GC9A01_LTSM &tft,
-            const uint16_t colorOn,
-            const uint16_t colorOff,
-            const uint16_t colorText) {
+              const uint16_t colorOn,
+              const uint16_t colorOff,
+              const uint16_t colorText) {
         _tft = &tft;
         _colorOn = colorOn;
         _colorOff = colorOff;
@@ -76,11 +83,22 @@ public:
         _ring2.init(tft, _colorOn, _colorOff);
     }
 
-    // base functions
+    /**
+     * Draw content.
+     */
     void drawUpdate();
+
+    /**
+     * Set all parameter to default.
+     */
     void reset();
 
-    // individual functions
+    /**
+     * Set the start parameter for workout run.
+     * @param executionMax set the max second for execution.
+     * @param breakMax set the max second for break.
+     * @param roundMax set the max round for workout.
+     */
     void setOptionRun(int16_t executionMax, int16_t breakMax, int16_t roundMax);
 };
 

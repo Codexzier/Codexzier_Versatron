@@ -63,6 +63,12 @@ public:
     MenuArea()
     : _tft(nullptr), _colorOn(0), _colorOff(0){}
 
+    /**
+     * Initialize the ring segment display with the given TFT display and colors.
+     * @param tft The GC9A01_LTSM TFT display object.
+     * @param colorOn The color to use for segments that are on.
+     * @param colorOff The color to use for segments that are off.
+     */
     void init(
         GC9A01_LTSM &tft,
         const uint16_t colorOn,
@@ -74,6 +80,14 @@ public:
         _menuPaging.init(tft, _colorOn, _colorOff, tft.C_BEIGE, 85, 194);
     }
 
+    /**
+     * Draw content.
+     */
+    void drawUpdate();
+
+    /**
+     * Set all parameter to default.
+     */
     void resetInitializedDrawMenu() {
         _isInitializedDrawMenu = false;
         _menuIndex = 0;
@@ -81,17 +95,32 @@ public:
         _menuPaging.drawFrameAndPage(_menuIndexPage, _menuIndexPageMax);
     }
 
-    void drawUpdate();
-
+    /**
+     * Add an menu item for selection an application.
+     * @param item Item for selection application.
+     */
     void addItem(const MenuItem& item);
-    void nextMenuSelect();
-    //void setMenuSelect(int index);
 
+    /**
+     * Jump to the next select menu item.
+     */
+    void nextMenuSelect();
+
+    /**
+     * Get the index number of the selected menu item.
+     * @return Index number of selected menue item.
+     */
     int getMenuSelectIndex();
 
-
+    /**
+     * TODO: Use I really this function to debug an value?
+     * @param value Write value for debug.
+     */
     void drawDebugValue(int value);
 
+    /**
+     * Destruct this menu class instance.
+     */
     ~MenuArea();
 };
 

@@ -8,9 +8,6 @@
 #include <Arduino.h>
 #include <stdint.h>
 #include "GC9A01_LTSM.hpp"
-#include "fonts_LTSM/FontArialBold_LTSM.hpp"
-#include "fonts_LTSM/FontPico_LTSM.hpp" // 8x12 pixels
-#include "fonts_LTSM/FontSinclairS_LTSM.hpp" // 8x8 pixels
 
 
 class AppTorchRun {

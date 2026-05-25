@@ -7,6 +7,7 @@ include_directories(.
     "$ENV{HOME}/Arduino/libraries"
     "$ENV{HOME}/Arduino/libraries/GC9A01_LTSM/src"
     "$ENV{HOME}/Arduino/libraries/display16_LTSM/src"
+    "$ENV{HOME}//home/codexzier/.arduino15/packages/esp32/hardware/esp32/3.3.8/libraries/WiFi/src"
 )
 
 add_executable(Codexzier_Versatron
@@ -25,4 +26,8 @@ add_executable(Codexzier_Versatron
         AppWorkoutRun.cpp
         AppWorkoutRun.h
         AppTorchRun.cpp
-        AppTorchRun.h)
+        AppTorchRun.h
+        AppCameraRun.cpp
+        AppCameraRun.h
+        AppWlanScanner.cpp
+        AppWlanScanner.h)

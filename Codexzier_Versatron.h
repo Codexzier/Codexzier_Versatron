@@ -10,6 +10,7 @@
 #include "MenuArea.h"
 #include "AppWorkout.h"
 #include "AppTorchRun.h"
+#include "AppWlanScanner.h"
 
 #ifndef CODEXZIER_VERSATRON_CODEXZIER_VERSATRON_H
 #define CODEXZIER_VERSATRON_CODEXZIER_VERSATRON_H
@@ -17,7 +18,8 @@
 enum DrawContent {
     Menu = 0,
     Workout = 1,
-    Torch = 2
+    Torch = 2,
+    ScanWiFi = 3
 };
 
 class Codexzier_Versatron {
@@ -41,6 +43,10 @@ class Codexzier_Versatron {
     // Torch
     AppTorchRun _appTorch;
 
+    // ========================================================================================
+    // ScanWifi
+    AppWlanScanner _appScnWiFi;
+
 
 public:
     Codexzier_Versatron()
@@ -59,6 +65,7 @@ public:
         _menu.init(tft, _colorOn, _colorOff);
         _appWorkout.init(tft, _colorOn, _colorOff, colorText);
         _appTorch.init(tft, _colorOn, _colorOff, colorText);
+        _appScnWiFi.init(tft, _colorOn, _colorOff, colorText);
     }
 
     void drawUpdate();
@@ -71,8 +78,6 @@ public:
     void setButton1();
     void setButton2();
     void setButton3();
-
-
 };
 
 #endif //CODEXZIER_VERSATRON_CODEXZIER_VERSATRON_H

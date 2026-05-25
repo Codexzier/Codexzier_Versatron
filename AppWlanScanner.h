@@ -1,37 +1,44 @@
 //
-// Created by codexzier on 04.05.26.
+// Created by codexzier on 25.05.26.
 //
 
-#ifndef CODEXZIER_VERSATRON_APPWORKOUT_H
-#define CODEXZIER_VERSATRON_APPWORKOUT_H
+#ifndef CODEXZIER_VERSATRON_APPWLANSCANNER_H
+#define CODEXZIER_VERSATRON_APPWLANSCANNER_H
 
 #include <Arduino.h>
+#include <memory>
 #include <stdint.h>
+#include <string>
+#include <vector>
 
-#include "AppWorkoutRun.h"
+#include "WiFi.h"
 #include "GC9A01_LTSM.hpp"
-#include "AppWorkoutSetup.h"
 
+class WlanItem {
 
-class AppWorkout {
+public:
+    std::string SSID_Name;
+    std::string RSSI;
+    std::string Channel;
+    std::string Encryption;
+};
 
+class AppWlanScanner {
     GC9A01_LTSM *_tft;
     uint16_t _colorOn;
     uint16_t _colorOff;
     uint16_t _colorText;
 
-    int _option = 1;
-    bool _optionRun = false;
-    bool _canBeClosed = false;
+    std::unique_ptr<std::vector<WlanItem*>> _wlanItems;
 
-    // Setup and run
-    AppWorkoutSetup _setup;
-    AppWorkoutRun _run;
+    bool _hasDraw = false;
+    void drawScanInfo();
+    void drawScannedWifiNetworks();
 
 
 public:
-    AppWorkout()
-        : _tft(nullptr), _colorOn(0), _colorOff(0), _colorText(0){ }
+    AppWlanScanner()
+    : _tft(nullptr), _colorOn(0), _colorOff(0), _colorText(0){ }
 
     /**
     * Initialize the ring segment display with the given TFT display and colors.
@@ -49,8 +56,7 @@ public:
         _colorOff = colorOff;
         _colorText = colorText;
 
-        _setup.init(tft, colorOn, colorOff, colorText);
-        _run.init(tft, colorOn, colorOff, colorText);
+        WiFi.STA.begin();
     }
 
     /**
@@ -61,7 +67,7 @@ public:
     /**
      * Set all parameter to default.
      */
-    void reset();
+    //void reset();
 
     /**
      * For the 3. Button to left the program.
@@ -69,27 +75,10 @@ public:
      */
     bool CanBeClosed();
 
-    /**
-     * Use the second poti to set up the parameter.
-     * @param value The value to set the parameter.
-     */
-    void setValue1(int16_t value);
+    void scanWifi();
 
-    /**
-     * Changed the target parameter select.
-     */
     void setButton1();
-
-    /**
-     * Start the Workout run application
-     */
-    void setButton2();
-
-    /**
-     * Left the application.
-     */
-    void setButton3();
 };
 
 
-#endif //CODEXZIER_VERSATRON_APPWORKOUT_H
+#endif //CODEXZIER_VERSATRON_APPWLANSCANNER_H

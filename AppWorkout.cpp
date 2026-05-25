@@ -66,7 +66,7 @@ void AppWorkout::setButton2() {
         _run.setOptionRun(
             _setup.getExecutionMax(),
             _setup.getBreakMax(),
-            _setup.getRoundMx());
+            _setup.getRoundMax());
         _optionRun = true;
         return;
     }

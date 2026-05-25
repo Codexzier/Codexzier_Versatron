@@ -33,6 +33,14 @@ void Codexzier_Versatron::drawUpdate()
             }
             break;
         }
+        case ScanWiFi: {
+            _appScnWiFi.drawUpdate();
+
+            if (_appScnWiFi.CanBeClosed()) {
+                showMenuAppUi();
+            }
+            break;
+        }
     }
 }
 
@@ -56,6 +64,10 @@ void Codexzier_Versatron::showApp(DrawContent content) {
     _drawContent = content;
     _appWorkout.reset();
     _appTorch.reset();
+
+    if (content == ScanWiFi) {
+        _appScnWiFi.scanWifi();
+    }
 }
 
 void Codexzier_Versatron::setValue1(int16_t value) {
@@ -69,6 +81,9 @@ void Codexzier_Versatron::setValue1(int16_t value) {
         }
         case Torch: {
             _appTorch.setValue1(value);
+            break;
+        }
+        case ScanWiFi: {
             break;
         }
     }
@@ -88,6 +103,11 @@ void Codexzier_Versatron::setButton1() {
             _appTorch.setButton1();
             break;
         }
+        case ScanWiFi: {
+            _appScnWiFi.setButton1();
+
+            break;
+        }
     }
 }
 
@@ -103,6 +123,9 @@ void Codexzier_Versatron::setButton2() {
         }
         case Torch: {
             _appTorch.setButton2();
+            break;
+        }
+        case ScanWiFi: {
             break;
         }
     }

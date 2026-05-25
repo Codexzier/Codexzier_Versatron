@@ -133,6 +133,6 @@ int16_t AppWorkoutSetup::getExecutionMax() const {
 int16_t AppWorkoutSetup::getBreakMax() const {
     return _secondsBreakMax;
 }
-int16_t AppWorkoutSetup::getRoundMx() const {
+int16_t AppWorkoutSetup::getRoundMax() const {
     return _roundMax;
 }
