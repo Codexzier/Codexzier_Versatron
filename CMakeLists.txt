@@ -30,4 +30,6 @@ add_executable(Codexzier_Versatron
         AppCameraRun.cpp
         AppCameraRun.h
         AppWlanScanner.cpp
-        AppWlanScanner.h)
+        AppWlanScanner.h
+        AppWlanScannerResultList.cpp
+        AppWlanScannerResultList.h)

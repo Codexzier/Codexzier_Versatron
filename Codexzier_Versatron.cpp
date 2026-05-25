@@ -126,6 +126,7 @@ void Codexzier_Versatron::setButton2() {
             break;
         }
         case ScanWiFi: {
+            _appScnWiFi.setButton2();
             break;
         }
     }

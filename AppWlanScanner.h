@@ -6,22 +6,14 @@
 #define CODEXZIER_VERSATRON_APPWLANSCANNER_H
 
 #include <Arduino.h>
-#include <memory>
 #include <stdint.h>
-#include <string>
-#include <vector>
 
 #include "WiFi.h"
 #include "GC9A01_LTSM.hpp"
+#include "fonts_LTSM/FontArialBold_LTSM.hpp"
 
-class WlanItem {
+#include "AppWlanScannerResultList.h"
 
-public:
-    std::string SSID_Name;
-    std::string RSSI;
-    std::string Channel;
-    std::string Encryption;
-};
 
 class AppWlanScanner {
     GC9A01_LTSM *_tft;
@@ -29,12 +21,10 @@ class AppWlanScanner {
     uint16_t _colorOff;
     uint16_t _colorText;
 
-    std::unique_ptr<std::vector<WlanItem*>> _wlanItems;
-
     bool _hasDraw = false;
     void drawScanInfo();
-    void drawScannedWifiNetworks();
 
+    AppWlanScannerResultList _resultList;
 
 public:
     AppWlanScanner()
@@ -55,6 +45,8 @@ public:
         _colorOn = colorOn;
         _colorOff = colorOff;
         _colorText = colorText;
+
+        _resultList.init(tft, _colorOn, _colorOff, _colorText);
 
         WiFi.STA.begin();
     }
@@ -78,6 +70,7 @@ public:
     void scanWifi();
 
     void setButton1();
+    void setButton2();
 };
 
 
