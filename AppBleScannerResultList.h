@@ -1,9 +1,9 @@
 ﻿//
-// Created by johan on 25.05.2026.
+// Created by johan on 26.05.2026.
 //
 
-#ifndef CODEXZIER_VERSATRON_APPWLANSCANNERRESULTLIST_H
-#define CODEXZIER_VERSATRON_APPWLANSCANNERRESULTLIST_H
+#ifndef CODEXZIER_VERSATRON_APPBLESCANNERRESULTLIST_H
+#define CODEXZIER_VERSATRON_APPBLESCANNERRESULTLIST_H
 
 #include <Arduino.h>
 #include <stdint.h>
@@ -13,34 +13,35 @@
 #include "GC9A01_LTSM.hpp"
 
 
-class WlanItem {
+class BleItem {
 
-public:
-    std::string SSID_Name;
-    std::string RSSI;
-    std::string Channel;
-    std::string Encryption;
+    public:
+    std::string Name;
+    std::string Address;
 };
 
-class AppWlanScannerResultList {
+class AppBleScannerResultList {
+
     GC9A01_LTSM *_tft;
     uint16_t _colorOn;
     uint16_t _colorOff;
     uint16_t _colorText;
 
-    std::unique_ptr<std::vector<WlanItem*>> _items;
+    std::unique_ptr<std::vector<BleItem*>> _items;
 
     int _page = 0;
     int _pageCount = 0;
-    // Anzahl pro Seite
-    const int _itemsPerPage = 4;
-    void drawWlanItems();
-    bool _hasDraw = false;
-    void drawWlanItem(int x, int y, int index, int itemIndex);
 
-public:
-    AppWlanScannerResultList()
-    : _tft(nullptr), _colorOn(0), _colorOff(0), _colorText(0){ }
+    const int _itemsPerPage = 4;
+
+    void drawItems();
+    bool _hasDraw = false;
+    void drawItem(int x, int y, int index, int itemIndex);
+
+    public:
+    AppBleScannerResultList()
+        : _tft(nullptr), _colorOn(0), _colorOff(0), _colorText(0){ }
+
 
     /**
     * Initialize the ring segment display with the given TFT display and colors.
@@ -60,8 +61,8 @@ public:
     }
 
     void drawUpdate();
-    void addWlanItem(WlanItem* item);
-    void clearWlanItems();
+    void addItem(BleItem* item);
+    void clearItems();
     void NextPage();
     int GetCountFindings() {
 
@@ -74,4 +75,4 @@ public:
 };
 
 
-#endif //CODEXZIER_VERSATRON_APPWLANSCANNERRESULTLIST_H
+#endif //CODEXZIER_VERSATRON_APPBLESCANNERRESULTLIST_H

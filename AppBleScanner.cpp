@@ -3,3 +3,84 @@
 //
 
 #include "AppBleScanner.h"
+
+
+
+void AppBleScanner::drawUpdate() {
+
+    _resultList.drawUpdate();
+
+    if (_hasDraw) {
+        return;
+    }
+
+    drawScanInfo();
+    _hasDraw = true;
+}
+
+void AppBleScanner::reset() {
+    _hasDraw = false;
+}
+
+bool AppBleScanner::CanBeClosed() {
+    return false;
+}
+
+void AppBleScanner::setButton1() {
+    _resultList.NextPage();
+}
+
+void AppBleScanner::drawScanInfo() {
+    _tft->setFont(FontDefault);
+    _tft->setTextColor(_colorOn, _tft->C_BLACK);
+
+    int countFindings = _resultList.GetCountFindings();
+
+    int posX = 40;
+    int posY = 45;
+    _tft->setCursor(posX, posY);
+    _tft->print("Bluetooth Found: ");
+    char buffer[12];
+    sprintf(buffer, "%d", countFindings);
+    _tft->print(buffer);
+}
+
+void AppBleScanner::scan() {
+    int posX = 80;
+    int posY = 25;
+    _tft->fillScreen(_tft->C_BLACK);
+    _tft->setFont(FontDefault);
+    _tft->setTextColor(_colorOn, _tft->C_BLACK);
+
+    _tft->setCursor(posX, posY);
+    _tft->print("Scan Start");
+
+    BLEScanResults* foundDevices = pBLEScan->start(scanTime, false);
+    int n = foundDevices->getCount();
+
+    _tft->setCursor(posX, posY);
+    _tft->print("Scan Done ");
+
+    if (n == 0) {
+        _tft->setCursor(posX, posY + 20);
+        _tft->print("No Bluetooth");
+        return;
+    }
+
+    for (int i = 0; i < n; i++) {
+        BLEAdvertisedDevice device = foundDevices->getDevice(i);
+
+        BleItem* item = new BleItem;
+        item->Name = device.getName().c_str();
+        item->Address = device.getAddress().toString().c_str();
+
+        _resultList.addItem(item);
+    }
+}
+
+
+void AppBleScanner::setButton2() {
+    _resultList.clearItems();
+    scan();
+    _hasDraw = false;
+}

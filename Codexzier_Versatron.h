@@ -5,6 +5,8 @@
 
 #include <Arduino.h>
 #include <stdint.h>
+
+#include "AppBleScanner.h"
 #include "GC9A01_LTSM.hpp"
 
 #include "MenuArea.h"
@@ -19,7 +21,8 @@ enum DrawContent {
     Menu = 0,
     Workout = 1,
     Torch = 2,
-    ScanWiFi = 3
+    ScanWiFi = 3,
+    ScanBle = 4,
 };
 
 class Codexzier_Versatron {
@@ -46,6 +49,7 @@ class Codexzier_Versatron {
     // ========================================================================================
     // ScanWifi
     AppWlanScanner _appScnWiFi;
+    AppBleScanner _appScnBle;
 
 
 public:
@@ -66,6 +70,7 @@ public:
         _appWorkout.init(tft, _colorOn, _colorOff, colorText);
         _appTorch.init(tft, _colorOn, _colorOff, colorText);
         _appScnWiFi.init(tft, _colorOn, _colorOff, colorText);
+        _appScnBle.init(tft, _colorOn, _colorOff, colorText);
     }
 
     void drawUpdate();
