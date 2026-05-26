@@ -59,7 +59,7 @@ public:
     /**
      * Set all parameter to default.
      */
-    //void reset();
+    void reset();
 
     /**
      * For the 3. Button to left the program.

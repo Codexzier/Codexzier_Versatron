@@ -21,6 +21,10 @@ void AppWlanScanner::drawUpdate() {
     _hasDraw = true;
 }
 
+void AppWlanScanner::reset() {
+    _hasDraw = false;
+}
+
 bool AppWlanScanner::CanBeClosed() {
     return false;
 }

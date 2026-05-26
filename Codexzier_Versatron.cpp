@@ -64,10 +64,7 @@ void Codexzier_Versatron::showApp(DrawContent content) {
     _drawContent = content;
     _appWorkout.reset();
     _appTorch.reset();
-
-    if (content == ScanWiFi) {
-        _appScnWiFi.scanWifi();
-    }
+    _appScnWiFi.reset();
 }
 
 void Codexzier_Versatron::setValue1(int16_t value) {

@@ -1,0 +1,13 @@
+﻿//
+// Created by johan on 26.05.2026.
+//
+
+#ifndef CODEXZIER_VERSATRON_APPBLESCANNER_H
+#define CODEXZIER_VERSATRON_APPBLESCANNER_H
+
+
+class AppBleScanner {
+};
+
+
+#endif //CODEXZIER_VERSATRON_APPBLESCANNER_H
