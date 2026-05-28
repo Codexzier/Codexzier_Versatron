@@ -15,9 +15,11 @@
 
 class BleItem {
 
-    public:
+public:
     std::string Name;
     std::string Address;
+    std::string DevUUID;
+    bool HasDevUUID;
 };
 
 class AppBleScannerResultList {

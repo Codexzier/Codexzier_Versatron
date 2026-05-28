@@ -74,6 +74,13 @@ void AppBleScanner::scan() {
         item->Name = device.getName().c_str();
         item->Address = device.getAddress().toString().c_str();
 
+        item->HasDevUUID = false;
+        if (device.haveServiceUUID()) {
+            BLEUUID devUUID = device.getServiceUUID();
+            item->DevUUID = devUUID.toString().c_str();
+            item->HasDevUUID = true;
+        }
+
         _resultList.addItem(item);
     }
 }

@@ -56,7 +56,7 @@ void AppBleScannerResultList::drawItems() {
         _tft->drawRoundRect(posX, posY, 190, 30, 5, _tft->C_RED);
         _tft->setTextColor(_tft->C_RED, _tft->C_BLACK);
         _tft->setCursor(posX + 4, posY + 4);
-        _tft->print("No other Wi-Fi");
+        _tft->print("No other Bluetooth");
         _tft->setCursor(posX + 4, posY + 19);
         _tft->print("networks found.");
     }
@@ -65,7 +65,12 @@ void AppBleScannerResultList::drawItems() {
 void AppBleScannerResultList::drawItem(int x, int y, int index, int itemIndex) {
     BleItem* item = (*_items)[itemIndex];
     int posY = y + 30 * index;
-    _tft->drawRoundRect(x, posY, 190, 30, 5, _colorOff);
+
+    uint16_t roundRectColor = _colorOff;
+    if (item->HasDevUUID) {
+        roundRectColor = _tft->C_YELLOW;
+    }
+    _tft->drawRoundRect(x, posY, 190, 30, 5, roundRectColor);
 
     int textPosX = x + 4;
     int textPosY = posY + 4;
