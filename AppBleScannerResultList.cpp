@@ -66,14 +66,13 @@ void AppBleScannerResultList::drawItem(int x, int y, int index, int itemIndex) {
     BleItem* item = (*_items)[itemIndex];
     int posY = y + 30 * index;
 
-    uint16_t roundRectColor = _colorOff;
     if (item->HasDevUUID) {
-        roundRectColor = _tft->C_YELLOW;
+        _tft->drawCircle(x + 195, posY + 7, 2, _tft->C_YELLOW);
     }
     if (item->HasManufacturerData) {
-        roundRectColor = _tft->C_GREEN;
+        _tft->drawCircle(x + 195, posY + 15, 2, _tft->C_GREEN);
     }
-    _tft->drawRoundRect(x, posY, 190, 30, 5, roundRectColor);
+    _tft->drawRoundRect(x, posY, 190, 30, 5, _colorOff);
 
     int textPosX = x + 4;
     int textPosY = posY + 4;
