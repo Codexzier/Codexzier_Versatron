@@ -20,6 +20,9 @@ public:
     std::string Address;
     std::string DevUUID;
     bool HasDevUUID;
+
+    std::string ManufacturerData;
+    bool HasManufacturerData;
 };
 
 class AppBleScannerResultList {

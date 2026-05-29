@@ -70,6 +70,9 @@ void AppBleScannerResultList::drawItem(int x, int y, int index, int itemIndex) {
     if (item->HasDevUUID) {
         roundRectColor = _tft->C_YELLOW;
     }
+    if (item->HasManufacturerData) {
+        roundRectColor = _tft->C_GREEN;
+    }
     _tft->drawRoundRect(x, posY, 190, 30, 5, roundRectColor);
 
     int textPosX = x + 4;

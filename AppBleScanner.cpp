@@ -81,6 +81,12 @@ void AppBleScanner::scan() {
             item->HasDevUUID = true;
         }
 
+        item->HasManufacturerData = false;
+        if (device.haveManufacturerData()) {
+            item->HasManufacturerData = true;
+            item->ManufacturerData = device.getManufacturerData().c_str();
+        }
+
         _resultList.addItem(item);
     }
 }
