@@ -6,13 +6,11 @@
 #define CODEXZIER_VERSATRON_APPBLESCANNERRESULTLIST_H
 
 #include <Arduino.h>
-#include <stdint.h>
 #include <memory>
 #include <string>
 #include <vector>
 
 #include "BaseDrawable.h"
-#include "GC9A01_LTSM.hpp"
 
 
 class BleItem {
@@ -46,8 +44,10 @@ class AppBleScannerResultList : public BaseDrawable  {
     void drawUpdate() override;
     void setButton1() override;
     void setButton2() override;
-
-
+    void setButton3() override { _canBeClosed = true; }
+    void setValue1(int16_t value) override {}
+    void setValue2(int16_t value) override {}
+    void reset() override {}
 
     void addItem(BleItem* item);
     int GetCountFindings() const {

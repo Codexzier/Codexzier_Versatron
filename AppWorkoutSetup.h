@@ -22,7 +22,6 @@ class AppWorkoutSetup {
     uint16_t _colorOff;
     uint16_t _colorText;
 
-
     int16_t _startX = 50;
     int16_t _startY = 70;
 

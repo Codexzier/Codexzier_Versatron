@@ -6,71 +6,31 @@
 #define CODEXZIER_VERSATRON_APPWLANSCANNER_H
 
 #include <Arduino.h>
-#include <stdint.h>
-
 #include "WiFi.h"
-#include "GC9A01_LTSM.hpp"
-#include "fonts_LTSM/FontArialBold_LTSM.hpp"
-
 #include "AppWlanScannerResultList.h"
+#include "BaseDrawable.h"
 
 
-class AppWlanScanner {
-    GC9A01_LTSM *_tft;
-    uint16_t _colorOn;
-    uint16_t _colorOff;
-    uint16_t _colorText;
+class AppWlanScanner : public BaseDrawable {
 
-    bool _hasDraw = false;
     void drawScanInfo();
 
     AppWlanScannerResultList _resultList;
 
-public:
-    AppWlanScanner()
-    : _tft(nullptr), _colorOn(0), _colorOff(0), _colorText(0){ }
-
-    /**
-    * Initialize the ring segment display with the given TFT display and colors.
-     * @param tft The GC9A01_LTSM TFT display object.
-     * @param colorOn The color to use for segments that are on.
-     * @param colorOff The color to use for segments that are off.
-     * @param colorText The color to use for text.
-     */
-    void init(GC9A01_LTSM &tft,
-              const uint16_t colorOn,
-              const uint16_t colorOff,
-              const uint16_t colorText) {
-        _tft = &tft;
-        _colorOn = colorOn;
-        _colorOff = colorOff;
-        _colorText = colorText;
-
-        _resultList.init(tft, _colorOn, _colorOff, _colorText);
-
-        WiFi.STA.begin();
-    }
-
-    /**
-     * Draw content.
-     */
-    void drawUpdate();
-
-    /**
-     * Set all parameter to default.
-     */
-    void reset();
-
-    /**
-     * For the 3. Button to left the program.
-     * @return Value are true, if the app can be closed.
-     */
-    bool CanBeClosed();
-
     void scanWifi();
 
-    void setButton1();
-    void setButton2();
+public:
+    void initExtend() override {
+        _resultList.init(*_tft, _colorOn, _colorOff, _colorText);
+        WiFi.STA.begin();
+    }
+    void drawUpdate() override;
+    void setButton1() override;
+    void setButton2() override;
+    void setButton3() override { _canBeClosed = true; }
+    void setValue1(int16_t value) override {}
+    void setValue2(int16_t value) override {}
+    void reset() override;
 };
 
 

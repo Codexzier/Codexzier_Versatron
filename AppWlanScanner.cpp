@@ -25,9 +25,6 @@ void AppWlanScanner::reset() {
     _hasDraw = false;
 }
 
-bool AppWlanScanner::CanBeClosed() {
-    return false;
-}
 
 void AppWlanScanner::setButton1() {
     _resultList.NextPage();

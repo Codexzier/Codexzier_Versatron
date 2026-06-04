@@ -72,8 +72,10 @@ public:
 
         _menu.init(tft, _colorOn, _colorOff);
         _appWorkout.init(tft, _colorOn, _colorOff, colorText);
+        _appWorkout.initExtend();
         _appTorch.init(tft, _colorOn, _colorOff, colorText);
         _appScnWiFi.init(tft, _colorOn, _colorOff, colorText);
+        _appScnWiFi.initExtend();
         _appScnBle.init(tft, _colorOn, _colorOff, colorText);
         _appScnBle.initExtend();
         _appPictureViewer.init(tft, colorOn, colorOff, colorText);

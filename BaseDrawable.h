@@ -21,6 +21,14 @@ public:
         _colorOff = colorOff;
         _colorText = _colorText;
     }
+
+    /**
+     * For the 3. Button to left the program.
+     * @return Value are true, if the app can be closed.
+     */
+    bool CanBeClosed() override {
+        return _canBeClosed;
+    }
 };
 
 #endif //CODEXZIER_VERSATRON_BASEDRAWABLE_H

@@ -6,89 +6,30 @@
 #define CODEXZIER_VERSATRON_APPWORKOUT_H
 
 #include <Arduino.h>
-#include <stdint.h>
-
 #include "AppWorkoutRun.h"
 #include "GC9A01_LTSM.hpp"
 #include "AppWorkoutSetup.h"
+#include "BaseDrawable.h"
 
-
-class AppWorkout {
-
-    GC9A01_LTSM *_tft;
-    uint16_t _colorOn;
-    uint16_t _colorOff;
-    uint16_t _colorText;
+class AppWorkout : public BaseDrawable {
 
     int _option = 1;
     bool _optionRun = false;
-    bool _canBeClosed = false;
 
     // Setup and run
     AppWorkoutSetup _setup;
     AppWorkoutRun _run;
 
-
 public:
-    AppWorkout()
-        : _tft(nullptr), _colorOn(0), _colorOff(0), _colorText(0){ }
 
-    /**
-    * Initialize the ring segment display with the given TFT display and colors.
-     * @param tft The GC9A01_LTSM TFT display object.
-     * @param colorOn The color to use for segments that are on.
-     * @param colorOff The color to use for segments that are off.
-     * @param colorText The color to use for text.
-     */
-    void init(GC9A01_LTSM &tft,
-              const uint16_t colorOn,
-              const uint16_t colorOff,
-              const uint16_t colorText) {
-        _tft = &tft;
-        _colorOn = colorOn;
-        _colorOff = colorOff;
-        _colorText = colorText;
-
-        _setup.init(tft, colorOn, colorOff, colorText);
-        _run.init(tft, colorOn, colorOff, colorText);
-    }
-
-    /**
-     * Draw content.
-     */
-    void drawUpdate();
-
-    /**
-     * Set all parameter to default.
-     */
-    void reset();
-
-    /**
-     * For the 3. Button to left the program.
-     * @return Value are true, if the app can be closed.
-     */
-    bool CanBeClosed();
-
-    /**
-     * Use the second poti to set up the parameter.
-     * @param value The value to set the parameter.
-     */
-    void setValue1(int16_t value);
-
-    /**
-     * Changed the target parameter select.
-     */
-    void setButton1();
-
-    /**
-     * Start the Workout run application
-     */
-    void setButton2();
-
-    /**
-     * Left the application.
-     */
-    void setButton3();
+    void initExtend() override ;
+    void drawUpdate() override;
+    void setButton1() override; // Changed the target parameter select.
+    void setButton2() override; // Start the Workout run application
+    void setButton3() override{ _canBeClosed = true; }
+    void setValue1(int16_t value) override; // Left the application.
+    void setValue2(int16_t value) override {}
+    void reset() override;
 };
 
 

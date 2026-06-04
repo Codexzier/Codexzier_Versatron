@@ -7,18 +7,15 @@
 
 #include <Arduino.h>
 #include <stdint.h>
+
+#include "BaseDrawable.h"
 #include "GC9A01_LTSM.hpp"
 
 
-class AppTorchRun {
-
-    GC9A01_LTSM *_tft;
-    uint16_t _colorOn;
-    uint16_t _colorOff;
-    uint16_t _colorText;
+class AppTorchRun : public BaseDrawable {
 
     int _option = 1;
-    bool _canBeClosed = false;
+//    bool _canBeClosed = false;
 
     uint16_t _colorTarget = 1;
     int _mode = 1;
@@ -32,35 +29,20 @@ class AppTorchRun {
     uint16_t _colorCircle = 0;
 
 public:
-    AppTorchRun()
-    : _tft(nullptr), _colorOn(0), _colorOff(0), _colorText(0){ }
 
-    void init(GC9A01_LTSM &tft,
-                const uint16_t colorOn,
-                const uint16_t colorOff,
-                const uint16_t colorText) {
-        _tft = &tft;
-        _colorOn = colorOn;
-        _colorOff = colorOff;
-        _colorText = colorText;
-
-        _colorTarget = tft.C_WHITE;
-        _colorBackground = tft.C_RED;
-    }
-
+    void initExtend() override {}
     // base functions
-    void drawUpdate();
-    void reset();
-    bool CanBeClosed();
-
-    void setValue1(int16_t value);
+    void drawUpdate() override;
+    void reset() override;
 
     // Selection option - Color
-    void setButton1();
+    void setButton1() override;
     // accept setup - mode
-    void setButton2();
-    // Return
-    void setButton3();
+    void setButton2() override;
+    void setButton3() override { _canBeClosed = true; }
+
+    void setValue1(int16_t value) override;
+    void setValue2(int16_t value) override {}
 };
 
 

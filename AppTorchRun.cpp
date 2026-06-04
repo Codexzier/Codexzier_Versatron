@@ -76,10 +76,11 @@ void AppTorchRun::reset() {
     _colorBackground = _tft->C_RED;
 }
 
+/*
 bool AppTorchRun::CanBeClosed() {
     return _canBeClosed;
 }
-
+*/
 void AppTorchRun::setValue1(int16_t value) {
     _brightness = value;
 }
@@ -130,8 +131,4 @@ void AppTorchRun::setButton2() {
     sprintf(buffer, "%d", _mode);
     _tft->setCursor(positionX, positionY + 20);
     _tft->print(buffer);
-}
-
-void AppTorchRun::setButton3() {
-    _canBeClosed = true;
 }

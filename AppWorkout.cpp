@@ -7,6 +7,12 @@
 #include <string>
 #include "fonts_LTSM/FontArialBold_LTSM.hpp"    // 16x16 pixels
 
+void AppWorkout::initExtend() {
+    _setup.init(*_tft, _colorOn, _colorOff, _colorText);
+    _run.init(*_tft, _colorOn, _colorOff, _colorText);
+}
+
+
 void AppWorkout::drawUpdate() {
 
     // draw option
@@ -22,13 +28,9 @@ void AppWorkout::drawUpdate() {
 void AppWorkout::reset() {
     _option = 1;
     _optionRun = false;
-    _canBeClosed = false;
+    //_canBeClosed = false;
     _setup.reset();
     _run.reset();
-}
-
-bool AppWorkout::CanBeClosed() {
-    return _canBeClosed;
 }
 
 void AppWorkout::setValue1(int16_t value) {
@@ -72,6 +74,7 @@ void AppWorkout::setButton2() {
     }
 }
 
+/*
 void AppWorkout::setButton3() {
 
     if (_option) {
@@ -85,3 +88,4 @@ void AppWorkout::setButton3() {
     // TODO: Zurück zum Hauptmenü bzw. App verlassen
     _canBeClosed = true;
 }
+*/

@@ -32,10 +32,6 @@ void AppBleScanner::reset() {
     _hasDraw = false;
 }
 
-bool AppBleScanner::CanBeClosed() {
-    return false;
-}
-
 void AppBleScanner::setButton1() {
     _resultList.setButton1();
 }

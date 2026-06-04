@@ -11,9 +11,7 @@
 #pragma once
 
 #include <Arduino.h>
-#include <stdint.h>
 #include "BaseDrawable.h"
-#include "GC9A01_LTSM.hpp"
 
 class AppPictureViewer : public BaseDrawable {
 
@@ -23,6 +21,10 @@ public:
     void drawUpdate() override;
     void setButton1() override;
     void setButton2() override;
+    void setButton3() override { _canBeClosed = true; }
+    void setValue1(int16_t value) override {}
+    void setValue2(int16_t value) override {}
+    void reset() override {}
 
 };
 

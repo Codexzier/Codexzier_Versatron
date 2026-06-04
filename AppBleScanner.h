@@ -28,25 +28,19 @@ class AppBleScanner : public BaseDrawable {
     int scanTime = 5; //In seconds
     BLEScan* pBLEScan;
 
+    void scan();
+
 public:
 
     void initExtend() override;
     void drawUpdate() override;
     void setButton1() override;
     void setButton2() override;
+    void setButton3() override { _canBeClosed = true; }
+    void setValue1(int16_t value) override {}
+    void setValue2(int16_t value) override {}
+    void reset() override;
 
-    /**
-     * Set all parameter to default.
-     */
-    void reset();
-
-    /**
-     * For the 3. Button to left the program.
-     * @return Value are true, if the app can be closed.
-     */
-    bool CanBeClosed();
-
-    void scan();
 };
 
 

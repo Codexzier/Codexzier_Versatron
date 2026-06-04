@@ -38,6 +38,22 @@ public:
      * Button execution 2.
      */
     virtual void setButton2() = 0;
+    /**
+     * Button execution 3.
+     */
+    virtual void setButton3() = 0;
+
+    virtual void setValue1(int16_t value) = 0;
+    virtual void setValue2(int16_t value) = 0;
+
+    /**
+     * Set all parameter to default.
+     */
+    virtual void reset() = 0;
+
+
+
+    virtual bool CanBeClosed() = 0;
 
 protected:
     GC9A01_LTSM *_tft = nullptr;
@@ -45,6 +61,7 @@ protected:
     uint16_t _colorOff = 0;
     uint16_t _colorText = 0;
     bool _hasDraw = false;
+    bool _canBeClosed = false;
 };
 
 #endif //CODEXZIER_VERSATRON_IDRAWABLE_H
