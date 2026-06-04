@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 4.2)
 project(Codexzier_Versatron)
 
-set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_STANDARD 20)
 
 include_directories(.
     "$ENV{HOME}/Arduino/libraries"
@@ -36,4 +36,8 @@ add_executable(Codexzier_Versatron
         AppBleScanner.cpp
         AppBleScanner.h
         AppBleScannerResultList.cpp
-        AppBleScannerResultList.h)
+        AppBleScannerResultList.h
+        AppPictureViewer.cpp
+        AppPictureViewer.h
+        IDrawable.h
+        BaseDrawable.h)

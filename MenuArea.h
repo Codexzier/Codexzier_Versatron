@@ -59,6 +59,10 @@ class MenuArea {
     void drawClearByChangedPage();
     void drawMenuPaging();
 
+    void drawInputValues();
+    int _value1 = 0;
+    int _value2 = 0;
+
 public:
     MenuArea()
     : _tft(nullptr), _colorOn(0), _colorOff(0){}
@@ -113,10 +117,15 @@ public:
     int getMenuSelectIndex();
 
     /**
-     * TODO: Use I really this function to debug an value?
+     * Write the actual input value
      * @param value Write value for debug.
      */
-    void drawDebugValue(int value);
+    void setValue1(int16_t value) {
+        _value1 = value;
+    }
+    void setValue2(int16_t value) {
+        _value2 = value;
+    }
 
     /**
      * Destruct this menu class instance.

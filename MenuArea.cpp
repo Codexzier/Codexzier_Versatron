@@ -14,6 +14,7 @@ void MenuArea::drawUpdate() {
         return;
     }
 
+    drawInputValues();
     drawMenu();
 }
 
@@ -140,14 +141,18 @@ int MenuArea::getMenuSelectIndex() {
     return _menuIndex;
 }
 
-void MenuArea::drawDebugValue(int value) {
+void MenuArea::drawInputValues() {
 
     _tft->setFont(FontDefault);
     _tft->setTextColor(_tft->C_GREEN, _tft->C_BLACK);
-    _tft->setCursor(180, 120);
+    _tft->setCursor(80, 30);
 
     char buffer[12];
-    sprintf(buffer, "%d", value);
+    sprintf(buffer, "%d", _value1);
+    _tft->print(buffer);
+
+    _tft->setCursor(140, 30);
+    sprintf(buffer, "%d", _value2);
     _tft->print(buffer);
 }
 

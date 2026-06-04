@@ -41,8 +41,12 @@ void Codexzier_Versatron::drawUpdate()
             }
             break;
         }
-            case ScanBle: {
+        case ScanBle: {
             _appScnBle.drawUpdate();
+            break;
+        }
+        case PictureViewer: {
+            _appPictureViewer.drawUpdate();
             break;
         }
     }
@@ -74,6 +78,7 @@ void Codexzier_Versatron::showApp(DrawContent content) {
 void Codexzier_Versatron::setValue1(int16_t value) {
     switch (_drawContent) {
         case Menu: {
+            _menu.setValue1(value);
             break;
         }
         case Workout: {
@@ -88,6 +93,34 @@ void Codexzier_Versatron::setValue1(int16_t value) {
             break;
         }
         case ScanBle: {
+            break;
+        }
+        case PictureViewer: {
+            break;
+        }
+    }
+}
+
+void Codexzier_Versatron::setValue2(int16_t value) {
+    switch (_drawContent) {
+        case Menu: {
+            _menu.setValue2(value);
+            break;
+        }
+        case Workout: {
+            break;
+        }
+        case Torch: {
+
+            break;
+        }
+        case ScanWiFi: {
+            break;
+        }
+        case ScanBle: {
+            break;
+        }
+        case PictureViewer: {
             break;
         }
     }
@@ -115,13 +148,16 @@ void Codexzier_Versatron::setButton1() {
             _appScnBle.setButton1();
             break;
         }
+        case PictureViewer: {
+            break;
+        }
     }
 }
 
 void Codexzier_Versatron::setButton2() {
     switch (_drawContent) {
         case Menu: {
-            showApp((DrawContent)(_menu.getMenuSelectIndex() + 1));
+            showApp(static_cast<DrawContent>(_menu.getMenuSelectIndex() + 1));
             break;
         }
         case Workout: {
@@ -138,6 +174,9 @@ void Codexzier_Versatron::setButton2() {
         }
         case ScanBle: {
             _appScnBle.setButton2();
+            break;
+        }
+        case PictureViewer: {
             break;
         }
     }

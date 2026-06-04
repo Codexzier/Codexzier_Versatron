@@ -8,7 +8,6 @@
 #include <Arduino.h>
 #include <stdint.h>
 #include "GC9A01_LTSM.hpp"
-#include "fonts_LTSM/FontArialBold_LTSM.hpp"
 
 #include "AppBleScannerResultList.h"
 
@@ -17,19 +16,24 @@
 #include <BLEScan.h>
 #include <BLEAdvertisedDevice.h>
 
+#include "BaseDrawable.h"
+
 class MyAdvertisedDeviceCallbacks: public BLEAdvertisedDeviceCallbacks {
     void onResult(BLEAdvertisedDevice advertisedDevice) {
         Serial.printf("Advertised Device: %s \n", advertisedDevice.toString().c_str());
     }
 };
 
-class AppBleScanner {
+class AppBleScanner : public BaseDrawable {
+    /*
     GC9A01_LTSM *_tft;
     uint16_t _colorOn;
     uint16_t _colorOff;
     uint16_t _colorText;
 
     bool _hasDraw = false;
+    */
+
     void drawScanInfo();
 
     AppBleScannerResultList _resultList;
@@ -37,9 +41,9 @@ class AppBleScanner {
     BLEScan* pBLEScan;
 
 public:
-    AppBleScanner()
-    : _tft(nullptr), _colorOn(0), _colorOff(0), _colorText(0){ }
-
+    //AppBleScanner()
+    //: _tft(nullptr), _colorOn(0), _colorOff(0), _colorText(0){ }
+/*
     void init(GC9A01_LTSM &tft,
         uint16_t colorOn,
         uint16_t colorOff,
@@ -49,21 +53,17 @@ public:
         _colorOff = colorOff;
         _colorText = colorText;
 
-        _resultList.init(tft, _colorOn, _colorOff, _colorText);
 
-        // TODO: Start instance if start this application
-        BLEDevice::init("");
-        pBLEScan = BLEDevice::getScan(); //create new scan
-        pBLEScan->setAdvertisedDeviceCallbacks(new MyAdvertisedDeviceCallbacks());
-        pBLEScan->setActiveScan(true); //active scan uses more power, but get results faster
-        pBLEScan->setInterval(100);
-        pBLEScan->setWindow(99);  // less or equal setInterval value
+
+
     }
+    */
+    void initExtend() ;
 
-    /**
-     * Draw content.
-     */
-    void drawUpdate();
+
+    void drawUpdate() override;
+    void setButton1() override;
+    void setButton2() override;
 
     /**
      * Set all parameter to default.
@@ -77,9 +77,6 @@ public:
     bool CanBeClosed();
 
     void scan();
-
-    void setButton1();
-    void setButton2();
 };
 
 

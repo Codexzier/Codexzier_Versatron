@@ -4,7 +4,17 @@
 
 #include "AppBleScanner.h"
 
+void AppBleScanner::initExtend() {
 
+    _resultList.init(*_tft, _colorOn, _colorOff, _colorText);
+    // TODO: Start instance if start this application
+    BLEDevice::init("");
+    pBLEScan = BLEDevice::getScan(); //create new scan
+    pBLEScan->setAdvertisedDeviceCallbacks(new MyAdvertisedDeviceCallbacks());
+    pBLEScan->setActiveScan(true); //active scan uses more power, but get results faster
+    pBLEScan->setInterval(100);
+    pBLEScan->setWindow(99);  // less or equal setInterval value
+}
 
 void AppBleScanner::drawUpdate() {
 

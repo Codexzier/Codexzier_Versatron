@@ -7,6 +7,7 @@
 #include <stdint.h>
 
 #include "AppBleScanner.h"
+#include "AppPictureViewer.h"
 #include "GC9A01_LTSM.hpp"
 
 #include "MenuArea.h"
@@ -23,6 +24,7 @@ enum DrawContent {
     Torch = 2,
     ScanWiFi = 3,
     ScanBle = 4,
+    PictureViewer = 5
 };
 
 class Codexzier_Versatron {
@@ -51,6 +53,8 @@ class Codexzier_Versatron {
     AppWlanScanner _appScnWiFi;
     AppBleScanner _appScnBle;
 
+    AppPictureViewer _appPictureViewer;
+
 
 public:
     Codexzier_Versatron()
@@ -71,6 +75,8 @@ public:
         _appTorch.init(tft, _colorOn, _colorOff, colorText);
         _appScnWiFi.init(tft, _colorOn, _colorOff, colorText);
         _appScnBle.init(tft, _colorOn, _colorOff, colorText);
+        _appScnBle.initExtend();
+        _appPictureViewer.init(tft, colorOn, colorOff, colorText);
     }
 
     void drawUpdate();
@@ -80,6 +86,7 @@ public:
 
     void showApp(DrawContent content);
     void setValue1(int16_t value);
+    void setValue2(int16_t value) ;
     void setButton1();
     void setButton2();
     void setButton3();
