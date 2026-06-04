@@ -24,7 +24,7 @@ public:
      * @param colorText The color to use for text.
      */
     virtual void init(GC9A01_LTSM &tft, uint16_t colorOn, uint16_t colorOff, uint16_t colorText) = 0;
-    //virtual void initExtend() = 0;
+    virtual void initExtend() = 0;
     /**
      * Draw content.
      */

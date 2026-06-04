@@ -93,14 +93,14 @@ void AppBleScannerResultList::addItem(BleItem *item) {
     _pageCount = static_cast<int>(_items->size()) / _itemsPerPage;
 }
 
-void AppBleScannerResultList::clearItems() {
+void AppBleScannerResultList::setButton2() {
     _items.reset();
     _pageCount = 0;
     _page = 0;
     _hasDraw = false;
 }
 
-void AppBleScannerResultList::NextPage() {
+void AppBleScannerResultList::setButton1() {
     _hasDraw = false;
     if (_page < _pageCount) {
         _page++;

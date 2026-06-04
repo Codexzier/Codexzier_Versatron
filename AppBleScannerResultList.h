@@ -10,6 +10,8 @@
 #include <memory>
 #include <string>
 #include <vector>
+
+#include "BaseDrawable.h"
 #include "GC9A01_LTSM.hpp"
 
 
@@ -25,12 +27,7 @@ public:
     bool HasManufacturerData;
 };
 
-class AppBleScannerResultList {
-
-    GC9A01_LTSM *_tft;
-    uint16_t _colorOn;
-    uint16_t _colorOff;
-    uint16_t _colorText;
+class AppBleScannerResultList : public BaseDrawable  {
 
     std::unique_ptr<std::vector<BleItem*>> _items;
 
@@ -44,32 +41,16 @@ class AppBleScannerResultList {
     void drawItem(int x, int y, int index, int itemIndex);
 
     public:
-    AppBleScannerResultList()
-        : _tft(nullptr), _colorOn(0), _colorOff(0), _colorText(0){ }
+
+    void initExtend() override {}
+    void drawUpdate() override;
+    void setButton1() override;
+    void setButton2() override;
 
 
-    /**
-    * Initialize the ring segment display with the given TFT display and colors.
-     * @param tft The GC9A01_LTSM TFT display object.
-     * @param colorOn The color to use for segments that are on.
-     * @param colorOff The color to use for segments that are off.
-     * @param colorText The color to use for text.
-     */
-    void init(GC9A01_LTSM &tft,
-              const uint16_t colorOn,
-              const uint16_t colorOff,
-              const uint16_t colorText) {
-        _tft = &tft;
-        _colorOn = colorOn;
-        _colorOff = colorOff;
-        _colorText = colorText;
-    }
 
-    void drawUpdate();
     void addItem(BleItem* item);
-    void clearItems();
-    void NextPage();
-    int GetCountFindings() {
+    int GetCountFindings() const {
 
         if (!_items) {
             return 0;
@@ -78,6 +59,5 @@ class AppBleScannerResultList {
         return _items->size();
     }
 };
-
 
 #endif //CODEXZIER_VERSATRON_APPBLESCANNERRESULTLIST_H

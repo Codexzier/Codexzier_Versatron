@@ -37,7 +37,7 @@ bool AppBleScanner::CanBeClosed() {
 }
 
 void AppBleScanner::setButton1() {
-    _resultList.NextPage();
+    _resultList.setButton1();
 }
 
 void AppBleScanner::drawScanInfo() {
@@ -103,7 +103,7 @@ void AppBleScanner::scan() {
 
 
 void AppBleScanner::setButton2() {
-    _resultList.clearItems();
+    _resultList.setButton2();
     scan();
     _hasDraw = false;
 }

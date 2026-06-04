@@ -20,10 +20,7 @@ public:
         _colorOn = colorOn;
         _colorOff = colorOff;
         _colorText = _colorText;
-
-        //initExtend();
     }
-
 };
 
 #endif //CODEXZIER_VERSATRON_BASEDRAWABLE_H

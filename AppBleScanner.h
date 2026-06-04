@@ -6,16 +6,11 @@
 #define CODEXZIER_VERSATRON_APPBLESCANNER_H
 
 #include <Arduino.h>
-#include <stdint.h>
-#include "GC9A01_LTSM.hpp"
-
 #include "AppBleScannerResultList.h"
-
 #include <BLEDevice.h>
 #include <BLEUtils.h>
 #include <BLEScan.h>
 #include <BLEAdvertisedDevice.h>
-
 #include "BaseDrawable.h"
 
 class MyAdvertisedDeviceCallbacks: public BLEAdvertisedDeviceCallbacks {
@@ -25,14 +20,7 @@ class MyAdvertisedDeviceCallbacks: public BLEAdvertisedDeviceCallbacks {
 };
 
 class AppBleScanner : public BaseDrawable {
-    /*
-    GC9A01_LTSM *_tft;
-    uint16_t _colorOn;
-    uint16_t _colorOff;
-    uint16_t _colorText;
 
-    bool _hasDraw = false;
-    */
 
     void drawScanInfo();
 
@@ -41,26 +29,8 @@ class AppBleScanner : public BaseDrawable {
     BLEScan* pBLEScan;
 
 public:
-    //AppBleScanner()
-    //: _tft(nullptr), _colorOn(0), _colorOff(0), _colorText(0){ }
-/*
-    void init(GC9A01_LTSM &tft,
-        uint16_t colorOn,
-        uint16_t colorOff,
-        uint16_t colorText) {
-        _tft = &tft;
-        _colorOn = colorOn;
-        _colorOff = colorOff;
-        _colorText = colorText;
 
-
-
-
-    }
-    */
-    void initExtend() ;
-
-
+    void initExtend() override;
     void drawUpdate() override;
     void setButton1() override;
     void setButton2() override;
