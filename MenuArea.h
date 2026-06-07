@@ -10,6 +10,7 @@
 #include <string>
 #include <memory>
 
+#include "BaseDrawable.h"
 #include "GC9A01_LTSM.hpp"
 #include "MenuPaging.h"
 
@@ -25,11 +26,7 @@ public:
     bool isSelected = false;
 };
 
-class MenuArea {
-
-    GC9A01_LTSM *_tft;
-    uint16_t _colorOn;
-    uint16_t _colorOff;
+class MenuArea : public BaseDrawable {
 
     int _menuIndex = 0;
 
@@ -64,30 +61,11 @@ class MenuArea {
     int _value2 = 0;
 
 public:
-    MenuArea()
-    : _tft(nullptr), _colorOn(0), _colorOff(0){}
 
-    /**
-     * Initialize the ring segment display with the given TFT display and colors.
-     * @param tft The GC9A01_LTSM TFT display object.
-     * @param colorOn The color to use for segments that are on.
-     * @param colorOff The color to use for segments that are off.
-     */
-    void init(
-        GC9A01_LTSM &tft,
-        const uint16_t colorOn,
-        const uint16_t colorOff) {
-        _tft = &tft;
-        _colorOn = colorOn;
-        _colorOff = colorOff;
-
-        _menuPaging.init(tft, _colorOn, _colorOff, tft.C_BEIGE, 85, 194);
+    void initExtend() override {
+        _menuPaging.init(*_tft, _colorOn, _colorOff, _tft->C_BEIGE, 85, 194);
     }
-
-    /**
-     * Draw content.
-     */
-    void drawUpdate();
+    void drawUpdate() override;
 
     /**
      * Set all parameter to default.
@@ -116,21 +94,18 @@ public:
      */
     int getMenuSelectIndex();
 
-    /**
-     * Write the actual input value
-     * @param value Write value for debug.
-     */
-    void setValue1(int16_t value) {
+
+    void setValue1(int16_t value) override {
         _value1 = value;
     }
-    void setValue2(int16_t value) {
+    void setValue2(int16_t value) override {
         _value2 = value;
     }
 
     /**
      * Destruct this menu class instance.
      */
-    ~MenuArea();
+    ~MenuArea() override;
 };
 
 #endif //CODEXZIER_VERSATRON_APPMENU_H

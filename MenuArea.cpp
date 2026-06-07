@@ -103,6 +103,7 @@ void MenuArea::drawMenu() {
     _isInitializedDrawMenu = true;
 }
 
+
 void MenuArea::drawClearByChangedPage() {
 
     if (_menuIndexPage != _menuIndexPageSelected) {
@@ -121,6 +122,7 @@ void MenuArea::drawMenuPaging() {
     }
 }
 
+
 void MenuArea::nextMenuSelect() {
 
     if (_menuIndex < 0 || _menuIndex >= static_cast<int>(_menuItems->size()))
@@ -134,7 +136,6 @@ void MenuArea::nextMenuSelect() {
     setIndexPage();
 
     _isInitializedDrawMenu = false;
-    //drawMenu();
 }
 
 int MenuArea::getMenuSelectIndex() {

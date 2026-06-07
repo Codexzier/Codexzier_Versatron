@@ -93,7 +93,7 @@ void AppWorkoutSetup::drawTextAndTime(int x, int y, const char *text, int value)
 
 void AppWorkoutSetup::drawSelectPointer() {
 
-    int16_t y = _startY + 3;
+    uint16_t y = _startY + 3;
     switch (_selectSetup) {
         case TimeExecution: {
             y += 50;
@@ -109,7 +109,7 @@ void AppWorkoutSetup::drawSelectPointer() {
         }
     }
 
-    int16_t x = _startX + 140;
+    uint16_t x = _startX + 140;
 
     if (y != _lastSelectSetupPointerPositionY) {
         _tft->drawTriangle(
@@ -125,13 +125,13 @@ void AppWorkoutSetup::drawSelectPointer() {
 
 // ==============================
 // properties
-int16_t AppWorkoutSetup::getExecutionMax() const {
+uint16_t AppWorkoutSetup::getExecutionMax() const {
     return _secondsExecutionMax;
 }
 
-int16_t AppWorkoutSetup::getBreakMax() const {
+uint16_t AppWorkoutSetup::getBreakMax() const {
     return _secondsBreakMax;
 }
-int16_t AppWorkoutSetup::getRoundMax() const {
+uint16_t AppWorkoutSetup::getRoundMax() const {
     return _roundMax;
 }

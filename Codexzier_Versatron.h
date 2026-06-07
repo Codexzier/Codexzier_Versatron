@@ -71,6 +71,7 @@ public:
         _colorText = colorText;
 
         _menu.init(tft, _colorOn, _colorOff);
+        _menu.initExtend();
         _appWorkout.init(tft, _colorOn, _colorOff, colorText);
         _appWorkout.initExtend();
         _appTorch.init(tft, _colorOn, _colorOff, colorText);

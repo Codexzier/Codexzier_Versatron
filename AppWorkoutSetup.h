@@ -29,10 +29,10 @@ class AppWorkoutSetup {
     bool _option1SetupHasDraw = false;
 
     SelectSetup _selectSetup = TimeExecution;
-    int16_t _lastSelectSetupPointerPositionY = 0;
-    int16_t _secondsExecutionMax = 30;
-    int16_t _secondsBreakMax = 30;
-    int16_t _roundMax = 5;
+    uint16_t _lastSelectSetupPointerPositionY = 0;
+    uint16_t _secondsExecutionMax = 30;
+    uint16_t _secondsBreakMax = 30;
+    uint16_t _roundMax = 5;
 
     void drawSetupValues();
     void drawSelectPointer();
@@ -83,19 +83,19 @@ public:
      * Get the max second execution.
      * @return max second for execution.
      */
-    int16_t getExecutionMax() const;
+    uint16_t getExecutionMax() const;
 
     /**
      * Get the max second break.
      * @return max second for break.
      */
-    int16_t getBreakMax() const;
+    uint16_t getBreakMax() const;
 
     /**
      * Get the max round of workout.
      * @return max round of workout.
      */
-    int16_t getRoundMax() const;
+    uint16_t getRoundMax() const;
 };
 
 
