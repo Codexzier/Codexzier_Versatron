@@ -5,6 +5,7 @@
 #include "AppTorchRun.h"
 #include <string>
 #include "GC9A01_LTSM.hpp"
+#include "fonts_LTSM/FontArialBold_LTSM.hpp"
 
 void AppTorchRun::setBackground() {
 

@@ -7,7 +7,6 @@
 
 #include <Arduino.h>
 #include "AppWorkoutRun.h"
-#include "GC9A01_LTSM.hpp"
 #include "AppWorkoutSetup.h"
 #include "BaseDrawable.h"
 
@@ -22,7 +21,7 @@ class AppWorkout : public BaseDrawable {
 
 public:
 
-    void initExtend() override ;
+    void initExtend() override;
     void drawUpdate() override;
     void setButton1() override; // Changed the target parameter select.
     void setButton2() override; // Start the Workout run application

@@ -5,7 +5,7 @@
 #include "AppWorkout.h"
 #include "GC9A01_LTSM.hpp"
 #include <string>
-#include "fonts_LTSM/FontArialBold_LTSM.hpp"    // 16x16 pixels
+//#include "fonts_LTSM/FontArialBold_LTSM.hpp"    // 16x16 pixels
 
 void AppWorkout::initExtend() {
     _setup.init(*_tft, _colorOn, _colorOff, _colorText);

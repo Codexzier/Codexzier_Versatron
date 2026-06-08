@@ -114,6 +114,7 @@ void MenuArea::drawClearByChangedPage() {
 }
 
 void MenuArea::drawMenuPaging() {
+
     if (_isInitializedDrawMenu) {
         _menuPaging.setPage(_menuIndexPage);
     }

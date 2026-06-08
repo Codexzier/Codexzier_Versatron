@@ -3,9 +3,8 @@
 //
 
 #include "AppWorkoutRun.h"
-
 #include <cstdio>
-
+#include "GC9A01_LTSM.hpp"
 #include "fonts_LTSM/FontArialBold_LTSM.hpp"
 
 void AppWorkoutRun::drawUpdate() {

@@ -8,6 +8,12 @@
 #include "fonts_LTSM/FontArialBold_LTSM.hpp"    // 16x16 pixels
 
 void MenuPaging::setPage(int pageNumber) {
+
+    if (_lastSetPageNumber = pageNumber) {
+        return;
+    }
+    _lastSetPageNumber = pageNumber;
+
     char buffer[12];
     sprintf(buffer, "%d", pageNumber);
 
@@ -28,6 +34,12 @@ void MenuPaging::setPageAndPageMax(int pageNumber, int pageMax) {
 }
 
 void MenuPaging::drawFrameAndPage(int pageNumber, int pageMax) {
+
+    if (pageNumber == _lastSetPageNumber && pageMax == _lastSetPageMax) {
+        return;
+    }
+    _lastSetPageNumber = pageNumber;
+    _lastSetPageMax = pageMax;
 
     _tft->setFont(FontArialBold);
 

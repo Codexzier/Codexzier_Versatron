@@ -19,7 +19,7 @@ public:
         _tft = &tft;
         _colorOn = colorOn;
         _colorOff = colorOff;
-        _colorText = _colorText;
+        _colorText = colorText;
     }
 
     /**

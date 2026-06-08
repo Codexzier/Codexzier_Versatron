@@ -19,6 +19,8 @@ class MenuPaging {
     uint16_t _positionY = 10;
     int _cornerRadius = 4;
 
+    int _lastSetPageNumber = 0;
+    int _lastSetPageMax = 0;
 
 public:
     MenuPaging()
