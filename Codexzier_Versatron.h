@@ -70,7 +70,7 @@ public:
         _colorOff = colorOff;
         _colorText = colorText;
 
-        _menu.init(tft, _colorOn, _colorOff);
+        _menu.init(tft, _colorOn, _colorOff, colorText);
         _menu.initExtend();
         _appWorkout.init(tft, _colorOn, _colorOff, colorText);
         _appWorkout.initExtend();

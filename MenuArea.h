@@ -5,7 +5,6 @@
 #pragma once
 
 #include <Arduino.h>
-#include <stdint.h>
 #include <vector>
 #include <string>
 #include <memory>
@@ -66,6 +65,10 @@ public:
         _menuPaging.init(*_tft, _colorOn, _colorOff, _tft->C_BEIGE, 85, 194);
     }
     void drawUpdate() override;
+    void setButton1() override{}
+    void setButton2() override{}
+    void setButton3() override { _canBeClosed = true; }
+
 
     /**
      * Set all parameter to default.
@@ -76,6 +79,7 @@ public:
         _menuIndexPage = 1;
         _menuPaging.drawFrameAndPage(_menuIndexPage, _menuIndexPageMax);
     }
+    void reset() override {}
 
     /**
      * Add an menu item for selection an application.
