@@ -85,6 +85,7 @@ public:
         _appScnBle.initExtend();
 
         _appPictureViewer.init(tft, colorOn, colorOff, colorText);
+        _appPictureViewer.initExtend();
     }
 
     void drawUpdate();

@@ -17,7 +17,7 @@ class AppPictureViewer : public BaseDrawable {
 
 public:
 
-    void initExtend() override{}
+    void initExtend() override;
     void drawUpdate() override;
     void setButton1() override;
     void setButton2() override;
