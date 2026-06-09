@@ -9,11 +9,6 @@
 
 void MenuPaging::setPage(int pageNumber) {
 
-    if (_lastSetPageNumber = pageNumber) {
-        return;
-    }
-    _lastSetPageNumber = pageNumber;
-
     char buffer[12];
     sprintf(buffer, "%d", pageNumber);
 

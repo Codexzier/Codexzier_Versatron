@@ -21,10 +21,10 @@
 enum DrawContent {
     Menu = 0,
     Workout = 1,
-    Torch = 2,
+    Torch = 5,
     ScanWiFi = 3,
     ScanBle = 4,
-    PictureViewer = 5
+    PictureViewer = 2
 };
 
 class Codexzier_Versatron {
@@ -55,6 +55,7 @@ class Codexzier_Versatron {
 
     AppPictureViewer _appPictureViewer;
 
+    std::vector<IDrawable*> _drawables;
 
 public:
     Codexzier_Versatron()
@@ -70,22 +71,17 @@ public:
         _colorOff = colorOff;
         _colorText = colorText;
 
-        _menu.init(tft, _colorOn, _colorOff, colorText);
-        _menu.initExtend();
+        _drawables.push_back(&_menu);
+        _drawables.push_back(&_appWorkout);
+        _drawables.push_back(&_appTorch);
+        _drawables.push_back(&_appScnWiFi);
+        _drawables.push_back(&_appScnBle);
+        _drawables.push_back(&_appPictureViewer);
 
-        _appWorkout.init(tft, _colorOn, _colorOff, _colorText);
-        _appWorkout.initExtend();
-
-        _appTorch.init(tft, _colorOn, _colorOff, colorText);
-
-        _appScnWiFi.init(tft, _colorOn, _colorOff, colorText);
-        _appScnWiFi.initExtend();
-
-        _appScnBle.init(tft, _colorOn, _colorOff, colorText);
-        _appScnBle.initExtend();
-
-        _appPictureViewer.init(tft, colorOn, colorOff, colorText);
-        _appPictureViewer.initExtend();
+        for (IDrawable* drawable : _drawables) {
+            drawable->init(tft, colorOn, colorOff, colorText);
+            drawable->initExtend();
+        }
     }
 
     void drawUpdate();

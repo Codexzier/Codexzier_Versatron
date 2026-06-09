@@ -20,7 +20,13 @@ class MenuPaging {
     int _cornerRadius = 4;
 
     int _lastSetPageNumber = 0;
-    int _lastSetPageMax = 0;
+    int _lastSetPageMax = -1;
+
+    /**
+     * Set the actual page.
+     * @param pageNumber set actual page.
+     */
+    void setPage(int pageNumber);
 
 public:
     MenuPaging()
@@ -64,11 +70,7 @@ public:
      */
     void setPageAndPageMax(int pageNumber, int pageMax);
 
-    /**
-     * Set the actual page.
-     * @param pageNumber set actual page.
-     */
-    void setPage(int pageNumber);
+
 };
 
 

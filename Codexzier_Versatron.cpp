@@ -12,6 +12,19 @@
 // render update content
 void Codexzier_Versatron::drawUpdate()
 {
+
+    // TODO: Für die Instanze muss ein Aktiv Flag sein.
+    // for (IDrawable* drawable : _drawables) {
+    //
+    //     if (_drawContent == Menu) {
+    //         drawable->drawUpdate();
+    //         if (drawable->CanBeClosed()) {
+    //             showMenuAppUi();
+    //             return;
+    //         }
+    //     }
+    // }
+    
     switch (_drawContent) {
         case Menu: {
             _menu.drawUpdate();
@@ -19,7 +32,7 @@ void Codexzier_Versatron::drawUpdate()
         }
         case Workout: {
             _appWorkout.drawUpdate();
-            
+
             if (_appWorkout.CanBeClosed()) {
                 showMenuAppUi();
             }
