@@ -65,10 +65,13 @@ public:
         _menuPaging.init(*_tft, _colorOn, _colorOff, _tft->C_BEIGE, 85, 194);
     }
     void drawUpdate() override;
-    void setButton1() override{}
+
+    /**
+     * Jump to the next select menu item.
+     */
+    void setButton1() override;
     void setButton2() override{}
     void setButton3() override { _canBeClosed = true; }
-
 
     /**
      * Set all parameter to default.
@@ -87,10 +90,7 @@ public:
      */
     void addItem(const MenuItem& item);
 
-    /**
-     * Jump to the next select menu item.
-     */
-    void nextMenuSelect();
+
 
     /**
      * Get the index number of the selected menu item.
@@ -104,6 +104,15 @@ public:
     }
     void setValue2(int16_t value) override {
         _value2 = value;
+    }
+
+    bool CanBeClosed() override {
+        // Menu is the base level
+        return false;
+    }
+
+    bool IsMenu() override {
+        return true;
     }
 
     /**

@@ -50,10 +50,11 @@ public:
      * Set all parameter to default.
      */
     virtual void reset() = 0;
-
-
-
     virtual bool CanBeClosed() = 0;
+
+    virtual bool IsMenu() = 0;
+    virtual void SetActive(bool active) = 0;
+    virtual bool IsActive() = 0;
 
 protected:
     GC9A01_LTSM *_tft = nullptr;
@@ -62,6 +63,7 @@ protected:
     uint16_t _colorText = 0;
     bool _hasDraw = false;
     bool _canBeClosed = false;
+    bool _isActive = false;
 };
 
 #endif //CODEXZIER_VERSATRON_IDRAWABLE_H

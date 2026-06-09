@@ -21,10 +21,10 @@
 enum DrawContent {
     Menu = 0,
     Workout = 1,
-    Torch = 5,
+    Torch = 2,
     ScanWiFi = 3,
     ScanBle = 4,
-    PictureViewer = 2
+    PictureViewer = 5
 };
 
 class Codexzier_Versatron {
@@ -82,6 +82,8 @@ public:
             drawable->init(tft, colorOn, colorOff, colorText);
             drawable->initExtend();
         }
+
+        _menu.SetActive(true);
     }
 
     void drawUpdate();

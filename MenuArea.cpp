@@ -122,9 +122,7 @@ void MenuArea::drawMenuPaging() {
     _menuPaging.drawFrameAndPage(_menuIndexPage, _menuIndexPageMax);
 }
 
-
-void MenuArea::nextMenuSelect() {
-
+void MenuArea::setButton1() {
     if (_menuIndex < 0 || _menuIndex >= static_cast<int>(_menuItems->size()))
     {
         _menuIndex = 0;

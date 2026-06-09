@@ -29,6 +29,17 @@ public:
     bool CanBeClosed() override {
         return _canBeClosed;
     }
+
+    bool IsMenu() override {
+        return false;
+    }
+
+    void SetActive(bool active) override {
+        _isActive = active;
+    }
+    bool IsActive() override {
+        return _isActive;
+    }
 };
 
 #endif //CODEXZIER_VERSATRON_BASEDRAWABLE_H

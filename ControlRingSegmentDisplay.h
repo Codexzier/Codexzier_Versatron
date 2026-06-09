@@ -25,7 +25,7 @@ private:
     int _segmentIndex = 0;
     int _segmentValueOn = 0.0f;
 
-    bool _segmentsOnRing[60];
+    bool _segmentsOnRing[121];
     int _radiusOuter = 118;
     int _radiusInner = 112;
     float _segmentMultiplicator = 6.0;
