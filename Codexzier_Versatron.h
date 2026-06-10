@@ -7,6 +7,7 @@
 #include <stdint.h>
 
 #include "AppBleScanner.h"
+#include "AppCameraRun.h"
 #include "AppPictureViewer.h"
 #include "GC9A01_LTSM.hpp"
 
@@ -45,6 +46,7 @@ class Codexzier_Versatron {
     AppBleScanner _appScnBle;
 
     AppPictureViewer _appPictureViewer;
+    AppCameraRun _camera;
 
     std::vector<IDrawable*> _drawables;
 
