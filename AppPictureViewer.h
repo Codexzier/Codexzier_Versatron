@@ -24,7 +24,7 @@ public:
     void setButton3() override { _canBeClosed = true; }
     void setValue1(int16_t value) override {}
     void setValue2(int16_t value) override {}
-    void reset() override {}
+    void reset() override;
 
 };
 

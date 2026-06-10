@@ -15,7 +15,6 @@
 class AppTorchRun : public BaseDrawable {
 
     int _option = 1;
-//    bool _canBeClosed = false;
 
     uint16_t _colorTarget = 1;
     int _mode = 1;

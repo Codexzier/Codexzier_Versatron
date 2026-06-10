@@ -18,15 +18,6 @@
 #ifndef CODEXZIER_VERSATRON_CODEXZIER_VERSATRON_H
 #define CODEXZIER_VERSATRON_CODEXZIER_VERSATRON_H
 
-// enum DrawContent {
-//     Menu = 0,
-//     Workout = 1,
-//     Torch = 2,
-//     ScanWiFi = 3,
-//     ScanBle = 4,
-//     PictureViewer = 5
-// };
-
 class Codexzier_Versatron {
 
     GC9A01_LTSM *_tft;
@@ -34,7 +25,6 @@ class Codexzier_Versatron {
     uint16_t _colorOff;
     uint16_t _colorText;
 
-    //DrawContent _drawContent = Menu;
     std::string _drawContentName = "Menu";
 
     // ========================================================================================
@@ -91,8 +81,6 @@ public:
 
     void showMenuAppUi();
     void addMenuItem(const MenuItem& item);
-
-    //void showApp(DrawContent content);
     void showApp(std::string content);
     void setValue1(int16_t value);
     void setValue2(int16_t value) ;

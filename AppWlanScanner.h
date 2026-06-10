@@ -10,7 +10,6 @@
 #include "AppWlanScannerResultList.h"
 #include "BaseDrawable.h"
 
-
 class AppWlanScanner : public BaseDrawable {
 
     void drawScanInfo();

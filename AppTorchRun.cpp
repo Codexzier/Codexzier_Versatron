@@ -75,13 +75,10 @@ void AppTorchRun::reset() {
     _canBeClosed = false;
     _colorTarget = _tft->C_WHITE;
     _colorBackground = _tft->C_RED;
+
+    _hasDraw = false;
 }
 
-/*
-bool AppTorchRun::CanBeClosed() {
-    return _canBeClosed;
-}
-*/
 void AppTorchRun::setValue1(int16_t value) {
     _brightness = value;
 }

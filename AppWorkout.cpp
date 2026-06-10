@@ -30,14 +30,12 @@ void AppWorkout::drawUpdate() {
 void AppWorkout::reset() {
     _option = 1;
     _optionRun = false;
-    //_canBeClosed = false;
     _setup.reset();
     _run.reset();
 }
 
 void AppWorkout::setValue1(int16_t value) {
 
-    // TODO: noch in eigene Function verschieben.
     value = value / 60;
     if(value > 60) {
         value = 60;
@@ -75,19 +73,3 @@ void AppWorkout::setButton2() {
         return;
     }
 }
-
-/*
-void AppWorkout::setButton3() {
-
-    if (_option) {
-
-        _tft->fillScreen(_tft->C_BLACK);
-        reset();
-
-        return;
-    }
-
-    // TODO: Zurück zum Hauptmenü bzw. App verlassen
-    _canBeClosed = true;
-}
-*/

@@ -33,10 +33,10 @@ void MenuArea::setMaxIndexPage() {
 void MenuArea::setIndexPage() {
     // get the current index page based on the menu index
     // example: is index 1, it is page 1 and it is index 4, it is page 2.
-    float current = (_menuIndex + 1) / 4.0f;
+    const float current = (static_cast<float>(_menuIndex) + 1.0f) / 4.0f;
     int currentInt = (_menuIndex + 1) / 4;
 
-    if (current > (float)currentInt) {
+    if (current > static_cast<float>(currentInt)) {
         currentInt++;
     }
 
@@ -110,14 +110,11 @@ void MenuArea::drawClearByChangedPage() {
         _isInitializedDrawMenu = false;
         _tft->fillScreen(_tft->C_BLACK);
     }
+
     _menuIndexPageSelected = _menuIndexPage;
 }
 
 void MenuArea::drawMenuPaging() {
-
-    if (_isInitializedDrawMenu) {
-       return;
-    }
 
     _menuPaging.drawFrameAndPage(_menuIndexPage, _menuIndexPageMax);
 }
@@ -159,7 +156,7 @@ void MenuArea::reset() {
     _isInitializedDrawMenu = false;
     _menuIndex = 0;
     _menuIndexPage = 1;
-    _menuPaging.drawFrameAndPage(_menuIndexPage, _menuIndexPageMax);
+    //_menuPaging.drawFrameAndPage(_menuIndexPage, _menuIndexPageMax);
 }
 
 

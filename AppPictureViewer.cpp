@@ -66,3 +66,7 @@ void AppPictureViewer::setButton1() {
 void AppPictureViewer::setButton2() {
 
 }
+
+void AppPictureViewer::reset() {
+    _hasDraw = false;
+}
