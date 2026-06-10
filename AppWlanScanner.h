@@ -23,6 +23,7 @@ public:
     void initExtend() override {
         _resultList.init(*_tft, _colorOn, _colorOff, _colorText);
         WiFi.STA.begin();
+        _applicationName = "WLAN Scanner";
     }
     void drawUpdate() override;
     void setButton1() override;

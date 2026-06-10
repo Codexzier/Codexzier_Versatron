@@ -4,6 +4,7 @@
 
 #pragma once
 #include <stdint.h>
+#include <string>
 #include "GC9A01_LTSM.hpp"
 
 #ifndef CODEXZIER_VERSATRON_IDRAWABLE_H
@@ -55,6 +56,7 @@ public:
     virtual bool IsMenu() = 0;
     virtual void SetActive(bool active) = 0;
     virtual bool IsActive() = 0;
+    virtual std::string GetApplicationName() = 0;
 
 protected:
     GC9A01_LTSM *_tft = nullptr;
@@ -64,6 +66,7 @@ protected:
     bool _hasDraw = false;
     bool _canBeClosed = false;
     bool _isActive = false;
+    std::string _applicationName = "";
 };
 
 #endif //CODEXZIER_VERSATRON_IDRAWABLE_H

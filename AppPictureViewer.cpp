@@ -38,6 +38,8 @@ void AppPictureViewer::initExtend() {
     // } else {
     //     _tft->print("UNKNOWN");
     // }
+
+    _applicationName = "Picture Viewer";
 }
 
 void AppPictureViewer::drawUpdate() {

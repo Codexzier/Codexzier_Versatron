@@ -31,7 +31,8 @@ void Codexzier_Versatron::drawUpdate()
 // menu
 void Codexzier_Versatron::showMenuAppUi(){
     _tft->fillScreen(_tft->C_BLACK);
-    _drawContent = Menu;
+    //_drawContent = Menu;
+    _drawContentName = "Menu";
     _menu.reset();
 
     for (IDrawable* drawable : _drawables) {
@@ -45,42 +46,44 @@ void Codexzier_Versatron::addMenuItem(const MenuItem& item){
 
 // ================================================================
 // app start
-void Codexzier_Versatron::showApp(DrawContent content) {
+//void Codexzier_Versatron::showApp(DrawContent content) {
+void Codexzier_Versatron::showApp(std::string content) {
 
     _tft->fillScreen(_tft->C_BLACK);
-    _drawContent = content;
+    //_drawContent = content;
+    _drawContentName = content;
 
     for (IDrawable* drawable : _drawables) {
         drawable->reset();
-        drawable->SetActive(false);
+        drawable->SetActive(drawable->GetApplicationName() == content);
     }
 
-    switch (_drawContent) {
-        case Menu: {
-            _menu.SetActive(true);
-            break;
-        }
-        case Workout: {
-            _appWorkout.SetActive(true);
-            break;
-        }
-        case Torch: {
-            _appTorch.SetActive(true);
-            break;
-        }
-        case ScanWiFi: {
-            _appScnWiFi.SetActive(true);
-            break;
-        }
-        case ScanBle: {
-            _appScnBle.SetActive(true);
-            break;
-        }
-        case PictureViewer: {
-            _appPictureViewer.SetActive(true);
-            break;
-        }
-    }
+    // switch (_drawContent) {
+    //     case Menu: {
+    //         _menu.SetActive(true);
+    //         break;
+    //     }
+    //     case Workout: {
+    //         _appWorkout.SetActive(true);
+    //         break;
+    //     }
+    //     case Torch: {
+    //         _appTorch.SetActive(true);
+    //         break;
+    //     }
+    //     case ScanWiFi: {
+    //         _appScnWiFi.SetActive(true);
+    //         break;
+    //     }
+    //     case ScanBle: {
+    //         _appScnBle.SetActive(true);
+    //         break;
+    //     }
+    //     case PictureViewer: {
+    //         _appPictureViewer.SetActive(true);
+    //         break;
+    //     }
+    // }
 }
 
 void Codexzier_Versatron::setValue1(int16_t value) {
@@ -115,8 +118,11 @@ void Codexzier_Versatron::setButton1() {
 
 void Codexzier_Versatron::setButton2() {
 
-    if (_drawContent == Menu) {
-        showApp(static_cast<DrawContent>(_menu.getMenuSelectIndex() + 1));
+    if (_drawContentName == "Menu") {//_drawContent == Menu) {
+        //showApp(static_cast<DrawContent>(_menu.getMenuSelectIndex() + 1));
+        int index = _menu.getMenuSelectIndex() + 1; // Um Menu zu überspringen
+        std::string applicationName = _drawables[index]->GetApplicationName();
+        showApp(applicationName);
         return;
     }
 
@@ -127,32 +133,32 @@ void Codexzier_Versatron::setButton2() {
         drawable->setButton2();
     }
 
-    return;
-    switch (_drawContent) {
-        case Menu: {
-            showApp(static_cast<DrawContent>(_menu.getMenuSelectIndex() + 1));
-            break;
-        }
-        case Workout: {
-            _appWorkout.setButton2();
-            break;
-        }
-        case Torch: {
-            _appTorch.setButton2();
-            break;
-        }
-        case ScanWiFi: {
-            _appScnWiFi.setButton2();
-            break;
-        }
-        case ScanBle: {
-            _appScnBle.setButton2();
-            break;
-        }
-        case PictureViewer: {
-            break;
-        }
-    }
+    // return;
+    // switch (_drawContent) {
+    //     case Menu: {
+    //         showApp(static_cast<DrawContent>(_menu.getMenuSelectIndex() + 1));
+    //         break;
+    //     }
+    //     case Workout: {
+    //         _appWorkout.setButton2();
+    //         break;
+    //     }
+    //     case Torch: {
+    //         _appTorch.setButton2();
+    //         break;
+    //     }
+    //     case ScanWiFi: {
+    //         _appScnWiFi.setButton2();
+    //         break;
+    //     }
+    //     case ScanBle: {
+    //         _appScnBle.setButton2();
+    //         break;
+    //     }
+    //     case PictureViewer: {
+    //         break;
+    //     }
+    // }
 }
 
 void Codexzier_Versatron::setButton3() {

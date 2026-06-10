@@ -63,6 +63,7 @@ public:
 
     void initExtend() override {
         _menuPaging.init(*_tft, _colorOn, _colorOff, _tft->C_BEIGE, 85, 194);
+        _applicationName = "Menu";
     }
     void drawUpdate() override;
 

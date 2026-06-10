@@ -10,6 +10,8 @@
 void AppWorkout::initExtend() {
     _setup.init(*_tft, _colorOn, _colorOff, _colorText);
     _run.init(*_tft, _colorOn, _colorOff, _colorText);
+
+    _applicationName = "Workout";
 }
 
 

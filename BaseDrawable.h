@@ -40,6 +40,10 @@ public:
     bool IsActive() override {
         return _isActive;
     }
+
+    std::string GetApplicationName() override {
+        return _applicationName;
+    }
 };
 
 #endif //CODEXZIER_VERSATRON_BASEDRAWABLE_H

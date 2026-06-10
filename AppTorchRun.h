@@ -30,7 +30,9 @@ class AppTorchRun : public BaseDrawable {
 
 public:
 
-    void initExtend() override {}
+    void initExtend() override {
+        _applicationName = "Torch";
+    }
     // base functions
     void drawUpdate() override;
     void reset() override;

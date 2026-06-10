@@ -21,7 +21,6 @@ class MyAdvertisedDeviceCallbacks: public BLEAdvertisedDeviceCallbacks {
 
 class AppBleScanner : public BaseDrawable {
 
-
     void drawScanInfo();
 
     AppBleScannerResultList _resultList;
