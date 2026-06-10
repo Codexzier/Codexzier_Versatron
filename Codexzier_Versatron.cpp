@@ -32,7 +32,7 @@ void Codexzier_Versatron::drawUpdate()
 void Codexzier_Versatron::showMenuAppUi(){
     _tft->fillScreen(_tft->C_BLACK);
     _drawContent = Menu;
-    _menu.resetInitializedDrawMenu();
+    _menu.reset();
 
     for (IDrawable* drawable : _drawables) {
         drawable->SetActive(false);

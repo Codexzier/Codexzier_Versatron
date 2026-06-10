@@ -73,31 +73,7 @@ public:
     void setButton2() override{}
     void setButton3() override { _canBeClosed = true; }
 
-    /**
-     * Set all parameter to default.
-     */
-    void resetInitializedDrawMenu() {
-        _isInitializedDrawMenu = false;
-        _menuIndex = 0;
-        _menuIndexPage = 1;
-        _menuPaging.drawFrameAndPage(_menuIndexPage, _menuIndexPageMax);
-    }
-    void reset() override {}
-
-    /**
-     * Add an menu item for selection an application.
-     * @param item Item for selection application.
-     */
-    void addItem(const MenuItem& item);
-
-
-
-    /**
-     * Get the index number of the selected menu item.
-     * @return Index number of selected menue item.
-     */
-    int getMenuSelectIndex();
-
+    void reset() override;
 
     void setValue1(int16_t value) override {
         _value1 = value;
@@ -114,6 +90,18 @@ public:
     bool IsMenu() override {
         return true;
     }
+
+    /**
+     * Add an menu item for selection an application.
+     * @param item Item for selection application.
+     */
+    void addItem(const MenuItem& item);
+
+    /**
+     * Get the index number of the selected menu item.
+     * @return Index number of selected menue item.
+     */
+    int getMenuSelectIndex();
 
     /**
      * Destruct this menu class instance.

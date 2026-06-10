@@ -143,7 +143,7 @@ int MenuArea::getMenuSelectIndex() {
 void MenuArea::drawInputValues() {
 
     _tft->setFont(FontDefault);
-    _tft->setTextColor(_tft->C_GREEN, _tft->C_BLACK);
+    _tft->setTextColor(_tft->C_DGREY, _tft->C_BLACK);
     _tft->setCursor(80, 30);
 
     char buffer[12];
@@ -154,6 +154,14 @@ void MenuArea::drawInputValues() {
     sprintf(buffer, "%d", _value2);
     _tft->print(buffer);
 }
+
+void MenuArea::reset() {
+    _isInitializedDrawMenu = false;
+    _menuIndex = 0;
+    _menuIndexPage = 1;
+    _menuPaging.drawFrameAndPage(_menuIndexPage, _menuIndexPageMax);
+}
+
 
 MenuArea::~MenuArea() {
     if (_menuItems) {
