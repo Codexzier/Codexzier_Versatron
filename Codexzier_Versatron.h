@@ -70,6 +70,7 @@ public:
         _drawables.push_back(&_appScnWiFi);
         _drawables.push_back(&_appScnBle);
         _drawables.push_back(&_appPictureViewer);
+        _drawables.push_back(&_camera);
 
         for (IDrawable* drawable : _drawables) {
             drawable->init(tft, colorOn, colorOff, colorText);

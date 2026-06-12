@@ -7,7 +7,16 @@ include_directories(.
     "$ENV{HOME}/Arduino/libraries"
     "$ENV{HOME}/Arduino/libraries/GC9A01_LTSM/src"
     "$ENV{HOME}/Arduino/libraries/display16_LTSM/src"
-    "$ENV{HOME}//home/codexzier/.arduino15/packages/esp32/hardware/esp32/3.3.8/libraries/WiFi/src"
+
+    "$ENV{HOME}/.arduino15/packages/esp32/hardware/esp32/3.3.10/cores/esp32"
+    "$ENV{HOME}/.arduino15/packages/esp32/hardware/esp32/3.3.10/variants/XIAO_ESP32S3"
+
+    "$ENV{HOME}/.arduino15/packages/esp32/hardware/esp32/3.3.10/libraries/FS/src"
+    "$ENV{HOME}/.arduino15/packages/esp32/hardware/esp32/3.3.10/libraries/SD/src"
+    "$ENV{HOME}/.arduino15/packages/esp32/hardware/esp32/3.3.10/libraries/SPI/src"
+    "$ENV{HOME}/.arduino15/packages/esp32/hardware/esp32/3.3.10/libraries/WiFi/src"
+
+    "$ENV{HOME}/.arduino15/packages/esp32/tools/esp32s3-libs/3.3.10/include/espressif__esp32-camera/driver/include"
 )
 
 add_executable(Codexzier_Versatron
