@@ -22,14 +22,14 @@ class AppWorkoutSetup {
     uint16_t _colorOff;
     uint16_t _colorText;
 
-    int16_t _startX = 50;
-    int16_t _startY = 70;
+    const int16_t _startX = 50;
+    const int16_t _startY = 70;
 
     void drawTextAndTime(int x, int y, const char* text, int value);
     bool _option1SetupHasDraw = false;
 
     SelectSetup _selectSetup = TimeExecution;
-    uint16_t _lastSelectSetupPointerPositionY = 0;
+    int16_t _lastSelectSetupPointerPositionY = 0;
     uint16_t _secondsExecutionMax = 30;
     uint16_t _secondsBreakMax = 30;
     uint16_t _roundMax = 5;

@@ -7,29 +7,34 @@
 #include "esp_camera.h"
 #include "FS.h"
 #include "SD.h"
-#include "SPI.h"
+//#include "SPI.h"
 #include "camera_pins.h"
-#include "fonts_LTSM/FontArialBold_LTSM.hpp"
+//#include "fonts_LTSM/FontArialBold_LTSM.hpp"
+#include <vector>
+#include <string>
+#include <memory>
 
 // Save pictures to SD card
 void AppCameraRun::photo_save(const char * fileName) {
     // Take a photo
     camera_fb_t *fb = esp_camera_fb_get();
 
-    _tft->setFont(FontArialBold);
-    _tft->setCursor(100, 100);
+    _tft->setFont(FontDefault);
 
     if (!fb) {
+        _tft->setCursor(_posX - 20, _posY - 100);
         _tft->setTextColor(_tft->C_RED, _tft->C_BLACK);
         _tft->print("Failed to get camera frame buffer");
         return;
     }
+
     // Save photo to file
     writeFile(SD, fileName, fb->buf, fb->len);
 
     // Release image buffer
     esp_camera_fb_return(fb);
 
+    _tft->setCursor(_posX - 25, _posY);
     _tft->setTextColor(_colorText, _tft->C_BLACK);
     _tft->print("Photo saved to file");
 }
@@ -37,10 +42,10 @@ void AppCameraRun::photo_save(const char * fileName) {
 // SD card write file
 void AppCameraRun::writeFile(FS &fs, const char * path, uint8_t * data, size_t len){
 
-    _tft->setFont(FontArialBold);
-    _tft->setCursor(50, 50);
-    Serial.printf("Writing file: %s\n", path);
+    _tft->setFont(FontDefault);
+    _tft->setCursor(_posX, _posY - 60);
     _tft->print("writing file");
+    Serial.printf("Writing file: %s\n", path);
 
     File file = fs.open(path, FILE_WRITE);
     if(!file){
@@ -49,13 +54,15 @@ void AppCameraRun::writeFile(FS &fs, const char * path, uint8_t * data, size_t l
         Serial.println("Failed to open file for writing");
         return;
     }
+
+    _tft->setCursor(_posX, _posY - 40);
     if(file.write(data, len) == len){
-        Serial.println("File written");
         _tft->print("File written");
+        Serial.println("File written");
     } else {
         _tft->setTextColor(_tft->C_RED, _tft->C_BLACK);
-        Serial.println("Write failed");
         _tft->print("write failed");
+        Serial.println("Write failed");
     }
     file.close();
 }
@@ -117,66 +124,106 @@ void AppCameraRun::initExtend() {
 #endif
     }
 
-    _tft->setFont(FontArialBold);
-    _tft->setCursor(100, 100);
-    _tft->setTextColor(_colorText, _tft->C_BLACK);
-    _tft->print("init camera");
     Serial.println("init camera");
 
     // camera init
     esp_err_t err = esp_camera_init(&config);
     if (err != ESP_OK) {
-        _tft->setTextColor(_tft->C_RED, _tft->C_BLACK);
-        _tft->print("Camera init faild");
         Serial.printf("Camera init failed with error 0x%x", err);
         return;
     }
 
-    _camera_sign = true; // Camera initialization check passes
+    // Camera initialization check passes
+    _camera_sign = true;
 
     // Initialize SD card
     if(!SD.begin(21)){
-        _tft->setTextColor(_tft->C_RED, _tft->C_BLACK);
-        _tft->print("Card Mount Failed");
+
         Serial.println("Card Mount Failed");
         return;
     }
-    uint8_t cardType = SD.cardType();
 
-    _tft->print("read card type");
+    uint8_t cardType = SD.cardType();
     Serial.println("read card type");
+
     // Determine if the type of SD card is available
     if(cardType == CARD_NONE){
-        _tft->setTextColor(_tft->C_RED, _tft->C_BLACK);
-        _tft->print("No SD card attached");
+
         Serial.println("No SD card attached");
         return;
     }
 
-    _tft->print("SD Card Type: ");
     Serial.print("SD Card Type: ");
     if(cardType == CARD_MMC){
-        _tft->print("MMC");
         Serial.println("MMC");
     } else if(cardType == CARD_SD){
-        _tft->print("SDSC");
         Serial.println("SDSC");
     } else if(cardType == CARD_SDHC){
-        _tft->print("SDHC");
         Serial.println("SDHC");
     } else {
-        _tft->print("UNKNOWN");
         Serial.println("UNKNOWN");
     }
 
-    _sd_sign = true; // sd initialization check passes
-
-    _tft->print("Ready");
+    // sd initialization check passes
+    _sd_sign = true;
     Serial.println("Ready.");
+
+    // SD Karte auslesen nach Dateien
+    const int16_t posX = 70;
+    const int16_t posY = 35;
+    _tft->setCursor(posX, posY);
+
+    File root = SD.open("/");
+    if (!root) {
+        Serial.println("Failed to open directory");
+        return;
+    }
+    if (!root.isDirectory()) {
+        Serial.println("Not a directory");
+        return;
+    }
+
+    if (!_filenames) {
+        _filenames = std::make_unique<std::vector<std::string>>();
+    }
+
+    File file = root.openNextFile();
+    while (file) {
+        if (file.isDirectory()) {
+            Serial.print("  DIR : ");
+            Serial.println(file.name());
+        } else {
+            Serial.print("  FILE: ");
+            Serial.print(file.name());
+            Serial.print("  SIZE: ");
+            Serial.println(file.size());
+
+            _filenames->push_back(file.name());
+            _imageCount++;
+        }
+        file = root.openNextFile();
+    }
 }
 
 void AppCameraRun::drawUpdate() {
 
+    if (_hasDraw) {
+        return;
+    }
+
+    constexpr int16_t posX = 30;
+    constexpr int16_t posY = 45;
+    _tft->setFont(FontDefault);
+    _tft->setTextColor(_colorText, _tft->C_BLACK);
+
+    const int fileCount = static_cast<int>(_filenames->size());
+    for (int index = 0; index < fileCount; index++) {
+        std::string filename = (*_filenames)[index];
+        _tft->setCursor(posX, posY + (index * 10));
+        _tft->print(filename.c_str());
+    }
+
+    _hasDraw = true;
 }
 
 void AppCameraRun::setButton1() {
@@ -184,17 +231,32 @@ void AppCameraRun::setButton1() {
 }
 
 void AppCameraRun::setButton2() {
+
     char filename[32];
     sprintf(filename, "/image%d.jpg", _imageCount);
     photo_save(filename);
 
-    _tft->setFont(FontArialBold);
-    _tft->setCursor(100, 100);
+    _tft->drawCircle(120, 120, 119, _colorOn);
+    _tft->drawCircle(120, 120, 118, _colorOff);
+    _tft->drawCircle(120, 120, 117, _colorOff);
+
+    constexpr int16_t posX = 50;
+    constexpr int16_t posY = 145;
+
+    _tft->setFont(FontDefault);
+    _tft->setCursor(posX, posY);
     _tft->setTextColor(_colorText, _tft->C_BLACK);
-    _tft->print("Saved picture");
+    _tft->print("Saved picture: ");
+
+    char buffer[10];
+    sprintf(buffer, "%02d", _imageCount);
+    _tft->print(buffer);
 
     Serial.printf("Saved picture：%s\n", filename);
     _imageCount++;
+
+    _hasDraw = false;
+    _tft->fillScreen(_tft->C_BLACK);
 }
 
 
