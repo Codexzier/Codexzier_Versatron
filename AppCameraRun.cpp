@@ -67,6 +67,54 @@ void AppCameraRun::writeFile(FS &fs, const char * path, uint8_t * data, size_t l
     file.close();
 }
 
+void AppCameraRun::readFiles() {
+
+    File root = SD.open("/");
+    if (!root) {
+        Serial.println("Failed to open directory");
+        return;
+    }
+    if (!root.isDirectory()) {
+        Serial.println("Not a directory");
+        return;
+    }
+
+    if (!_filenames) {
+        _filenames = std::make_unique<std::vector<std::string>>();
+    }
+
+    File file = root.openNextFile();
+    while (file) {
+        if (file.isDirectory()) {
+            Serial.print("  DIR : ");
+            Serial.println(file.name());
+        } else {
+            Serial.print("  FILE: ");
+            Serial.print(file.name());
+            Serial.print("  SIZE: ");
+            Serial.println(file.size());
+
+            _filenames->push_back(file.name());
+            _imageCount++;
+        }
+        file = root.openNextFile();
+    }
+}
+
+void AppCameraRun::drawText(){
+
+    constexpr int16_t posX = 30;
+    constexpr int16_t posY = 45;
+    _tft->setFont(FontDefault);
+    _tft->setTextColor(_colorText, _tft->C_BLACK);
+
+    const int fileCount = static_cast<int>(_filenames->size());
+    for (int index = 0; index < fileCount; index++) {
+        std::string filename = (*_filenames)[index];
+        _tft->setCursor(posX, posY + (index * 10));
+        _tft->print(filename.c_str());
+    }
+}
 
 void AppCameraRun::initExtend() {
 
@@ -173,36 +221,7 @@ void AppCameraRun::initExtend() {
     const int16_t posY = 35;
     _tft->setCursor(posX, posY);
 
-    File root = SD.open("/");
-    if (!root) {
-        Serial.println("Failed to open directory");
-        return;
-    }
-    if (!root.isDirectory()) {
-        Serial.println("Not a directory");
-        return;
-    }
-
-    if (!_filenames) {
-        _filenames = std::make_unique<std::vector<std::string>>();
-    }
-
-    File file = root.openNextFile();
-    while (file) {
-        if (file.isDirectory()) {
-            Serial.print("  DIR : ");
-            Serial.println(file.name());
-        } else {
-            Serial.print("  FILE: ");
-            Serial.print(file.name());
-            Serial.print("  SIZE: ");
-            Serial.println(file.size());
-
-            _filenames->push_back(file.name());
-            _imageCount++;
-        }
-        file = root.openNextFile();
-    }
+    readFiles();
 }
 
 void AppCameraRun::drawUpdate() {
@@ -211,17 +230,14 @@ void AppCameraRun::drawUpdate() {
         return;
     }
 
-    constexpr int16_t posX = 30;
-    constexpr int16_t posY = 45;
-    _tft->setFont(FontDefault);
-    _tft->setTextColor(_colorText, _tft->C_BLACK);
+    readFiles();
 
-    const int fileCount = static_cast<int>(_filenames->size());
-    for (int index = 0; index < fileCount; index++) {
-        std::string filename = (*_filenames)[index];
-        _tft->setCursor(posX, posY + (index * 10));
-        _tft->print(filename.c_str());
-    }
+
+
+    _tft->drawCircle(120, 120, 119, _colorOn);
+    _tft->drawCircle(120, 120, 118, _colorOff);
+    _tft->drawCircle(120, 120, 117, _colorOff);
+    drawText();
 
     _hasDraw = true;
 }
@@ -232,21 +248,18 @@ void AppCameraRun::setButton1() {
 
 void AppCameraRun::setButton2() {
 
-    char filename[32];
-    sprintf(filename, "/image%d.jpg", _imageCount);
-    photo_save(filename);
-
-    _tft->drawCircle(120, 120, 119, _colorOn);
-    _tft->drawCircle(120, 120, 118, _colorOff);
-    _tft->drawCircle(120, 120, 117, _colorOff);
-
     constexpr int16_t posX = 50;
     constexpr int16_t posY = 145;
 
     _tft->setFont(FontDefault);
     _tft->setCursor(posX, posY);
     _tft->setTextColor(_colorText, _tft->C_BLACK);
-    _tft->print("Saved picture: ");
+    _tft->print("Save picture: ");
+
+    char filename[32];
+    sprintf(filename, "/image%d.jpg", _imageCount);
+    _tft->print(filename);
+    photo_save(filename);
 
     char buffer[10];
     sprintf(buffer, "%02d", _imageCount);
