@@ -24,10 +24,12 @@ class AppCameraRun : public BaseDrawable {
     const int16_t _posY = 165;
 
     std::unique_ptr<std::vector<std::string>> _filenames;
+    std::string _lastFilename;
 
     void photo_save(const char * fileName);
     void writeFile(FS &fs, const char * path, uint8_t * data, size_t len);
     void readFiles();
+    void drawLastPicture();
     void drawText();
 
 public:

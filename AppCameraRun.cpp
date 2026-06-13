@@ -95,10 +95,77 @@ void AppCameraRun::readFiles() {
             Serial.println(file.size());
 
             _filenames->push_back(file.name());
+            _lastFilename = file.name();
             _imageCount++;
         }
         file = root.openNextFile();
     }
+}
+
+void AppCameraRun::drawLastPicture() {
+
+    constexpr int16_t posX = 30;
+    constexpr int16_t posY = 45;
+    _tft->setFont(FontDefault);
+    _tft->setCursor(posX, posY);
+    _tft->setTextColor(_colorText, _tft->C_BLACK);
+    _tft->print(_lastFilename.c_str());
+    Serial.printf("Reading file: %s\n", _lastFilename);
+
+    _tft->setCursor(posX, posY + 10);
+    File file = SD.open(_lastFilename.c_str());
+    if(!file){
+        _tft->setTextColor(_tft->C_RED, _tft->C_BLACK);
+        _tft->print("Failed to open file for reading");
+        Serial.println("Failed to open file for reading");
+        return;
+    }
+
+    _tft->print("Read from file: ");
+    Serial.print("Read from file: ");
+
+    int headerPicOffset[4];
+
+    // 14 Byte von der Datei einlesen
+    // um den Header auszuwerten
+    int headerFormat[8];
+    int32_t index = 0;
+    int32_t indexPictureStart = -1;
+    int32_t picWidth = -1;
+    int32_t picHeight = -1;
+
+    file.seek(10); // springe zu bild offset header information
+    while(file.available()){
+        int byteValue = file.read();
+
+        if (indexPictureStart < 0) {
+            headerPicOffset[index] = byteValue;
+            index++;
+            if (index >= 4) {
+
+                indexPictureStart = headerPicOffset[0] | headerPicOffset[1] << 8 | headerPicOffset[2] << 16 | headerPicOffset[3] << 24;
+                index = 0;
+                file.seek(18);
+            }
+        }
+        if (indexPictureStart > 0 && picWidth < 0 && picHeight < 0) {
+            headerFormat[index] =  byteValue;
+            index++;
+            if (index >= 8) {
+                index = 0;
+                file.seek(indexPictureStart);
+
+                // Breite: 4 bytes aus position 18
+                picWidth = headerFormat[0] | headerFormat[1] << 8 | headerFormat[2] << 16 | headerFormat[3] << 24;
+                // hoehe: 4 Bytes aus position 22
+                picHeight = headerFormat[4] | headerFormat[5] << 8 | headerFormat[6] << 16 | headerFormat[7] << 24;
+            }
+        }
+    }
+    file.close();
+
+
+
 }
 
 void AppCameraRun::drawText(){
@@ -149,28 +216,28 @@ void AppCameraRun::initExtend() {
     config.pixel_format = PIXFORMAT_JPEG; // for streaming
     config.grab_mode = CAMERA_GRAB_WHEN_EMPTY;
     config.fb_location = CAMERA_FB_IN_PSRAM;
-    config.jpeg_quality = 12;
-    config.fb_count = 1;
+    //config.jpeg_quality = 12;
+    //config.fb_count = 1;
 
     // if PSRAM IC present, init with UXGA resolution and higher JPEG quality
     //                      for larger pre-allocated frame buffer.
-    if(config.pixel_format == PIXFORMAT_JPEG){
-        if(psramFound()){
-            config.jpeg_quality = 10;
-            config.fb_count = 2;
-            config.grab_mode = CAMERA_GRAB_LATEST;
-        } else {
-            // Limit the frame size when PSRAM is not available
-            config.frame_size = FRAMESIZE_SVGA;
-            config.fb_location = CAMERA_FB_IN_DRAM;
-        }
-    } else {
+    // if(config.pixel_format == PIXFORMAT_JPEG){
+    //     if(psramFound()){
+    //         config.jpeg_quality = 10;
+    //         config.fb_count = 2;
+    //         config.grab_mode = CAMERA_GRAB_LATEST;
+    //     } else {
+    //         // Limit the frame size when PSRAM is not available
+    //         config.frame_size = FRAMESIZE_SVGA;
+    //         config.fb_location = CAMERA_FB_IN_DRAM;
+    //     }
+    // } else {
         // Best option for face detection/recognition
         config.frame_size = FRAMESIZE_240X240;
 #if CONFIG_IDF_TARGET_ESP32S3
         config.fb_count = 2;
 #endif
-    }
+    //}
 
     Serial.println("init camera");
 
@@ -237,6 +304,7 @@ void AppCameraRun::drawUpdate() {
     _tft->drawCircle(120, 120, 119, _colorOn);
     _tft->drawCircle(120, 120, 118, _colorOff);
     _tft->drawCircle(120, 120, 117, _colorOff);
+
     drawText();
 
     _hasDraw = true;
