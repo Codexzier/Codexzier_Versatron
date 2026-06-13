@@ -107,7 +107,7 @@ void AppWlanScannerResultList::addWlanItem(WlanItem *item) {
 }
 
 void AppWlanScannerResultList::clearWlanItems() {
-    _items.reset();
+    _items.reset(); // TODO: ggf umstellen auf clear()
     _page = 0;
     _pageCount = 0;
     _hasDraw = false;

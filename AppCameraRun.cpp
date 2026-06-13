@@ -25,6 +25,8 @@ void AppCameraRun::photo_save(const char * fileName) {
         _tft->setCursor(_posX - 20, _posY - 100);
         _tft->setTextColor(_tft->C_RED, _tft->C_BLACK);
         _tft->print("Failed to get camera frame buffer");
+        Serial.println("Failed to get camera frame buffer");
+        delay(1000);
         return;
     }
 
@@ -37,6 +39,7 @@ void AppCameraRun::photo_save(const char * fileName) {
     _tft->setCursor(_posX - 25, _posY);
     _tft->setTextColor(_colorText, _tft->C_BLACK);
     _tft->print("Photo saved to file");
+    Serial.println("Photo saved to file");
 }
 
 // SD card write file
@@ -50,8 +53,11 @@ void AppCameraRun::writeFile(FS &fs, const char * path, uint8_t * data, size_t l
     File file = fs.open(path, FILE_WRITE);
     if(!file){
         _tft->setTextColor(_tft->C_RED, _tft->C_BLACK);
-        _tft->print("Failed to open file for writing");
+        _tft->print("Failed to open");
+        _tft->setCursor(_posX, _posY - 50);
+        _tft->print("file for writing");
         Serial.println("Failed to open file for writing");
+        delay(1000);
         return;
     }
 
@@ -63,43 +69,59 @@ void AppCameraRun::writeFile(FS &fs, const char * path, uint8_t * data, size_t l
         _tft->setTextColor(_tft->C_RED, _tft->C_BLACK);
         _tft->print("write failed");
         Serial.println("Write failed");
+        delay(1000);
     }
     file.close();
 }
 
 void AppCameraRun::readFiles() {
 
+    Serial.println("Get root");
     File root = SD.open("/");
     if (!root) {
         Serial.println("Failed to open directory");
+        delay(1000);
         return;
     }
+
+    Serial.println("Check directory");
     if (!root.isDirectory()) {
         Serial.println("Not a directory");
+        delay(1000);
         return;
     }
 
+    Serial.println("create instance of the filename list or reset");
     if (!_filenames) {
+        Serial.println("set instance of filename list");
         _filenames = std::make_unique<std::vector<std::string>>();
     }
+    else {
+        Serial.println("reset list");
+        _filenames->clear();
+        _imageCount = 0;
+    }
 
+    Serial.println("read root directory");
     File file = root.openNextFile();
     while (file) {
         if (file.isDirectory()) {
             Serial.print("  DIR : ");
             Serial.println(file.name());
         } else {
+
+            _lastFilename = file.name();
             Serial.print("  FILE: ");
-            Serial.print(file.name());
+            Serial.print(_lastFilename.c_str());
             Serial.print("  SIZE: ");
             Serial.println(file.size());
 
-            _filenames->push_back(file.name());
-            _lastFilename = file.name();
+            _filenames->push_back(_lastFilename);
             _imageCount++;
         }
         file = root.openNextFile();
     }
+    file.close();
 }
 
 void AppCameraRun::drawLastPicture() {
@@ -110,62 +132,85 @@ void AppCameraRun::drawLastPicture() {
     _tft->setCursor(posX, posY);
     _tft->setTextColor(_colorText, _tft->C_BLACK);
     _tft->print(_lastFilename.c_str());
-    Serial.printf("Reading file: %s\n", _lastFilename);
+    Serial.printf("Reading file: %s\n", _lastFilename.c_str());
 
+    std::string fullpath = "/" + _lastFilename;
+    Serial.printf("fullpath file: %s\n", fullpath.c_str());
     _tft->setCursor(posX, posY + 10);
-    File file = SD.open(_lastFilename.c_str());
+    File file = SD.open(fullpath.c_str());
     if(!file){
         _tft->setTextColor(_tft->C_RED, _tft->C_BLACK);
-        _tft->print("Failed to open file for reading");
+        _tft->print("Failed to open");
+        _tft->setCursor(posX, posY + 20);
+        _tft->print("file for reading");
         Serial.println("Failed to open file for reading");
+        delay(1000);
         return;
     }
 
     _tft->print("Read from file: ");
     Serial.print("Read from file: ");
 
-    int headerPicOffset[4];
+    // -------------------
+    // Header
 
-    // 14 Byte von der Datei einlesen
-    // um den Header auszuwerten
-    int headerFormat[8];
-    int32_t index = 0;
-    int32_t indexPictureStart = -1;
-    int32_t picWidth = -1;
-    int32_t picHeight = -1;
+    // Offset
+    // springe zu bild offset header information
+    const uint32_t indexPictureStart = GetHeaderInformation(file, 10);
 
-    file.seek(10); // springe zu bild offset header information
-    while(file.available()){
-        int byteValue = file.read();
+    // width and hight
+    const uint32_t picWidth = GetHeaderInformation(file, 18);
+    const uint32_t picHeight = GetHeaderInformation(file, 22);
 
-        if (indexPictureStart < 0) {
-            headerPicOffset[index] = byteValue;
-            index++;
-            if (index >= 4) {
+    Serial.print("Offset: "); Serial.print(indexPictureStart, DEC);
+    Serial.print(", Breite: "); Serial.print(picWidth, DEC);
+    Serial.print(", Höhe: "); Serial.println(picHeight, DEC);
 
-                indexPictureStart = headerPicOffset[0] | headerPicOffset[1] << 8 | headerPicOffset[2] << 16 | headerPicOffset[3] << 24;
-                index = 0;
-                file.seek(18);
-            }
+    Serial.println("Lese Bilddatei aus: ");
+    file.seek(0);
+    uint32_t countPixel = 0;
+    for (int16_t y = 239; y >= 0; y--) {
+
+        if (!file.available()) {
+            continue;
         }
-        if (indexPictureStart > 0 && picWidth < 0 && picHeight < 0) {
-            headerFormat[index] =  byteValue;
-            index++;
-            if (index >= 8) {
-                index = 0;
-                file.seek(indexPictureStart);
 
-                // Breite: 4 bytes aus position 18
-                picWidth = headerFormat[0] | headerFormat[1] << 8 | headerFormat[2] << 16 | headerFormat[3] << 24;
-                // hoehe: 4 Bytes aus position 22
-                picHeight = headerFormat[4] | headerFormat[5] << 8 | headerFormat[6] << 16 | headerFormat[7] << 24;
-            }
+        for (int16_t x = 0; x < 240; x++) {
+
+            const uint16_t pixelFarbe = GetNextPixelColorValue(file);
+
+            //Serial.print(pixelFarbe, DEC);
+            _tft->drawPixel(x, y, pixelFarbe);
+            countPixel++;
         }
+        //Serial.println("");
     }
     file.close();
 
+    Serial.print("Anzahl Pixel ausgelesen: ");
+    Serial.println(countPixel, DEC);
+}
+
+uint32_t AppCameraRun::GetHeaderInformation(File &file, uint32_t position) {
+
+    file.seek(position);
+    uint8_t b0 = file.read();
+    uint8_t b1 = file.read();
+    uint8_t b2 = file.read();
+    uint8_t b3 = file.read();
+
+    return  b0 | b1 << 8 | b2 << 16 | b3 << 24;
+}
+
+uint16_t AppCameraRun::GetNextPixelColorValue(File &file) {
 
 
+    const uint8_t highByte = file.read(); // Zweites Byte (hochwertig)
+    const uint8_t lowByte = file.read();  // Erstes Byte (niederwertig)
+
+    const uint16_t color = highByte << 8 | lowByte;
+
+    return color;
 }
 
 void AppCameraRun::drawText(){
@@ -212,8 +257,8 @@ void AppCameraRun::initExtend() {
     config.pin_reset = RESET_GPIO_NUM;
 
     config.xclk_freq_hz = 20000000;
-    config.frame_size = FRAMESIZE_UXGA;
-    config.pixel_format = PIXFORMAT_JPEG; // for streaming
+    //config.frame_size = FRAMESIZE_UXGA;
+    config.pixel_format = PIXFORMAT_RGB565; //PIXFORMAT_JPEG; // for streaming
     config.grab_mode = CAMERA_GRAB_WHEN_EMPTY;
     config.fb_location = CAMERA_FB_IN_PSRAM;
     //config.jpeg_quality = 12;
@@ -233,6 +278,7 @@ void AppCameraRun::initExtend() {
     //     }
     // } else {
         // Best option for face detection/recognition
+
         config.frame_size = FRAMESIZE_240X240;
 #if CONFIG_IDF_TARGET_ESP32S3
         config.fb_count = 2;
@@ -245,6 +291,7 @@ void AppCameraRun::initExtend() {
     esp_err_t err = esp_camera_init(&config);
     if (err != ESP_OK) {
         Serial.printf("Camera init failed with error 0x%x", err);
+        delay(1000);
         return;
     }
 
@@ -255,6 +302,7 @@ void AppCameraRun::initExtend() {
     if(!SD.begin(21)){
 
         Serial.println("Card Mount Failed");
+        delay(1000);
         return;
     }
 
@@ -265,6 +313,7 @@ void AppCameraRun::initExtend() {
     if(cardType == CARD_NONE){
 
         Serial.println("No SD card attached");
+        delay(1000);
         return;
     }
 
@@ -282,13 +331,6 @@ void AppCameraRun::initExtend() {
     // sd initialization check passes
     _sd_sign = true;
     Serial.println("Ready.");
-
-    // SD Karte auslesen nach Dateien
-    const int16_t posX = 70;
-    const int16_t posY = 35;
-    _tft->setCursor(posX, posY);
-
-    readFiles();
 }
 
 void AppCameraRun::drawUpdate() {
@@ -297,14 +339,19 @@ void AppCameraRun::drawUpdate() {
         return;
     }
 
+    Serial.println("refresh tft content");
+
+    Serial.println("read files");
     readFiles();
 
-
+    Serial.println("draw last frame");
+    drawLastPicture();
 
     _tft->drawCircle(120, 120, 119, _colorOn);
     _tft->drawCircle(120, 120, 118, _colorOff);
     _tft->drawCircle(120, 120, 117, _colorOff);
 
+    Serial.println("draw text");
     drawText();
 
     _hasDraw = true;
@@ -324,8 +371,9 @@ void AppCameraRun::setButton2() {
     _tft->setTextColor(_colorText, _tft->C_BLACK);
     _tft->print("Save picture: ");
 
+    _imageCount++;
     char filename[32];
-    sprintf(filename, "/image%d.jpg", _imageCount);
+    sprintf(filename, "/image%d.bmp", _imageCount);
     _tft->print(filename);
     photo_save(filename);
 
@@ -334,7 +382,7 @@ void AppCameraRun::setButton2() {
     _tft->print(buffer);
 
     Serial.printf("Saved picture：%s\n", filename);
-    _imageCount++;
+
 
     _hasDraw = false;
     _tft->fillScreen(_tft->C_BLACK);

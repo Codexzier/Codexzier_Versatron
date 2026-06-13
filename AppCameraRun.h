@@ -32,6 +32,8 @@ class AppCameraRun : public BaseDrawable {
     void drawLastPicture();
     void drawText();
 
+    uint32_t GetHeaderInformation(File &file, uint32_t position);
+    uint16_t GetNextPixelColorValue(File &file);
 public:
 
     void initExtend() override;
