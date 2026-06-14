@@ -7,15 +7,18 @@
 #include "esp_camera.h"
 #include "FS.h"
 #include "SD.h"
-//#include "SPI.h"
 #include "camera_pins.h"
-//#include "fonts_LTSM/FontArialBold_LTSM.hpp"
 #include <vector>
 #include <string>
 #include <memory>
 
+#include "GC9A01_LTSM.hpp"
+#include "display16_graphics_LTSM.hpp"
+
+
 // Save pictures to SD card
 void AppCameraRun::photo_save(const char * fileName) {
+
     // Take a photo
     camera_fb_t *fb = esp_camera_fb_get();
 
@@ -31,14 +34,24 @@ void AppCameraRun::photo_save(const char * fileName) {
     }
 
     // Save photo to file
-    writeFile(SD, fileName, fb->buf, fb->len);
+    uint8_t* picture = fb->buf;
+    const uint32_t len = fb->len;
+    writeFile(SD, fileName, picture, len);
+
+    char buffer[10];
+    sprintf(buffer, "%02d", len);
+    Serial.print("Buffer Länge: "); Serial.println(len, DEC);
+
+    //_tft->TFTsetRotation(2);
+    //_tft->drawSpriteData(0, 0, buf, 240, 240, _tft->C_BLUE, false);
+    drawPicture(picture);
 
     // Release image buffer
     esp_camera_fb_return(fb);
 
-    _tft->setCursor(_posX - 25, _posY);
+    _tft->setCursor(30, 170);
     _tft->setTextColor(_colorText, _tft->C_BLACK);
-    _tft->print("Photo saved to file");
+    _tft->print("Photo saved");
     Serial.println("Photo saved to file");
 }
 
@@ -46,22 +59,23 @@ void AppCameraRun::photo_save(const char * fileName) {
 void AppCameraRun::writeFile(FS &fs, const char * path, uint8_t * data, size_t len){
 
     _tft->setFont(FontDefault);
-    _tft->setCursor(_posX, _posY - 60);
+    _tft->setCursor(125, 60);
     _tft->print("writing file");
     Serial.printf("Writing file: %s\n", path);
 
     File file = fs.open(path, FILE_WRITE);
     if(!file){
         _tft->setTextColor(_tft->C_RED, _tft->C_BLACK);
+        _tft->setCursor(125, 70);
         _tft->print("Failed to open");
-        _tft->setCursor(_posX, _posY - 50);
+        _tft->setCursor(125, 80);
         _tft->print("file for writing");
         Serial.println("Failed to open file for writing");
         delay(1000);
         return;
     }
 
-    _tft->setCursor(_posX, _posY - 40);
+    _tft->setCursor(125, 70);
     if(file.write(data, len) == len){
         _tft->print("File written");
         Serial.println("File written");
@@ -99,7 +113,7 @@ void AppCameraRun::readFiles() {
     else {
         Serial.println("reset list");
         _filenames->clear();
-        _imageCount = 0;
+        _imageCount = 1;
     }
 
     Serial.println("read root directory");
@@ -110,18 +124,41 @@ void AppCameraRun::readFiles() {
             Serial.println(file.name());
         } else {
 
-            _lastFilename = file.name();
+            std::string filename = file.name();
             Serial.print("  FILE: ");
-            Serial.print(_lastFilename.c_str());
+            Serial.print(filename.c_str());
             Serial.print("  SIZE: ");
             Serial.println(file.size());
 
-            _filenames->push_back(_lastFilename);
+            _filenames->push_back(filename);
             _imageCount++;
         }
         file = root.openNextFile();
     }
     file.close();
+}
+
+void AppCameraRun::drawPicture(const uint8_t* bitmap) {
+
+    // draw frame
+    _tft->drawRoundRect(120, 60, 120, 120, 4, _colorOn);
+
+    //_tft->set
+    //_tft->setAddrWindow(120, 60, 120, 120);
+    const uint8_t* bitmapIter = bitmap;
+    uint16_t colour;
+    for (int16_t y = 239; y >= 0; y--) {
+
+        for (int16_t x = 0; x < 240; x++) {
+
+            uint8_t hi = pgm_read_byte(bitmapIter);       // high byte
+            uint8_t lo = pgm_read_byte(bitmapIter + 1);   // low byte
+            colour = (static_cast<uint16_t>(hi) << 8) | static_cast<uint16_t>(lo);
+            bitmapIter += 2;
+
+            _tft->drawPixel(120 + (x / 2), 60 + y / 2, colour);
+        }
+    }
 }
 
 void AppCameraRun::drawLastPicture() {
@@ -134,7 +171,7 @@ void AppCameraRun::drawLastPicture() {
     _tft->print(_lastFilename.c_str());
     Serial.printf("Reading file: %s\n", _lastFilename.c_str());
 
-    std::string fullpath = "/" + _lastFilename;
+    std::string fullpath = _lastFilename; // "/" +
     Serial.printf("fullpath file: %s\n", fullpath.c_str());
     _tft->setCursor(posX, posY + 10);
     File file = SD.open(fullpath.c_str());
@@ -221,11 +258,26 @@ void AppCameraRun::drawText(){
     _tft->setTextColor(_colorText, _tft->C_BLACK);
 
     const int fileCount = static_cast<int>(_filenames->size());
-    for (int index = 0; index < fileCount; index++) {
+    int indexPos = 1;
+    for (int index = fileCount - 3; index < fileCount; index++) {
         std::string filename = (*_filenames)[index];
-        _tft->setCursor(posX, posY + (index * 10));
+        _tft->setCursor(posX, posY + indexPos * 10);
         _tft->print(filename.c_str());
+        indexPos++;
     }
+
+    _tft->drawFastHLine(0, posY + 50, 120, _colorOn);
+    _tft->setCursor(posX - 20, posY + 60);
+    _tft->print("Pictures: ");
+    char buffer[10];
+    sprintf(buffer, "%02d", fileCount);
+    _tft->print(buffer);
+
+    _tft->setCursor(posX - 20, posY + 80);
+    _tft->print("used: ");
+    int cardsizeMb = SD.usedBytes() / 1024 / 1024;
+    sprintf(buffer, "%02d", cardsizeMb);
+    _tft->print(buffer); _tft->print("MB");
 }
 
 void AppCameraRun::initExtend() {
@@ -257,29 +309,15 @@ void AppCameraRun::initExtend() {
     config.pin_reset = RESET_GPIO_NUM;
 
     config.xclk_freq_hz = 20000000;
-    //config.frame_size = FRAMESIZE_UXGA;
-    config.pixel_format = PIXFORMAT_RGB565; //PIXFORMAT_JPEG; // for streaming
+
+    // Bitmap Einstellung
+    config.pixel_format = PIXFORMAT_RGB565;
     config.grab_mode = CAMERA_GRAB_WHEN_EMPTY;
     config.fb_location = CAMERA_FB_IN_PSRAM;
-    //config.jpeg_quality = 12;
-    //config.fb_count = 1;
+    config.jpeg_quality = 12;
+    config.fb_count = 1;
 
-    // if PSRAM IC present, init with UXGA resolution and higher JPEG quality
-    //                      for larger pre-allocated frame buffer.
-    // if(config.pixel_format == PIXFORMAT_JPEG){
-    //     if(psramFound()){
-    //         config.jpeg_quality = 10;
-    //         config.fb_count = 2;
-    //         config.grab_mode = CAMERA_GRAB_LATEST;
-    //     } else {
-    //         // Limit the frame size when PSRAM is not available
-    //         config.frame_size = FRAMESIZE_SVGA;
-    //         config.fb_location = CAMERA_FB_IN_DRAM;
-    //     }
-    // } else {
-        // Best option for face detection/recognition
-
-        config.frame_size = FRAMESIZE_240X240;
+    config.frame_size = FRAMESIZE_240X240;
 #if CONFIG_IDF_TARGET_ESP32S3
         config.fb_count = 2;
 #endif
@@ -345,7 +383,7 @@ void AppCameraRun::drawUpdate() {
     readFiles();
 
     Serial.println("draw last frame");
-    drawLastPicture();
+    //drawLastPicture();
 
     _tft->drawCircle(120, 120, 119, _colorOn);
     _tft->drawCircle(120, 120, 118, _colorOff);
@@ -363,18 +401,19 @@ void AppCameraRun::setButton1() {
 
 void AppCameraRun::setButton2() {
 
-    constexpr int16_t posX = 50;
-    constexpr int16_t posY = 145;
+    _tft->fillScreen(_tft->C_BLACK);
 
     _tft->setFont(FontDefault);
-    _tft->setCursor(posX, posY);
+    _tft->setCursor(60, 180);
     _tft->setTextColor(_colorText, _tft->C_BLACK);
     _tft->print("Save picture: ");
 
     _imageCount++;
     char filename[32];
     sprintf(filename, "/image%d.bmp", _imageCount);
+    _tft->setCursor(60, 190);
     _tft->print(filename);
+    _lastFilename = filename;
     photo_save(filename);
 
     char buffer[10];
@@ -383,9 +422,7 @@ void AppCameraRun::setButton2() {
 
     Serial.printf("Saved picture：%s\n", filename);
 
-
     _hasDraw = false;
-    _tft->fillScreen(_tft->C_BLACK);
 }
 
 

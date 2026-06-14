@@ -29,6 +29,7 @@ class AppCameraRun : public BaseDrawable {
     void photo_save(const char * fileName);
     void writeFile(FS &fs, const char * path, uint8_t * data, size_t len);
     void readFiles();
+    void drawPicture(const uint8_t* bitmap);
     void drawLastPicture();
     void drawText();
 
