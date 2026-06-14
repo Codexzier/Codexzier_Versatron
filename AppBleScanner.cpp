@@ -32,6 +32,7 @@ void AppBleScanner::drawUpdate() {
 
 void AppBleScanner::reset() {
     _hasDraw = false;
+    _tft->clearBuffer(_tft->C_BLACK);
 }
 
 void AppBleScanner::setButton1() {

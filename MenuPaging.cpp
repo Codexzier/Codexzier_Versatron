@@ -30,9 +30,9 @@ void MenuPaging::setPageAndPageMax(int pageNumber, int pageMax) {
 
 void MenuPaging::drawFrameAndPage(int pageNumber, int pageMax) {
 
-    if (pageNumber == _lastSetPageNumber && pageMax == _lastSetPageMax) {
-        return;
-    }
+    // if (pageNumber == _lastSetPageNumber && pageMax == _lastSetPageMax) {
+    //     return;
+    // }
     _lastSetPageNumber = pageNumber;
     _lastSetPageMax = pageMax;
 

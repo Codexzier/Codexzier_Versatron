@@ -32,6 +32,8 @@ void AppWorkout::reset() {
     _optionRun = false;
     _setup.reset();
     _run.reset();
+
+    _tft->clearBuffer(_tft->C_BLACK);
 }
 
 void AppWorkout::setValue1(int16_t value) {

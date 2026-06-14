@@ -26,6 +26,7 @@ void Codexzier_Versatron::drawUpdate()
             return;
         }
     }
+    _tft->writeBuffer();
 }
 
 // ================================================================
@@ -34,6 +35,7 @@ void Codexzier_Versatron::showMenuAppUi(){
     _tft->fillScreen(_tft->C_BLACK);
     _drawContentName = _menu.GetApplicationName();
     _menu.reset();
+    _tft->clearBuffer(_tft->C_BLACK);
 
     for (IDrawable* drawable : _drawables) {
         drawable->SetActive(false);

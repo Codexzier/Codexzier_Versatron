@@ -20,6 +20,12 @@
 void AppCameraRun::photo_save(const char * fileName) {
 
     // Take a photo
+
+    // das erste bild aufrufen und verwerfen.
+    camera_fb_t *fb_old = esp_camera_fb_get();
+    esp_camera_fb_return(fb_old);
+
+    // camera frame buffer
     camera_fb_t *fb = esp_camera_fb_get();
 
     _tft->setFont(FontDefault);
@@ -143,8 +149,6 @@ void AppCameraRun::drawPicture(const uint8_t* bitmap) {
     // draw frame
     _tft->drawRoundRect(120, 60, 120, 120, 4, _colorOn);
 
-    //_tft->set
-    //_tft->setAddrWindow(120, 60, 120, 120);
     const uint8_t* bitmapIter = bitmap;
     uint16_t colour;
     for (int16_t y = 239; y >= 0; y--) {
@@ -159,6 +163,8 @@ void AppCameraRun::drawPicture(const uint8_t* bitmap) {
             _tft->drawPixel(120 + (x / 2), 60 + y / 2, colour);
         }
     }
+
+    _tft->drawRoundRect(120, 60, 120, 120, 4, _colorOn);
 }
 
 void AppCameraRun::drawLastPicture() {
@@ -318,9 +324,9 @@ void AppCameraRun::initExtend() {
     config.fb_count = 1;
 
     config.frame_size = FRAMESIZE_240X240;
-#if CONFIG_IDF_TARGET_ESP32S3
-        config.fb_count = 2;
-#endif
+//#if CONFIG_IDF_TARGET_ESP32S3
+      //  config.fb_count = 2;
+//#endif
     //}
 
     Serial.println("init camera");
@@ -401,23 +407,27 @@ void AppCameraRun::setButton1() {
 
 void AppCameraRun::setButton2() {
 
-    _tft->fillScreen(_tft->C_BLACK);
+    //_tft->fillScreen(_tft->C_BLACK);
+    _tft->drawRoundRect(120, 60, 120, 120, 4, _tft->C_YELLOW);
+    _tft->writeBuffer();
+    _tft->clearBuffer();
 
     _tft->setFont(FontDefault);
-    _tft->setCursor(60, 180);
+    _tft->setCursor(10, 150);
     _tft->setTextColor(_colorText, _tft->C_BLACK);
     _tft->print("Save picture: ");
 
     _imageCount++;
     char filename[32];
     sprintf(filename, "/image%d.bmp", _imageCount);
-    _tft->setCursor(60, 190);
+    _tft->setCursor(40, 170);
     _tft->print(filename);
     _lastFilename = filename;
     photo_save(filename);
 
     char buffer[10];
     sprintf(buffer, "%02d", _imageCount);
+    _tft->setCursor(60, 160);
     _tft->print(buffer);
 
     Serial.printf("Saved picture：%s\n", filename);

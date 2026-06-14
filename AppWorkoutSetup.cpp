@@ -31,6 +31,8 @@ void AppWorkoutSetup::drawUpdate() {
 void AppWorkoutSetup::reset() {
     _option1SetupHasDraw = false;
     _lastSelectSetupPointerPositionY = 0;
+
+    _tft->clearBuffer(_tft->C_BLACK);
 }
 
 void AppWorkoutSetup::setValue1(int16_t value) {

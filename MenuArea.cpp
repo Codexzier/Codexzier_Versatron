@@ -38,6 +38,8 @@ void MenuArea::setIndexPage() {
 
     if (current > static_cast<float>(currentInt)) {
         currentInt++;
+
+        _tft->clearBuffer(_tft->C_BLACK);
     }
 
     _menuIndexPage = currentInt;
@@ -157,6 +159,7 @@ void MenuArea::reset() {
     _menuIndex = 0;
     _menuIndexPage = 1;
     //_menuPaging.drawFrameAndPage(_menuIndexPage, _menuIndexPageMax);
+    _tft->clearBuffer(_tft->C_BLACK);
 }
 
 

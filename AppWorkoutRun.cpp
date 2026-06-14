@@ -56,6 +56,8 @@ void AppWorkoutRun::reset() {
     _drawRoundHasDraw = false;
     _workoutFinish = false;
     _renderWorkoutFinish = false;
+
+    _tft->clearBuffer(_tft->C_BLACK);
 }
 
 bool AppWorkoutRun::timerUpdate() {
@@ -169,6 +171,8 @@ void AppWorkoutRun::drawTimeUp(int x, int y, int value, const char *text) {
 
 
 void AppWorkoutRun::setOptionRun(int16_t executionMax, int16_t breakMax, int16_t roundMax) {
+
+    _tft->clearBuffer(_tft->C_BLACK);
 
     _secondsExecutionMax = executionMax;
     _secondsBreakMax = breakMax;
