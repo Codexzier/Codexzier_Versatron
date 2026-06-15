@@ -3,18 +3,29 @@
 //
 
 #include "AppTorchRun.h"
-#include <string>
 #include "GC9A01_LTSM.hpp"
-#include "fonts_LTSM/FontArialBold_LTSM.hpp"
 
 void AppTorchRun::setBackground() {
 
-    if (_colorTarget == _colorBackground) {
+    if (_colorTarget == _colorBackground &&
+        _brightness >= _brightnessLast - 1 &&
+        _brightness <= _brightnessLast + 1) {
         return;
     }
+     _brightnessLast = _brightness;
 
     _colorBackground = _colorTarget;
-    _tft->fillScreen(_colorBackground);
+    int bright = static_cast<float>(_brightness) / 4096.0 * 120.0;
+
+    for (int iY = 0; iY < 120; iY++) {
+
+        if (iY <= bright) {
+            _tft->drawCircle(120, 120, iY, _colorBackground);
+        }
+        else {
+            _tft->drawCircle(120, 120, iY, _tft->C_BLACK);
+        }
+    }
 }
 
 bool AppTorchRun::animationRun(int animationEndCount) {
@@ -42,7 +53,7 @@ void AppTorchRun::setCircleAnimation() {
 }
 
 void AppTorchRun::drawUpdate() {
-
+    
     switch (_mode) {
         case 1: {
             setBackground();
@@ -77,6 +88,7 @@ void AppTorchRun::reset() {
     _colorBackground = _tft->C_RED;
 
     _hasDraw = false;
+    _tft->clearBuffer(_tft->C_BLACK);
 }
 
 void AppTorchRun::setValue1(int16_t value) {

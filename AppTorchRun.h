@@ -9,7 +9,6 @@
 #include <stdint.h>
 
 #include "BaseDrawable.h"
-#include "GC9A01_LTSM.hpp"
 
 
 class AppTorchRun : public BaseDrawable {
@@ -19,6 +18,7 @@ class AppTorchRun : public BaseDrawable {
     uint16_t _colorTarget = 1;
     int _mode = 1;
     int16_t _brightness = 0;
+    int16_t _brightnessLast = 0;
 
     void setBackground();
     uint16_t _colorBackground = 1;
