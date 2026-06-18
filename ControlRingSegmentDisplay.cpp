@@ -3,11 +3,7 @@
 //
 
 #include "ControlRingSegmentDisplay.h"
-
-#include <algorithm>
 #include <math.h>
-#include "fonts_LTSM/FontArialBold_LTSM.hpp"    // 16x16 pixels
-
 
 void ControlRingSegmentDisplay::drawInitGaugeSetup(int countSegments) {
     _segmentsCount = countSegments;
@@ -41,28 +37,52 @@ int ControlRingSegmentDisplay::GetValue() {
 
 void ControlRingSegmentDisplay::drawGaugeUpdate() {
 
-    if (_segmentIndex >= _segmentsCount) {
-        _segmentIndex = 0;
+    if (_withBuffer) {
+        for (int segmentIndex = 0; segmentIndex < _segmentsCount; segmentIndex++) {
+            float angle = _startAngle + (static_cast<float>(segmentIndex) * _segmentMultiplicator);
+
+            uint16_t color1 = _colorOn;
+            bool segmentOn = true;
+            if(_segmentValueOn <= segmentIndex) {
+                color1 = _colorOff;
+                segmentOn = false;
+            }
+
+            if (_segmentsOnRing[segmentIndex] == segmentOn) {
+                continue;
+            }
+
+            _segmentsOnRing[segmentIndex] = segmentOn;
+
+            drawGaugeSegment(angle, color1, _segmentMultiplicator / 2.0);
+        }
     }
+    else {
 
-    float angle = _startAngle + (_segmentIndex * _segmentMultiplicator);
+        if (_segmentIndex >= _segmentsCount) {
+            _segmentIndex = 0;
+        }
 
-    uint16_t color1 = _colorOn;
-    bool segmentOn = true;
-    if(_segmentValueOn <= _segmentIndex) {
-        color1 = _colorOff;
-        segmentOn = false;
-    }
+        float angle = _startAngle + (_segmentIndex * _segmentMultiplicator);
 
-    if (_segmentsOnRing[_segmentIndex] == segmentOn) {
+        uint16_t color1 = _colorOn;
+        bool segmentOn = true;
+        if(_segmentValueOn <= _segmentIndex) {
+            color1 = _colorOff;
+            segmentOn = false;
+        }
+
+        // if (_segmentsOnRing[_segmentIndex] == segmentOn) {
+        //     _segmentIndex++;
+        //     return;
+        // }
+        _segmentsOnRing[_segmentIndex] = segmentOn;
+
+        drawGaugeSegment(angle, color1, _segmentMultiplicator / 2.0);
+
         _segmentIndex++;
-        return;
+
     }
-    _segmentsOnRing[_segmentIndex] = segmentOn;
-
-    drawGaugeSegment(angle, color1, _segmentMultiplicator / 2.0);
-
-    _segmentIndex++;
 }
 
 // ========================================================================================

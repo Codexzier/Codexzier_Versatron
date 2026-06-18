@@ -16,6 +16,16 @@ void MenuArea::drawUpdate() {
 
     drawInputValues();
     drawMenu();
+
+    if (_timeup < 60) {
+        _ring1.setValue(_timeup);
+        _timeup++;
+    }
+    else {
+        _timeup = 0;
+    }
+
+    _ring1.drawGaugeUpdate();
 }
 
 // not sure if this is the best approach

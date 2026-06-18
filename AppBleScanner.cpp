@@ -63,19 +63,23 @@ void AppBleScanner::scan() {
 
     _tft->setCursor(posX, posY);
     _tft->print("Scan Start");
+    _tft->writeBuffer();
 
     BLEScanResults* foundDevices = pBLEScan->start(scanTime, false);
     int n = foundDevices->getCount();
 
     _tft->setCursor(posX, posY);
     _tft->print("Scan Done ");
+    _tft->writeBuffer();
 
+    _tft->setCursor(posX, posY + 20);
     if (n == 0) {
-        _tft->setCursor(posX, posY + 20);
         _tft->print("No Bluetooth");
+        _tft->writeBuffer();
         return;
     }
 
+    _tft->setCursor(10, 100);
     for (int i = 0; i < n; i++) {
         BLEAdvertisedDevice device = foundDevices->getDevice(i);
 
@@ -96,7 +100,13 @@ void AppBleScanner::scan() {
             item->ManufacturerData = device.getManufacturerData().c_str();
         }
 
+        item->Rssi = device.getRSSI();
+
         _resultList.addItem(item);
+
+        _tft->drawFastHLine(50, 120, i, _colorOn);
+        _tft->print(".");
+        _tft->writeBuffer();
     }
 }
 

@@ -9,16 +9,9 @@
 #include "GC9A01_LTSM.hpp"
 
 
-void AppBleScannerResultList::drawUpdate() {
-
-    if (_hasDraw) {
-        return;
-    }
-
-    _tft->fillRect(0, 55, 240, 135, _tft->C_BLACK);
-    drawItems();
-    _hasDraw = true;
-
+float AppBleScannerResultList::calculateDistance(const int rssi, const int txPower) {
+    float pathLossExponent = 2.5; // Anpassen an deine Umgebung!
+    return pow(10.0, static_cast<float>(txPower - rssi) / (10 * pathLossExponent));
 }
 
 void AppBleScannerResultList::drawItems() {
@@ -62,9 +55,9 @@ void AppBleScannerResultList::drawItems() {
     }
 }
 
-void AppBleScannerResultList::drawItem(int x, int y, int index, int itemIndex) {
+void AppBleScannerResultList::drawItem(const int16_t x, const int16_t y, const int16_t index, const int16_t itemIndex) {
     BleItem* item = (*_items)[itemIndex];
-    int posY = y + 30 * index;
+    const int16_t posY = y + 30 * index;
 
     if (item->HasDevUUID) {
         _tft->drawCircle(x + 195, posY + 7, 2, _tft->C_YELLOW);
@@ -81,7 +74,17 @@ void AppBleScannerResultList::drawItem(int x, int y, int index, int itemIndex) {
 
     textPosY += 15;
     _tft->setCursor(textPosX, textPosY);
-    _tft->print(item->Address.c_str());
+    //_tft->print(item->Address.c_str());
+    float distance = calculateDistance(item->Rssi, _txPower);
+    char buffer[10];
+    sprintf(buffer, "%02d", static_cast<int>(distance));
+    _tft->print("Distance: ");
+    _tft->print(buffer);
+    _tft->print("m");
+    _tft->setCursor(textPosX + 110, textPosY);
+    _tft->print("RSSI: ");
+    sprintf(buffer, "%02d", item->Rssi);
+
 }
 
 void AppBleScannerResultList::addItem(BleItem *item) {
@@ -91,6 +94,18 @@ void AppBleScannerResultList::addItem(BleItem *item) {
 
     _items->push_back(item);
     _pageCount = static_cast<int>(_items->size()) / _itemsPerPage;
+}
+
+void AppBleScannerResultList::drawUpdate() {
+
+    if (_hasDraw) {
+        return;
+    }
+
+    _tft->fillRect(0, 55, 240, 135, _tft->C_BLACK);
+    drawItems();
+    _hasDraw = true;
+
 }
 
 void AppBleScannerResultList::setButton2() {

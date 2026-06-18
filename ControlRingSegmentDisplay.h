@@ -22,6 +22,8 @@ private:
     int _segmentsCount = 60;
     const float _startAngle = 0.0f;
     const float _angleStep = 1.0f;
+
+    bool _withBuffer = true;
     int _segmentIndex = 0;
     int _segmentValueOn = 0.0f;
 

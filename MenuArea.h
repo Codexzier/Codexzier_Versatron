@@ -12,6 +12,7 @@
 #include "BaseDrawable.h"
 #include "GC9A01_LTSM.hpp"
 #include "MenuPaging.h"
+#include "ControlRingSegmentDisplay.h"
 
 #ifndef CODEXZIER_VERSATRON_APPMENU_H
 #define CODEXZIER_VERSATRON_APPMENU_H
@@ -59,11 +60,21 @@ class MenuArea : public BaseDrawable {
     int _value1 = 0;
     int _value2 = 0;
 
+    ControlRingSegmentDisplay _ring1;
+    int _timeup = 0;
+
 public:
+    MenuArea()
+        : _ring1(120, 118) {}
 
     void initExtend() override {
         _menuPaging.init(*_tft, _colorOn, _colorOff, _tft->C_BEIGE, 85, 194);
         _applicationName = "Menu";
+
+
+        _ring1.init(*_tft, _colorOn, _colorOff);
+        _ring1.drawInitGaugeSetup(60);
+        _ring1.setValue(0);
     }
     void drawUpdate() override;
 

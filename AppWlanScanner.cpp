@@ -56,13 +56,16 @@ void AppWlanScanner::scanWifi() {
 
     _tft->setCursor(posX, posY);
     _tft->print("Scan Start");
+    _tft->writeBuffer();
     int n = WiFi.scanNetworks();
     _tft->setCursor(posX, posY);
     _tft->print("Scan Done ");
+    _tft->writeBuffer();
 
     if (n == 0) {
         _tft->setCursor(posX, posY + 20);
         _tft->print("No WiFi Network");
+        _tft->writeBuffer();
         return;
     }
 
@@ -104,6 +107,8 @@ void AppWlanScanner::scanWifi() {
         Serial.println(i, DEC);
 
         _resultList.addWlanItem(newItem);
+
+        _tft->writeBuffer();
     }
 }
 

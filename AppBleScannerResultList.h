@@ -21,6 +21,8 @@ public:
     std::string DevUUID;
     bool HasDevUUID;
 
+    int Rssi;
+
     std::string ManufacturerData;
     bool HasManufacturerData;
 };
@@ -28,6 +30,7 @@ public:
 class AppBleScannerResultList : public BaseDrawable  {
 
     std::unique_ptr<std::vector<BleItem*>> _items;
+    int _txPower = -60; // must be calibrate
 
     int _page = 0;
     int _pageCount = 0;
@@ -36,7 +39,8 @@ class AppBleScannerResultList : public BaseDrawable  {
 
     void drawItems();
     bool _hasDraw = false;
-    void drawItem(int x, int y, int index, int itemIndex);
+    void drawItem(int16_t x, int16_t y, int16_t index, int16_t itemIndex);
+    float calculateDistance(int rssi, int txPower);
 
     public:
 
@@ -57,6 +61,9 @@ class AppBleScannerResultList : public BaseDrawable  {
         }
 
         return _items->size();
+    }
+    void setTxPower(const int txPower) {
+        _txPower = txPower;
     }
 };
 
