@@ -49,4 +49,8 @@ add_executable(Codexzier_Versatron
         AppPictureViewer.cpp
         AppPictureViewer.h
         IDrawable.h
-        BaseDrawable.h)
+        BaseDrawable.h
+        AppRadioRadar.cpp
+        AppRadioRadar.h
+        SubFileManager.cpp
+        SubFileManager.h)

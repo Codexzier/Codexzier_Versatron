@@ -264,8 +264,22 @@ void AppCameraRun::drawText(){
     _tft->setTextColor(_colorText, _tft->C_BLACK);
 
     const int fileCount = static_cast<int>(_filenames->size());
+    Serial.print("Count pictures: ");
+    Serial.println(fileCount, DEC);
+
+    if (fileCount == 0) {
+        _tft->setCursor(posX - 20, posY + 60);
+        _tft->print("Pictures: 0");
+        return;
+    }
+
+    int lastPictures = 3 ;
+    if (fileCount < 3) {
+        lastPictures = fileCount;
+    }
+
     int indexPos = 1;
-    for (int index = fileCount - 3; index < fileCount; index++) {
+    for (int index = fileCount - lastPictures; index < fileCount; index++) {
         std::string filename = (*_filenames)[index];
         _tft->setCursor(posX, posY + indexPos * 10);
         _tft->print(filename.c_str());

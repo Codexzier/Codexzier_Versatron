@@ -11,9 +11,16 @@
 #pragma once
 
 #include <Arduino.h>
+
+
 #include "BaseDrawable.h"
 
+
 class AppPictureViewer : public BaseDrawable {
+
+
+
+    void drawPicture();
 
 public:
 
