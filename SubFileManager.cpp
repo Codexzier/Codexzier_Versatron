@@ -5,10 +5,8 @@
 #include "SubFileManager.h"
 
 #include <SD.h>
-// #include <Arduino.h>
+#include <Arduino.h>
 #include "FS.h"
-// #include "SD.h"
-// #include "SPI.h"
 
 uint16_t SubFileManager::GetNextPixelColorValue(File &file) {
 
@@ -127,6 +125,9 @@ void SubFileManager::readFiles() {
         file = root.openNextFile();
     }
     file.close();
+
+    const int countFiles = static_cast<int>(_filenames->size());
+    Serial.print("Count files: "); Serial.println(countFiles, DEC);
 }
 
 int SubFileManager::GetCountPictures() {
@@ -138,6 +139,34 @@ int SubFileManager::GetCountPictures() {
 
 int SubFileManager::GetCardSizeMb() {
     return SD.usedBytes() / 1024 / 1024;
+}
+
+uint8_t* SubFileManager::GetPictureData(int index) {
+
+    //if (!_filenames) {
+        Serial.println("Files are not readed! try to read");
+        readFiles();
+
+        if (!_filenames) {
+            return  nullptr;
+        }
+    //}
+    Serial.println("Read file from index.");
+    const std::string filename = "/" + (*_filenames)[index];
+
+    Serial.print("Read file: ");  Serial.println(filename.c_str());
+    File file = SD.open(filename.c_str());
+    if (!file) {
+        Serial.println("File picture can not loaded.");
+        return nullptr;
+    }
+
+    size_t fileSize = file.size();
+    uint8_t* bitmap = new uint8_t[fileSize];
+    file.read(bitmap, fileSize);
+    file.close();
+
+    return bitmap;
 }
 
 bool SubFileManager::IsSdCardInit() {

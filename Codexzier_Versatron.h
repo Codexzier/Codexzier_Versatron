@@ -82,7 +82,9 @@ public:
             drawable->initExtend();
         }
 
+        _subFileManager.init();
         _camera.SetupFileManger(_subFileManager);
+        _appPictureViewer.SetupFileManger(_subFileManager);
 
         _menu.SetActive(true);
     }

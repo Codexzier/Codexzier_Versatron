@@ -13,7 +13,7 @@
 
 class AppCameraRun : public BaseDrawable {
 
-    int _imageCount = 1;                // File Counter
+    int _imageCount = 0;                // File Counter
     bool _camera_sign = false;          // Check camera status
     bool _sd_sign = false;              // Check sd status
 
@@ -44,6 +44,7 @@ public:
     void SetupFileManger(SubFileManager &fileManger) {
         _fileManager = &fileManger;
     }
+
 };
 
 

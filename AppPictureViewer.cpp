@@ -5,91 +5,43 @@
 #include "AppPictureViewer.h"
 
 
-
-
 void AppPictureViewer::initExtend() {
 
     _applicationName = "Picture Viewer";
 
-    // read pictures
-    // File root = SD.open("/");
-    // if (!root) {
-    //     Serial.println("Failed to open directory");
-    //     delay(1000);
-    //     return;
-    // }
-    //
-    // Serial.println("Check directory");
-    // if (!root.isDirectory()) {
-    //     Serial.println("Not a directory");
-    //     delay(1000);
-    //     return;
-    // }
-    //
-
-    // else {
-    //     Serial.println("reset list");
-    //     _filenames->clear();
-    // }
-    //
-    // Serial.println("read root directory");
-    // File file = root.openNextFile();
-    // while (file) {
-    //     if (file.isDirectory()) {
-    //         Serial.print("  DIR : ");
-    //         Serial.println(file.name());
-    //     } else {
-    //
-    //         std::string filename = file.name();
-    //         Serial.print("  FILE: ");
-    //         Serial.print(filename.c_str());
-    //         Serial.print("  SIZE: ");
-    //         Serial.println(file.size());
-    //
-    //         _filenames->push_back(filename);
-    //     }
-    //     file = root.openNextFile();
-    // }
-    // file.close();
-
-    //delay(4000);
 }
 
 void AppPictureViewer::drawPicture() {
-    /*
-    const std::string fullpath = (*_filenames)[_viewIndex];
-    Serial.print("try to read ");
-    File file = SD.open(fullpath.c_str());
-    if(!file){
-        _tft->setTextColor(_tft->C_RED, _tft->C_BLACK);
-        _tft->print("Failed to open");
-        _tft->setCursor(60, 60 + 20);
-        _tft->print("file for reading");
-        Serial.println("Failed to open file for reading");
-        delay(1000);
+
+    Serial.println("Read file");
+
+    _tft->drawRoundRect(80, 90, 80, 30, 4, _colorOn);
+    _tft->setCursor(90, 100);
+    _tft->setFont(FontDefault);
+    _tft->print("Read from file: ");
+    _tft->writeBuffer();
+    const uint8_t* bitmap = _fileManager->GetPictureData(_pictureIndex);
+
+    if (bitmap == nullptr) {
         return;
     }
 
-    _tft->print("Read from file: ");
-    Serial.print("Read from file: ");
-    _tft->writeBuffer();
-
+    // draw recorded picture
+    const uint8_t* bitmapIter = bitmap;
+    uint16_t colour;
     for (int16_t y = 239; y >= 0; y--) {
-
-        if (!file.available()) {
-            continue;
-        }
 
         for (int16_t x = 0; x < 240; x++) {
 
-            //const uint16_t pixelFarbe = GetNextPixelColorValue(file);
+            uint8_t hi = pgm_read_byte(bitmapIter);       // high byte
+            uint8_t lo = pgm_read_byte(bitmapIter + 1);   // low byte
+            colour = (static_cast<uint16_t>(hi) << 8) | static_cast<uint16_t>(lo);
+            bitmapIter += 2;
 
-            //_tft->drawPixel(x, y, pixelFarbe);
+            _tft->drawPixel(x, y, colour);
         }
     }
-    file.close();
     _tft->writeBuffer();
-    */
 }
 
 
@@ -100,20 +52,27 @@ void AppPictureViewer::drawUpdate() {
         return;
     }
 
-    //drawPicture();
     _tft->setCursor(120, 120);
-    _tft->drawCircle(120, 120, 30, _colorOn);
+
+    drawPicture();
+
+    _tft->drawCircle(120, 120, 119, _colorOn);
 
     _hasDraw = true;
 }
 
 void AppPictureViewer::setButton1() {
 
-    /*
-    if (_viewIndex < static_cast<int>(_filenames->size())) {
-        _viewIndex++;
+    if (_pictureCount == 0) {
+        _pictureCount = _fileManager->GetCountPictures();
     }
-    */
+
+    if (_pictureIndex < _pictureCount - 1) {
+        _pictureIndex++;
+    }
+    else {
+        _pictureIndex = 0;
+    }
 
     _hasDraw = false;
 }

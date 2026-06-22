@@ -32,6 +32,7 @@ public:
 
     int GetCountPictures();
     int GetCardSizeMb();
+    uint8_t* GetPictureData(int index);
     bool IsSdCardInit();
 };
 

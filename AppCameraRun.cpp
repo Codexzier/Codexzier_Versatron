@@ -61,15 +61,17 @@ void AppCameraRun::drawPicture(const uint8_t* bitmap) {
     const uint8_t* bitmapIter = bitmap;
     uint16_t colour;
     for (int16_t y = 239; y >= 0; y--) {
+    //for (int16_t y = 119; y >= 0; y--) {
 
         for (int16_t x = 0; x < 240; x++) {
+        //for (int16_t x = 0; x < 120; x++) {
 
             uint8_t hi = pgm_read_byte(bitmapIter);       // high byte
             uint8_t lo = pgm_read_byte(bitmapIter + 1);   // low byte
             colour = (static_cast<uint16_t>(hi) << 8) | static_cast<uint16_t>(lo);
             bitmapIter += 2;
 
-            _tft->drawPixel(120 + (x / 2), 60 + y / 2, colour);
+            _tft->drawPixel(120 + (x / 2), 60 + (y / 2), colour);
         }
     }
 
@@ -218,7 +220,7 @@ void AppCameraRun::setButton1() {
 }
 
 void AppCameraRun::setButton2() {
-    
+
     _tft->drawRoundRect(120, 60, 120, 120, 4, _tft->C_YELLOW);
     _tft->writeBuffer();
     _tft->clearBuffer();
@@ -228,6 +230,9 @@ void AppCameraRun::setButton2() {
     _tft->setTextColor(_colorText, _tft->C_BLACK);
     _tft->print("Save picture: ");
 
+    if (_imageCount == 0) {
+        _imageCount = _fileManager->GetCountPictures();
+    }
     _imageCount++;
     char filename[32];
     sprintf(filename, "/image%d.bmp", _imageCount);
