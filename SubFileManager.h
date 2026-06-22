@@ -2,6 +2,8 @@
 // Created by codexzier on 22.06.26.
 //
 
+#pragma once
+
 #ifndef CODEXZIER_VERSATRON_SUBFILEMANAGER_H
 #define CODEXZIER_VERSATRON_SUBFILEMANAGER_H
 
@@ -20,11 +22,16 @@ class SubFileManager {
     uint16_t GetNextPixelColorValue(File &file);
 
     void readSdCard();
+    bool _sdSuccess = false;
 public:
 
     void init();
 
+    void writeFile(const char * path, uint8_t * data, size_t len);
+    void readFiles();
 
+    int GetCardSizeMb();
+    bool IsSdCardInit();
 };
 
 

@@ -10,6 +10,7 @@
 #include <vector>
 #include <string>
 #include <memory>
+#include <SubFileManager.h>
 
 #define CAMERA_MODEL_XIAO_ESP32S3 // Has PSRAM
 
@@ -23,18 +24,20 @@ class AppCameraRun : public BaseDrawable {
     const int16_t _posX = 70;
     const int16_t _posY = 165;
 
-    std::unique_ptr<std::vector<std::string>> _filenames;
-    std::string _lastFilename;
+    //std::unique_ptr<std::vector<std::string>> _filenames;
+    //std::string _lastFilename;
 
     void photo_save(const char * fileName);
-    void writeFile(FS &fs, const char * path, uint8_t * data, size_t len);
-    void readFiles();
+
+    //void readFiles();
     void drawPicture(const uint8_t* bitmap);
-    void drawLastPicture();
+    //void drawLastPicture();
     void drawText();
 
     uint32_t GetHeaderInformation(File &file, uint32_t position);
     uint16_t GetNextPixelColorValue(File &file);
+
+    SubFileManager *_fileManager = nullptr;
 public:
 
     void initExtend() override;
@@ -46,6 +49,10 @@ public:
     void setValue2(int16_t value) override {}
     void reset() override {
         _hasDraw = false;
+    }
+
+    void SetupFileManger(SubFileManager &fileManger) {
+        _fileManager = &fileManger;
     }
 };
 

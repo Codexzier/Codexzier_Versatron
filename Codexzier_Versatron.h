@@ -15,6 +15,7 @@
 #include "AppWorkout.h"
 #include "AppTorchRun.h"
 #include "AppWlanScanner.h"
+#include "SubFileManager.h"
 
 #ifndef CODEXZIER_VERSATRON_CODEXZIER_VERSATRON_H
 #define CODEXZIER_VERSATRON_CODEXZIER_VERSATRON_H
@@ -48,6 +49,10 @@ class Codexzier_Versatron {
     AppPictureViewer _appPictureViewer;
     AppCameraRun _camera;
 
+    // ========================================================================================
+    // Sub Managers
+    SubFileManager _subFileManager;
+
     std::vector<IDrawable*> _drawables;
 
 public:
@@ -76,6 +81,8 @@ public:
             drawable->init(tft, colorOn, colorOff, colorText);
             drawable->initExtend();
         }
+
+        _camera.SetupFileManger(_subFileManager);
 
         _menu.SetActive(true);
     }

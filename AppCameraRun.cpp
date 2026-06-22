@@ -5,10 +5,7 @@
 #include "AppCameraRun.h"
 
 #include "esp_camera.h"
-#include "FS.h"
-#include "SD.h"
 #include "camera_pins.h"
-#include <vector>
 #include <string>
 #include <memory>
 
@@ -20,7 +17,6 @@
 void AppCameraRun::photo_save(const char * fileName) {
 
     // Take a photo
-
     // das erste bild aufrufen und verwerfen.
     camera_fb_t *fb_old = esp_camera_fb_get();
     esp_camera_fb_return(fb_old);
@@ -42,7 +38,7 @@ void AppCameraRun::photo_save(const char * fileName) {
     // Save photo to file
     uint8_t* picture = fb->buf;
     const uint32_t len = fb->len;
-    writeFile(SD, fileName, picture, len);
+    _fileManager->writeFile(fileName, picture, len);
 
     char buffer[10];
     sprintf(buffer, "%02d", len);
@@ -59,89 +55,6 @@ void AppCameraRun::photo_save(const char * fileName) {
     _tft->setTextColor(_colorText, _tft->C_BLACK);
     _tft->print("Photo saved");
     Serial.println("Photo saved to file");
-}
-
-// SD card write file
-void AppCameraRun::writeFile(FS &fs, const char * path, uint8_t * data, size_t len){
-
-    _tft->setFont(FontDefault);
-    _tft->setCursor(125, 60);
-    _tft->print("writing file");
-    Serial.printf("Writing file: %s\n", path);
-
-    File file = fs.open(path, FILE_WRITE);
-    if(!file){
-        _tft->setTextColor(_tft->C_RED, _tft->C_BLACK);
-        _tft->setCursor(125, 70);
-        _tft->print("Failed to open");
-        _tft->setCursor(125, 80);
-        _tft->print("file for writing");
-        Serial.println("Failed to open file for writing");
-        delay(1000);
-        return;
-    }
-
-    _tft->setCursor(125, 70);
-    if(file.write(data, len) == len){
-        _tft->print("File written");
-        Serial.println("File written");
-    } else {
-        _tft->setTextColor(_tft->C_RED, _tft->C_BLACK);
-        _tft->print("write failed");
-        Serial.println("Write failed");
-        delay(1000);
-    }
-    file.close();
-}
-
-void AppCameraRun::readFiles() {
-
-    Serial.println("Get root");
-    File root = SD.open("/");
-    if (!root) {
-        Serial.println("Failed to open directory");
-        delay(1000);
-        return;
-    }
-
-    Serial.println("Check directory");
-    if (!root.isDirectory()) {
-        Serial.println("Not a directory");
-        delay(1000);
-        return;
-    }
-
-    Serial.println("create instance of the filename list or reset");
-    if (!_filenames) {
-        Serial.println("set instance of filename list");
-        _filenames = std::make_unique<std::vector<std::string>>();
-    }
-    else {
-        Serial.println("reset list");
-        _filenames->clear();
-        _imageCount = 1;
-    }
-
-    Serial.println("read root directory");
-    File file = root.openNextFile();
-    while (file) {
-        if (file.isDirectory()) {
-            Serial.print("  DIR : ");
-            Serial.println(file.name());
-        } else {
-
-            std::string filename = file.name();
-            Serial.print("  FILE: ");
-            Serial.print(filename.c_str());
-            Serial.print("  SIZE: ");
-            Serial.println(file.size());
-
-            _filenames->push_back(filename);
-            _imageCount++;
-        }
-        file = root.openNextFile();
-    }
-    file.close();
 }
 
 void AppCameraRun::drawPicture(const uint8_t* bitmap) {
@@ -167,6 +80,7 @@ void AppCameraRun::drawPicture(const uint8_t* bitmap) {
     _tft->drawRoundRect(120, 60, 120, 120, 4, _colorOn);
 }
 
+/*
 void AppCameraRun::drawLastPicture() {
 
     constexpr int16_t posX = 30;
@@ -233,6 +147,7 @@ void AppCameraRun::drawLastPicture() {
     Serial.print("Anzahl Pixel ausgelesen: ");
     Serial.println(countPixel, DEC);
 }
+*/
 
 uint32_t AppCameraRun::GetHeaderInformation(File &file, uint32_t position) {
 
@@ -263,7 +178,7 @@ void AppCameraRun::drawText(){
     _tft->setFont(FontDefault);
     _tft->setTextColor(_colorText, _tft->C_BLACK);
 
-    const int fileCount = static_cast<int>(_filenames->size());
+    const int fileCount = 0; //static_cast<int>(_filenames->size());
     Serial.print("Count pictures: ");
     Serial.println(fileCount, DEC);
 
@@ -273,6 +188,7 @@ void AppCameraRun::drawText(){
         return;
     }
 
+    /*
     int lastPictures = 3 ;
     if (fileCount < 3) {
         lastPictures = fileCount;
@@ -289,13 +205,15 @@ void AppCameraRun::drawText(){
     _tft->drawFastHLine(0, posY + 50, 120, _colorOn);
     _tft->setCursor(posX - 20, posY + 60);
     _tft->print("Pictures: ");
-    char buffer[10];
+
     sprintf(buffer, "%02d", fileCount);
     _tft->print(buffer);
+    */
+    char buffer[10];
 
     _tft->setCursor(posX - 20, posY + 80);
     _tft->print("used: ");
-    int cardsizeMb = SD.usedBytes() / 1024 / 1024;
+    int cardsizeMb = _fileManager->GetCardSizeMb(); //SD.usedBytes() / 1024 / 1024;
     sprintf(buffer, "%02d", cardsizeMb);
     _tft->print(buffer); _tft->print("MB");
 }
@@ -321,8 +239,11 @@ void AppCameraRun::initExtend() {
     config.pin_pclk = PCLK_GPIO_NUM;
     config.pin_vsync = VSYNC_GPIO_NUM;
     config.pin_href = HREF_GPIO_NUM;
-    config.pin_sscb_sda = SIOD_GPIO_NUM;
-    config.pin_sscb_scl = SIOC_GPIO_NUM;
+
+    //config.pin_sscb_sda = SIOD_GPIO_NUM;
+    config.pin_sccb_sda = SIOD_GPIO_NUM;
+    //config.pin_sscb_scl = SIOC_GPIO_NUM;
+    config.pin_sccb_scl = SIOC_GPIO_NUM;
 
     // not connected
     config.pin_pwdn = PWDN_GPIO_NUM;
@@ -356,35 +277,7 @@ void AppCameraRun::initExtend() {
     // Camera initialization check passes
     _camera_sign = true;
 
-    // Initialize SD card
-    if(!SD.begin(21)){
 
-        Serial.println("Card Mount Failed");
-        delay(1000);
-        return;
-    }
-
-    uint8_t cardType = SD.cardType();
-    Serial.println("read card type");
-
-    // Determine if the type of SD card is available
-    if(cardType == CARD_NONE){
-
-        Serial.println("No SD card attached");
-        delay(1000);
-        return;
-    }
-
-    Serial.print("SD Card Type: ");
-    if(cardType == CARD_MMC){
-        Serial.println("MMC");
-    } else if(cardType == CARD_SD){
-        Serial.println("SDSC");
-    } else if(cardType == CARD_SDHC){
-        Serial.println("SDHC");
-    } else {
-        Serial.println("UNKNOWN");
-    }
 
     // sd initialization check passes
     _sd_sign = true;
@@ -400,7 +293,7 @@ void AppCameraRun::drawUpdate() {
     Serial.println("refresh tft content");
 
     Serial.println("read files");
-    readFiles();
+    //readFiles();
 
     Serial.println("draw last frame");
     //drawLastPicture();
@@ -436,7 +329,7 @@ void AppCameraRun::setButton2() {
     sprintf(filename, "/image%d.bmp", _imageCount);
     _tft->setCursor(40, 170);
     _tft->print(filename);
-    _lastFilename = filename;
+    //_lastFilename = filename;
     photo_save(filename);
 
     char buffer[10];

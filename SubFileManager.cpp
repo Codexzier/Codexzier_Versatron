@@ -46,6 +46,8 @@ void SubFileManager::readSdCard() {
     } else {
         Serial.print("UNKNOWN");
     }
+
+    _sdSuccess = true;
 }
 
 void SubFileManager::init() {
@@ -56,4 +58,81 @@ void SubFileManager::init() {
     }
 
     readSdCard();
+}
+
+// SD card write file
+void SubFileManager::writeFile(const char * path, uint8_t * data, size_t len){
+
+    Serial.printf("Writing file: %s\n", path);
+
+    File file = SD.open(path, FILE_WRITE);
+    if(!file){
+        Serial.println("Failed to open file for writing");
+        delay(1000);
+        return;
+    }
+
+    if(file.write(data, len) == len){
+        Serial.println("File written");
+    } else {
+        Serial.println("Write failed");
+        delay(1000);
+    }
+    file.close();
+}
+
+void SubFileManager::readFiles() {
+
+    Serial.println("Get root");
+    File root = SD.open("/");
+    if (!root) {
+        Serial.println("Failed to open directory");
+        delay(1000);
+        return;
+    }
+
+    Serial.println("Check directory");
+    if (!root.isDirectory()) {
+        Serial.println("Not a directory");
+        delay(1000);
+        return;
+    }
+
+    Serial.println("create instance of the filename list or reset");
+    if (!_filenames) {
+        Serial.println("set instance of filename list");
+        _filenames = std::make_unique<std::vector<std::string>>();
+    }
+    else {
+        Serial.println("reset list");
+        _filenames->clear();
+    }
+
+    Serial.println("read root directory");
+    File file = root.openNextFile();
+    while (file) {
+        if (file.isDirectory()) {
+            Serial.print("  DIR : ");
+            Serial.println(file.name());
+        } else {
+
+            std::string filename = file.name();
+            Serial.print("  FILE: ");
+            Serial.print(filename.c_str());
+            Serial.print("  SIZE: ");
+            Serial.println(file.size());
+
+            _filenames->push_back(filename);
+        }
+        file = root.openNextFile();
+    }
+    file.close();
+}
+
+int SubFileManager::GetCardSizeMb() {
+    return SD.usedBytes() / 1024 / 1024;
+}
+
+bool SubFileManager::IsSdCardInit() {
+    return _sdSuccess;
 }
