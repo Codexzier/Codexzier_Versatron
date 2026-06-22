@@ -30,6 +30,7 @@ public:
     void writeFile(const char * path, uint8_t * data, size_t len);
     void readFiles();
 
+    int GetCountPictures();
     int GetCardSizeMb();
     bool IsSdCardInit();
 };

@@ -6,10 +6,6 @@
 #define CODEXZIER_VERSATRON_APPCAMERARUN_H
 
 #include "BaseDrawable.h"
-#include "FS.h"
-#include <vector>
-#include <string>
-#include <memory>
 #include <SubFileManager.h>
 
 #define CAMERA_MODEL_XIAO_ESP32S3 // Has PSRAM
@@ -24,14 +20,8 @@ class AppCameraRun : public BaseDrawable {
     const int16_t _posX = 70;
     const int16_t _posY = 165;
 
-    //std::unique_ptr<std::vector<std::string>> _filenames;
-    //std::string _lastFilename;
-
     void photo_save(const char * fileName);
-
-    //void readFiles();
     void drawPicture(const uint8_t* bitmap);
-    //void drawLastPicture();
     void drawText();
 
     uint32_t GetHeaderInformation(File &file, uint32_t position);

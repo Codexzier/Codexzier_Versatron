@@ -12,11 +12,8 @@
 #include "GC9A01_LTSM.hpp"
 #include "display16_graphics_LTSM.hpp"
 
-
-// Save pictures to SD card
 void AppCameraRun::photo_save(const char * fileName) {
 
-    // Take a photo
     // das erste bild aufrufen und verwerfen.
     camera_fb_t *fb_old = esp_camera_fb_get();
     esp_camera_fb_return(fb_old);
@@ -44,8 +41,6 @@ void AppCameraRun::photo_save(const char * fileName) {
     sprintf(buffer, "%02d", len);
     Serial.print("Buffer Länge: "); Serial.println(len, DEC);
 
-    //_tft->TFTsetRotation(2);
-    //_tft->drawSpriteData(0, 0, buf, 240, 240, _tft->C_BLUE, false);
     drawPicture(picture);
 
     // Release image buffer
@@ -62,6 +57,7 @@ void AppCameraRun::drawPicture(const uint8_t* bitmap) {
     // draw frame
     _tft->drawRoundRect(120, 60, 120, 120, 4, _colorOn);
 
+    // draw recorded picture
     const uint8_t* bitmapIter = bitmap;
     uint16_t colour;
     for (int16_t y = 239; y >= 0; y--) {
@@ -79,75 +75,6 @@ void AppCameraRun::drawPicture(const uint8_t* bitmap) {
 
     _tft->drawRoundRect(120, 60, 120, 120, 4, _colorOn);
 }
-
-/*
-void AppCameraRun::drawLastPicture() {
-
-    constexpr int16_t posX = 30;
-    constexpr int16_t posY = 45;
-    _tft->setFont(FontDefault);
-    _tft->setCursor(posX, posY);
-    _tft->setTextColor(_colorText, _tft->C_BLACK);
-    _tft->print(_lastFilename.c_str());
-    Serial.printf("Reading file: %s\n", _lastFilename.c_str());
-
-    std::string fullpath = _lastFilename; // "/" +
-    Serial.printf("fullpath file: %s\n", fullpath.c_str());
-    _tft->setCursor(posX, posY + 10);
-    File file = SD.open(fullpath.c_str());
-    if(!file){
-        _tft->setTextColor(_tft->C_RED, _tft->C_BLACK);
-        _tft->print("Failed to open");
-        _tft->setCursor(posX, posY + 20);
-        _tft->print("file for reading");
-        Serial.println("Failed to open file for reading");
-        delay(1000);
-        return;
-    }
-
-    _tft->print("Read from file: ");
-    Serial.print("Read from file: ");
-
-    // -------------------
-    // Header
-
-    // Offset
-    // springe zu bild offset header information
-    const uint32_t indexPictureStart = GetHeaderInformation(file, 10);
-
-    // width and hight
-    const uint32_t picWidth = GetHeaderInformation(file, 18);
-    const uint32_t picHeight = GetHeaderInformation(file, 22);
-
-    Serial.print("Offset: "); Serial.print(indexPictureStart, DEC);
-    Serial.print(", Breite: "); Serial.print(picWidth, DEC);
-    Serial.print(", Höhe: "); Serial.println(picHeight, DEC);
-
-    Serial.println("Lese Bilddatei aus: ");
-    file.seek(0);
-    uint32_t countPixel = 0;
-    for (int16_t y = 239; y >= 0; y--) {
-
-        if (!file.available()) {
-            continue;
-        }
-
-        for (int16_t x = 0; x < 240; x++) {
-
-            const uint16_t pixelFarbe = GetNextPixelColorValue(file);
-
-            //Serial.print(pixelFarbe, DEC);
-            _tft->drawPixel(x, y, pixelFarbe);
-            countPixel++;
-        }
-        //Serial.println("");
-    }
-    file.close();
-
-    Serial.print("Anzahl Pixel ausgelesen: ");
-    Serial.println(countPixel, DEC);
-}
-*/
 
 uint32_t AppCameraRun::GetHeaderInformation(File &file, uint32_t position) {
 
@@ -178,7 +105,7 @@ void AppCameraRun::drawText(){
     _tft->setFont(FontDefault);
     _tft->setTextColor(_colorText, _tft->C_BLACK);
 
-    const int fileCount = 0; //static_cast<int>(_filenames->size());
+    const int fileCount = _fileManager->GetCountPictures();
     Serial.print("Count pictures: ");
     Serial.println(fileCount, DEC);
 
@@ -188,27 +115,6 @@ void AppCameraRun::drawText(){
         return;
     }
 
-    /*
-    int lastPictures = 3 ;
-    if (fileCount < 3) {
-        lastPictures = fileCount;
-    }
-
-    int indexPos = 1;
-    for (int index = fileCount - lastPictures; index < fileCount; index++) {
-        std::string filename = (*_filenames)[index];
-        _tft->setCursor(posX, posY + indexPos * 10);
-        _tft->print(filename.c_str());
-        indexPos++;
-    }
-
-    _tft->drawFastHLine(0, posY + 50, 120, _colorOn);
-    _tft->setCursor(posX - 20, posY + 60);
-    _tft->print("Pictures: ");
-
-    sprintf(buffer, "%02d", fileCount);
-    _tft->print(buffer);
-    */
     char buffer[10];
 
     _tft->setCursor(posX - 20, posY + 80);
@@ -293,7 +199,6 @@ void AppCameraRun::drawUpdate() {
     Serial.println("refresh tft content");
 
     Serial.println("read files");
-    //readFiles();
 
     Serial.println("draw last frame");
     //drawLastPicture();
@@ -313,8 +218,7 @@ void AppCameraRun::setButton1() {
 }
 
 void AppCameraRun::setButton2() {
-
-    //_tft->fillScreen(_tft->C_BLACK);
+    
     _tft->drawRoundRect(120, 60, 120, 120, 4, _tft->C_YELLOW);
     _tft->writeBuffer();
     _tft->clearBuffer();

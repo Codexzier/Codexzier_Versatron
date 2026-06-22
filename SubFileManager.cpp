@@ -129,6 +129,13 @@ void SubFileManager::readFiles() {
     file.close();
 }
 
+int SubFileManager::GetCountPictures() {
+    
+    readFiles();
+
+    return static_cast<int>(_filenames->size());
+}
+
 int SubFileManager::GetCardSizeMb() {
     return SD.usedBytes() / 1024 / 1024;
 }
