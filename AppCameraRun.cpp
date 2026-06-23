@@ -5,7 +5,7 @@
 #include "AppCameraRun.h"
 
 #include "esp_camera.h"
-#include "camera_pins.h"
+//#include "camera_pins.h"
 #include <string>
 #include <memory>
 
@@ -14,6 +14,7 @@
 
 void AppCameraRun::photo_save(const char * fileName) {
 
+    /*
     // das erste bild aufrufen und verwerfen.
     camera_fb_t *fb_old = esp_camera_fb_get();
     esp_camera_fb_return(fb_old);
@@ -35,16 +36,26 @@ void AppCameraRun::photo_save(const char * fileName) {
     // Save photo to file
     uint8_t* picture = fb->buf;
     const uint32_t len = fb->len;
-    _fileManager->writeFile(fileName, picture, len);
+    */
+    const CameraRecordResult result = _cameraManager->getPicture();
+
+    if (!result.Success) {
+        _tft->setCursor(_posX - 20, _posY - 100);
+        _tft->setTextColor(_tft->C_RED, _tft->C_BLACK);
+        _tft->print("Failed to get camera frame buffer");
+        return;
+    }
+
+    _fileManager->writeFile(fileName, result.Buffer, result.Length);
 
     char buffer[10];
-    sprintf(buffer, "%02d", len);
-    Serial.print("Buffer Länge: "); Serial.println(len, DEC);
+    sprintf(buffer, "%02d", result.Length);
+    Serial.print("Buffer Länge: "); Serial.println(result.Length, DEC);
 
-    drawPicture(picture);
+    drawPicture(result.Buffer);
 
     // Release image buffer
-    esp_camera_fb_return(fb);
+    //esp_camera_fb_return(fb);
 
     _tft->setCursor(30, 170);
     _tft->setTextColor(_colorText, _tft->C_BLACK);
@@ -128,6 +139,7 @@ void AppCameraRun::drawText(){
 
 void AppCameraRun::initExtend() {
 
+    /*
     camera_config_t config;
     config.ledc_channel = LEDC_CHANNEL_0;
     config.ledc_timer = LEDC_TIMER_0;
@@ -184,6 +196,8 @@ void AppCameraRun::initExtend() {
 
     // Camera initialization check passes
     _camera_sign = true;
+    */
+
 
 
 
@@ -221,6 +235,15 @@ void AppCameraRun::setButton1() {
 
 void AppCameraRun::setButton2() {
 
+    if (!_cameraManager->IsCameraReady()) {
+
+        _tft->setFont(FontDefault);
+        _tft->setCursor(10, 150);
+        _tft->setTextColor(_colorText, _tft->C_BLACK);
+        _tft->print("Camera not ready");
+        return;
+    }
+
     _tft->drawRoundRect(120, 60, 120, 120, 4, _tft->C_YELLOW);
     _tft->writeBuffer();
     _tft->clearBuffer();
@@ -238,7 +261,7 @@ void AppCameraRun::setButton2() {
     sprintf(filename, "/image%d.bmp", _imageCount);
     _tft->setCursor(40, 170);
     _tft->print(filename);
-    //_lastFilename = filename;
+
     photo_save(filename);
 
     char buffer[10];

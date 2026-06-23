@@ -7,6 +7,7 @@
 #include <stdint.h>
 
 #include "AppBleScanner.h"
+#include "AppCameraOnDisplay.h"
 #include "AppCameraRun.h"
 #include "AppPictureViewer.h"
 #include "GC9A01_LTSM.hpp"
@@ -16,6 +17,7 @@
 #include "AppTorchRun.h"
 #include "AppWlanScanner.h"
 #include "SubFileManager.h"
+#include "AppCameraOnDisplay.h"
 
 #ifndef CODEXZIER_VERSATRON_CODEXZIER_VERSATRON_H
 #define CODEXZIER_VERSATRON_CODEXZIER_VERSATRON_H
@@ -49,9 +51,12 @@ class Codexzier_Versatron {
     AppPictureViewer _appPictureViewer;
     AppCameraRun _camera;
 
+    AppCameraOnDisplay _cameraOnTft;
+
     // ========================================================================================
     // Sub Managers
     SubFileManager _subFileManager;
+    SubCameraManager _subCameraManager;
 
     std::vector<IDrawable*> _drawables;
 
@@ -76,6 +81,7 @@ public:
         _drawables.push_back(&_appScnBle);
         _drawables.push_back(&_appPictureViewer);
         _drawables.push_back(&_camera);
+        _drawables.push_back(&_cameraOnTft);
 
         for (IDrawable* drawable : _drawables) {
             drawable->init(tft, colorOn, colorOff, colorText);
@@ -83,7 +89,10 @@ public:
         }
 
         _subFileManager.init();
+        _subCameraManager.init();
+
         _camera.SetupFileManger(_subFileManager);
+        _camera.SetupCameraManager(_subCameraManager);
         _appPictureViewer.SetupFileManger(_subFileManager);
 
         _menu.SetActive(true);

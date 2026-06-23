@@ -7,8 +7,9 @@
 
 #include "BaseDrawable.h"
 #include <SubFileManager.h>
+#include <SubCameraManager.h>
 
-#define CAMERA_MODEL_XIAO_ESP32S3 // Has PSRAM
+//#define CAMERA_MODEL_XIAO_ESP32S3 // Has PSRAM
 
 
 class AppCameraRun : public BaseDrawable {
@@ -28,6 +29,8 @@ class AppCameraRun : public BaseDrawable {
     uint16_t GetNextPixelColorValue(File &file);
 
     SubFileManager *_fileManager = nullptr;
+    SubCameraManager* _cameraManager = nullptr;
+
 public:
 
     void initExtend() override;
@@ -43,6 +46,9 @@ public:
 
     void SetupFileManger(SubFileManager &fileManger) {
         _fileManager = &fileManger;
+    }
+    void SetupCameraManager(SubCameraManager &cameraManager) {
+        _cameraManager = &cameraManager;
     }
 
 };

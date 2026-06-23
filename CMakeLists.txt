@@ -53,4 +53,8 @@ add_executable(Codexzier_Versatron
         AppRadioRadar.cpp
         AppRadioRadar.h
         SubFileManager.cpp
-        SubFileManager.h)
+        SubFileManager.h
+        AppCameraOnDisplay.cpp
+        AppCameraOnDisplay.h
+        SubCameraManager.cpp
+        SubCameraManager.h)
