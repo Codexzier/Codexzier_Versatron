@@ -9,9 +9,6 @@
 #include <SubFileManager.h>
 #include <SubCameraManager.h>
 
-//#define CAMERA_MODEL_XIAO_ESP32S3 // Has PSRAM
-
-
 class AppCameraRun : public BaseDrawable {
 
     int _imageCount = 0;                // File Counter
