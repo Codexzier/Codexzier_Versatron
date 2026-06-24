@@ -47,7 +47,6 @@ public:
     void SetupCameraManager(SubCameraManager &cameraManager) {
         _cameraManager = &cameraManager;
     }
-
 };
 
 

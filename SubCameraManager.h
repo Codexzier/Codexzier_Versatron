@@ -26,6 +26,7 @@ public:
     void init();
 
     CameraRecordResult getPicture();
+    CameraRecordResult getPictureFast();
     bool IsCameraReady() const { return _camera_sign; }
 };
 

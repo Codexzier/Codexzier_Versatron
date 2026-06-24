@@ -78,9 +78,29 @@ CameraRecordResult SubCameraManager::getPicture() {
 
     CameraRecordResult result;
 
+    if (!fb) {
+        Serial.println("Failed to get camera frame buffer");
+        result.Success = false;
+        return result;
+    }
+
+    result.Buffer = fb->buf;
+    result.Length = fb->len;
+    result.Success = true;
+
+    esp_camera_fb_return(fb);
+
+    return result;
+}
+
+CameraRecordResult SubCameraManager::getPictureFast() {
+    camera_fb_t *fb = esp_camera_fb_get();
+
+    CameraRecordResult result;
 
     if (!fb) {
         Serial.println("Failed to get camera frame buffer");
+        result.Success = false;
         return result;
     }
 
