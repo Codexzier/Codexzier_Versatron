@@ -57,4 +57,6 @@ add_executable(Codexzier_Versatron
         AppCameraOnDisplay.cpp
         AppCameraOnDisplay.h
         SubCameraManager.cpp
-        SubCameraManager.h)
+        SubCameraManager.h
+        SubBleManager.cpp
+        SubBleManager.h)

@@ -7,6 +7,8 @@
 void AppBleScanner::initExtend() {
 
     _resultList.init(*_tft, _colorOn, _colorOff, _colorText);
+
+    /*
     // TODO: Start instance if start this application
     BLEDevice::init("");
     pBLEScan = BLEDevice::getScan(); //create new scan
@@ -14,6 +16,7 @@ void AppBleScanner::initExtend() {
     pBLEScan->setActiveScan(true); //active scan uses more power, but get results faster
     pBLEScan->setInterval(100);
     pBLEScan->setWindow(99);  // less or equal setInterval value
+    */
 
     _applicationName = "BLE Scanner";
 }
@@ -65,22 +68,26 @@ void AppBleScanner::scan() {
     _tft->print("Scan Start");
     _tft->writeBuffer();
 
+/*
     BLEScanResults* foundDevices = pBLEScan->start(scanTime, false);
     int n = foundDevices->getCount();
+    */
+    BleScanResult scanResult = _bleManager->scan();
 
     _tft->setCursor(posX, posY);
     _tft->print("Scan Done ");
     _tft->writeBuffer();
 
     _tft->setCursor(posX, posY + 20);
-    if (n == 0) {
+    if (scanResult.CountDevice == 0) {
         _tft->print("No Bluetooth");
         _tft->writeBuffer();
         return;
     }
 
     _tft->setCursor(10, 100);
-    for (int i = 0; i < n; i++) {
+    for (int i = 0; i < scanResult.CountDevice; i++) {
+        /*
         BLEAdvertisedDevice device = foundDevices->getDevice(i);
 
         BleItem* item = new BleItem;
@@ -101,11 +108,13 @@ void AppBleScanner::scan() {
         }
 
         item->Rssi = device.getRSSI();
-
+*/
+        BleItem* item =_bleManager->getBleItem(i);
         _resultList.addItem(item);
 
+        _tft->drawFastHLine(50, 118, i, _colorOn);
+        _tft->drawFastHLine(50, 119, i, _colorOn);
         _tft->drawFastHLine(50, 120, i, _colorOn);
-        _tft->print(".");
         _tft->writeBuffer();
     }
 }

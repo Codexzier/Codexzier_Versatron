@@ -13,6 +13,13 @@
 // render update content
 void Codexzier_Versatron::drawUpdate()
 {
+    long actualTime = millis();
+    if (actualTime >= _lastTime + _timeToDisplayOff) {
+        _tft->TFTsetPowerMode(GC9A01_LTSM::PowerState_e::SleepPartialIdleOn);
+        _powerDown = true;
+        return;
+    }
+
     for (IDrawable* drawable : _drawables) {
 
         if (!drawable->IsActive()) {
@@ -89,6 +96,14 @@ void Codexzier_Versatron::setValue2(int16_t value) {
 
 void Codexzier_Versatron::setButton1() {
 
+    _lastTime = millis();
+
+    if (_powerDown) {
+        _tft->TFTsetPowerMode(GC9A01_LTSM::PowerState_e::NormalIdleOn);
+        _powerDown = false;
+        return;
+    }
+
     for (IDrawable* drawable : _drawables) {
         if (!drawable->IsActive()) {
             continue;
@@ -98,6 +113,8 @@ void Codexzier_Versatron::setButton1() {
 }
 
 void Codexzier_Versatron::setButton2() {
+
+    _lastTime = millis();
 
     if (_drawContentName == "Menu") {
         // Um Menu zu überspringen
@@ -115,5 +132,7 @@ void Codexzier_Versatron::setButton2() {
 }
 
 void Codexzier_Versatron::setButton3() {
+
+    _lastTime = millis();
     showMenuAppUi();
 }

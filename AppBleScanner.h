@@ -7,17 +7,13 @@
 
 #include <Arduino.h>
 #include "AppBleScannerResultList.h"
-#include <BLEDevice.h>
-#include <BLEUtils.h>
-#include <BLEScan.h>
-#include <BLEAdvertisedDevice.h>
+//#include <BLEDevice.h>
+//#include <BLEUtils.h>
+//#include <BLEScan.h>
+//#include <BLEAdvertisedDevice.h>
 #include "BaseDrawable.h"
+#include "SubBleManager.h"
 
-class MyAdvertisedDeviceCallbacks: public BLEAdvertisedDeviceCallbacks {
-    void onResult(BLEAdvertisedDevice advertisedDevice) {
-        Serial.printf("Advertised Device: %s \n", advertisedDevice.toString().c_str());
-    }
-};
 
 class AppBleScanner : public BaseDrawable {
 
@@ -25,9 +21,10 @@ class AppBleScanner : public BaseDrawable {
 
     AppBleScannerResultList _resultList;
     int scanTime = 5; //In seconds
-    BLEScan* pBLEScan;
+    //BLEScan* pBLEScan;
 
     void scan();
+    SubBleManager* _bleManager = nullptr;
 
 public:
 
@@ -40,6 +37,9 @@ public:
     void setValue2(int16_t value) override {}
     void reset() override;
 
+    void SetupBleManager(SubBleManager &bleManager) {
+        _bleManager = &bleManager;
+    }
 };
 
 

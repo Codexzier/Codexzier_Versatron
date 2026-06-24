@@ -16,8 +16,10 @@
 #include "AppWorkout.h"
 #include "AppTorchRun.h"
 #include "AppWlanScanner.h"
+
+#include "SubCameraManager.h"
 #include "SubFileManager.h"
-#include "AppCameraOnDisplay.h"
+#include "SubBleManager.h"
 
 #ifndef CODEXZIER_VERSATRON_CODEXZIER_VERSATRON_H
 #define CODEXZIER_VERSATRON_CODEXZIER_VERSATRON_H
@@ -57,8 +59,13 @@ class Codexzier_Versatron {
     // Sub Managers
     SubFileManager _subFileManager;
     SubCameraManager _subCameraManager;
+    SubBleManager _subBleManager;
 
     std::vector<IDrawable*> _drawables;
+
+    long _lastTime = 0;
+    long _timeToDisplayOff = 30000;
+    bool _powerDown = false;
 
 public:
     Codexzier_Versatron()
@@ -90,12 +97,16 @@ public:
 
         _subFileManager.init();
         _subCameraManager.init();
+        _subBleManager.init();
 
         _camera.SetupFileManger(_subFileManager);
         _camera.SetupCameraManager(_subCameraManager);
         _appPictureViewer.SetupFileManger(_subFileManager);
+        _appScnBle.SetupBleManager(_subBleManager);
 
         _menu.SetActive(true);
+
+        _lastTime = millis();
     }
 
     void drawUpdate();
